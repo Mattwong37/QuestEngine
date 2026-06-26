@@ -14,3 +14,7 @@
     <button (click)="createCharacter()">Submit</button>
   </div>
 }
+
+@if (currentScreen() === 'game') {
+  <app-game />
+}
