@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { TitleScreen } from './components/title-screen/title-screen';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [TitleScreen],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('Quest Engine');
-}
+
+export class App {}
+
