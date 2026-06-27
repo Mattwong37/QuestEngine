@@ -7,6 +7,7 @@
 .title-content {
     text-align: center;
 }
+
 h1 {
     font-size: 90px;
     color:blanchedalmond;
@@ -19,7 +20,13 @@ h2 {
     text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8);
 }
 
+p {
+    font-size: 50px;
+    color:blanchedalmond;
+    text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8); 
+}
 
+.character-creation button,
 .title-screen button {
     padding: 14px 36px;
     font-family: 'Cinzel', serif;
@@ -38,6 +45,8 @@ h2 {
     box-shadow: 0px 0px 10px rgba(212, 175, 55, 0.2);
 }
 
+.character-creation-content input[type="text"]:hover,
+.character-creation button:hover,
 .title-screen button:hover {
     color: #ffffff;
     background: #2a2015;
@@ -47,7 +56,35 @@ h2 {
 }
 
 .character-creation-content {
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 70vh;
+}
+
+.character-creation-content input[type="text"] {
+    margin-bottom: 12px;
+}
+
+.character-creation-content input[type="text"] {
+    padding: 12px 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    text-align: center;
+    
+    background: #1e1a15;
+    color: #f1d280;
+    border: 2px solid #5c4a37;
+    border-radius: 4px;
+    outline: none;
+    
+    transition: all 0.3s ease;
+    width: 250px;
+}
+
+
+.character-creation-content input[type="text"]:focus {
+    border-color: rgb(212, 175, 53, .8);
+    box-shadow: 0px 0px 10px rgba(212, 175, 55, 0.3);
 }

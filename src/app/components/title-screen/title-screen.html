@@ -9,10 +9,13 @@
 
     @if (currentScreen() === 'character-creation') {
     <div class="character-creation">
-        <h2>Create Your Character</h2>
-        <p>What is your name?</p>
-        <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." />
-        <button (click)="createCharacter()">Submit</button>
+        <div class="character-creation-content">
+            <h2>Create Your Character</h2>
+            <p>What is your name?</p>
+            <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." ali/>
+            <button (click)="createCharacter()">Submit</button>
+        </div>
+
     </div>
     }
 
