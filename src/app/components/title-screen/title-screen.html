@@ -1,19 +1,19 @@
-@if (currentScreen() === 'title') {
-  <div class="title-screen">
-    <h1>Quest Engine</h1>
-    <button (click)="startGame()">Begin Adventure</button>
-  </div>
-}
+    @if (currentScreen() === 'title') {
+    <div class="title-screen">
+        <h1>Quest Engine</h1>
+        <button (click)="startGame()">Begin Adventure</button>
+    </div>
+    }
 
-@if (currentScreen() === 'character-creation') {
-  <div class="character-creation">
-    <h2>Create Your Character</h2>
-    <p>What is your name?</p>
-    <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." />
-    <button (click)="createCharacter()">Submit</button>
-  </div>
-}
+    @if (currentScreen() === 'character-creation') {
+    <div class="character-creation">
+        <h2>Create Your Character</h2>
+        <p>What is your name?</p>
+        <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." />
+        <button (click)="createCharacter()">Submit</button>
+    </div>
+    }
 
-@if (currentScreen() === 'game') {
-  <app-game />
+    @if (currentScreen() === 'game') {
+    <app-game />
 }

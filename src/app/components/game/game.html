@@ -1,39 +1,86 @@
-<div class="game-container">
-  
-  <div class="hud">
-    <div class="hud-stat">
-      <span>HP</span>
-      <div class="bar">
-        <div class="bar-fill health" 
-          [style.width.%]="healthPercent()">
+<div class="game-container" [class.dark-mode]="darkMode()">
+    
+    <div class="hud">
+        <div class="hud-stat">
+        <span>HP</span>
+        <div class="bar">
+            <div class="bar-fill health" 
+            [style.width.%]="healthPercent()">
+            </div>
         </div>
-      </div>
-      <span>{{ gameService.player().currentHealth }} / {{ gameService.player().maxHealth }}</span>
+        <span>{{ gameService.player().currentHealth }} / {{ gameService.player().maxHealth }}</span>
+        </div>
+
+        <div class="hud-stat">
+        <span>MP</span>
+        <div class="bar">
+            <div class="bar-fill magic" 
+            [style.width.%]="magicPercent()">
+            </div>
+        </div>
+        <span>{{ gameService.player().currentMagic }} / {{ gameService.player().maxMagic }}</span>
+        </div>
+
+        <div class="hud-stat">
+        <span>Level {{ gameService.player().level }}</span>
+        <div class="bar">
+            <div class="bar-fill xp" 
+            [style.width.%]="xpPercent()">
+            </div>
+        </div>
+        <span>{{ gameService.player().xp }} / {{ gameService.player().xpToNextLevel }} XP</span>
+        </div>
     </div>
 
-    <div class="hud-stat">
-      <span>MP</span>
-      <div class="bar">
-        <div class="bar-fill magic" 
-          [style.width.%]="magicPercent()">
+    <div class="main-area">   
+        <div class="story-area">
+            <p>Welcome, {{ gameService.player().name }}</p>
         </div>
-      </div>
-      <span>{{ gameService.player().currentMagic }} / {{ gameService.player().maxMagic }}</span>
+
+        <div class="side-panel">
+            <div class="panel-buttons">
+                <button (click)="activePanel.set('equipment')" [class.active]="activePanel() === 'equipment'">Equipment</button>
+                <button (click)="activePanel.set('stats')" [class.active]="activePanel() === 'stats'">Stats</button>
+                <button (click)="activePanel.set('settings')" [class.active]="activePanel() === 'settings'">Settings</button>
+            </div>
+
+            <div class="panel-content">
+                @if (activePanel() === 'equipment') {
+                <div>
+                    <h3>Equipment</h3>
+                    <p>No weapon equipped</p>
+                </div>
+                }
+
+                @if (activePanel() === 'stats') {
+                <div>
+                    <h3>Stats</h3>
+                    <p>Attack: {{ gameService.player().attackMin }} - {{ gameService.player().attackMax }}</p>
+                    <p>Defense: {{ gameService.player().defense }}</p>
+                    <p>Magic Defense: {{ gameService.player().magicDefense }}</p>
+                    <p>Stamina: {{ gameService.player().stamina }}%</p>
+                </div>
+                }
+
+                @if (activePanel() === 'settings') {
+                <div>
+                    <h3>Settings</h3>
+                    <label>OpenAI API Key</label>
+                    <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
+                    <button (click)="saveApiKey()">Save</button>
+
+                    <div class="divider"></div>
+
+                    <label>Dark Mode</label>
+                    <div class="toggle-row">
+                    <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                    </div>
+                </div>
+                }
+        
+        </div> 
     </div>
-
-    <div class="hud-stat">
-      <span>Level {{ gameService.player().level }}</span>
-      <div class="bar">
-        <div class="bar-fill xp" 
-          [style.width.%]="xpPercent()">
-        </div>
-      </div>
-      <span>{{ gameService.player().xp }} / {{ gameService.player().xpToNextLevel }} XP</span>
-    </div>
-  </div>
-
-  <div class="story-area">
-    <p>Welcome, {{ gameService.player().name }}</p>
-  </div>
-
+        
 </div>

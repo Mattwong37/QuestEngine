@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Cinzel', serif;
+}
+
+body.light-bg {
+    --text-color: black;
+    background-image: url('/lightMode.png');
+}
+
+body.dark-bg {
+    --text-color: white;
+    background-image: url('/darkMode.png');
+}
