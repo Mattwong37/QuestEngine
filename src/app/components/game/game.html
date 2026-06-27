@@ -5,6 +5,7 @@
         <span>HP</span>
         <div class="bar">
             <div class="bar-fill health" 
+            [class.threshold] = "healthPercent() <= thresholdAmount"
             [style.width.%]="healthPercent()">
             </div>
         </div>
@@ -15,6 +16,7 @@
         <span>MP</span>
         <div class="bar">
             <div class="bar-fill magic" 
+            [class.threshold] = "magicPercent() <= thresholdAmount"
             [style.width.%]="magicPercent()">
             </div>
         </div>

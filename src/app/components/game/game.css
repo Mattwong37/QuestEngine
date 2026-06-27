@@ -37,7 +37,8 @@
 .bar {
     flex: 1;
     height: 12px;
-    background: #0f3460;
+    background: rgb(87, 77, 45);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     overflow: hidden;
 }
@@ -49,15 +50,28 @@
 }
 
 .bar-fill.health {
-    background: #e94560;
+    background: #4e9f3d;
+    box-shadow: 0 0 8px #4e9f3d, 0 0 25px 8px #4e9f3d;
+}
+
+.bar-fill.health.threshold {
+    background: #D32F2F;
+    box-shadow: 0 0 8px #D32F2F, 0 0 25px 8px #D32F2F;
 }
 
 .bar-fill.magic {
-    background: #4a90d9;
+    background: #1E88E5;
+    box-shadow: 0 0 8px #1E88E5, 0 0 25px 8px #1E88E5;
+}
+.bar-fill.magic.threshold {
+    background: #8e24bc;
+    box-shadow: 0 0 8px #8e24bc, 0 0 25px 8px #8e24bc;
 }
 
+
 .bar-fill.xp {
-    background: #f5a623;
+    background: #FFD700;
+    box-shadow: 0 0 8px #FFD700, 0 0 25px 8px #FFD700;
 }
 
 .story-area {
