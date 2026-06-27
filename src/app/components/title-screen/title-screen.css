@@ -1,0 +1,53 @@
+.title-screen {
+    display: grid;
+    place-items: center;
+    height: 70vh;
+}
+
+.title-content {
+    text-align: center;
+}
+h1 {
+    font-size: 90px;
+    color:blanchedalmond;
+    text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8);
+}
+
+h2 {
+    font-size: 90px;
+    color:blanchedalmond;
+    text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8);
+}
+
+
+.title-screen button {
+    padding: 14px 36px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+    background: #1a1510;
+    color: #f1d280;
+    border: 2px solid #d4af37;
+    border-radius: 4px;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 0px 10px rgba(212, 175, 55, 0.2);
+}
+
+.title-screen button:hover {
+    color: #ffffff;
+    background: #2a2015;
+    border-color: #fff1c5;
+    box-shadow: 0px 0px 20px rgba(212, 175, 55, 0.6);
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
+}
+
+.character-creation-content {
+    display: grid;
+    place-items: center;
+    height: 70vh;
+}

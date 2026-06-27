@@ -9,6 +9,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     font-family: 'Cinzel', serif;
+    background-image: url('/lightMode.png');
 }
 
 body.light-bg {

@@ -1,7 +1,9 @@
     @if (currentScreen() === 'title') {
     <div class="title-screen">
-        <h1>Quest Engine</h1>
-        <button (click)="startGame()">Begin Adventure</button>
+        <div class="title-content">
+            <h1>Quest Engine</h1>
+            <button (click)="startGame()">Begin Adventure</button>
+        </div>
     </div>
     }
 
@@ -15,5 +17,5 @@
     }
 
     @if (currentScreen() === 'game') {
-    <app-game />
-}
+        <app-game />
+    }
