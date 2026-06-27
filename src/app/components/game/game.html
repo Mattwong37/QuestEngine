@@ -65,6 +65,12 @@
                 @if (activePanel() === 'settings') {
                 <div>
                     <h3>Settings</h3>
+                    <label>Claude API Key</label>
+                    <input type="password" [(ngModel)]="anthropicKey" placeholder="sk-ant-..." />
+                    <button (click)="saveAnthropicKey()">Save</button>
+
+                    <div class="divider"></div>
+
                     <label>OpenAI API Key</label>
                     <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
                     <button (click)="saveApiKey()">Save</button>

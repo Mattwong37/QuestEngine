@@ -12,6 +12,7 @@ export class Game implements OnInit {
   gameService = inject(GameService);
   activePanel = signal('equipment');
   openAiKey = signal('');
+  anthropicKey = signal('');
   darkMode = signal(false);
 
   healthPercent() {
@@ -34,6 +35,11 @@ export class Game implements OnInit {
     alert('API key saved!');
   }
 
+  saveAnthropicKey() {
+    localStorage.setItem('anthropic_key', this.anthropicKey());
+    alert('API key saved!');
+  }
+
   darkModeToggle() {
     this.darkMode.set(!this.darkMode());
     document.body.style.backgroundImage = this.darkMode() 
@@ -44,8 +50,8 @@ export class Game implements OnInit {
     document.body.style.backgroundImage = url;
     console.log('Body background after set:', document.body.style.backgroundImage);
   }
-    constructor() {
-effect(() => {
+  constructor() {
+    effect(() => {
       if (this.darkMode()) {
         document.body.classList.remove('light-bg');
         document.body.classList.add('dark-bg');
@@ -59,5 +65,11 @@ effect(() => {
 
   ngOnInit() {
     document.body.classList.add('light-bg');
+
+    const savedOpenAi = localStorage.getItem('openai_key');
+    const savedAnthropic = localStorage.getItem('anthropic_key');
+    
+    if (savedOpenAi) this.openAiKey.set(savedOpenAi);
+    if (savedAnthropic) this.anthropicKey.set(savedAnthropic);
   }
 }
