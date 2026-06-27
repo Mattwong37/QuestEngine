@@ -22,7 +22,7 @@ export class TitleScreen {
   } 
 
   createCharacter() {
-    this.gameService.playerName.set(this.playerName());
+    this.gameService.initPlayer(this.playerName());
     this.currentScreen.set('game');
     console.log('Player name:', this.playerName());
     console.log('Saved to service:', this.gameService.playerName());

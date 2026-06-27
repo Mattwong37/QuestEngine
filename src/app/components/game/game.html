@@ -1,3 +1,39 @@
-<div class="game">
-  <h2>Welcome, {{ gameService.playerName() }}!</h2>
+<div class="game-container">
+  
+  <div class="hud">
+    <div class="hud-stat">
+      <span>HP</span>
+      <div class="bar">
+        <div class="bar-fill health" 
+          [style.width.%]="healthPercent()">
+        </div>
+      </div>
+      <span>{{ gameService.player().currentHealth }} / {{ gameService.player().maxHealth }}</span>
+    </div>
+
+    <div class="hud-stat">
+      <span>MP</span>
+      <div class="bar">
+        <div class="bar-fill magic" 
+          [style.width.%]="magicPercent()">
+        </div>
+      </div>
+      <span>{{ gameService.player().currentMagic }} / {{ gameService.player().maxMagic }}</span>
+    </div>
+
+    <div class="hud-stat">
+      <span>Level {{ gameService.player().level }}</span>
+      <div class="bar">
+        <div class="bar-fill xp" 
+          [style.width.%]="xpPercent()">
+        </div>
+      </div>
+      <span>{{ gameService.player().xp }} / {{ gameService.player().xpToNextLevel }} XP</span>
+    </div>
+  </div>
+
+  <div class="story-area">
+    <p>Welcome, {{ gameService.player().name }}</p>
+  </div>
+
 </div>
