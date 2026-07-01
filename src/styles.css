@@ -14,10 +14,12 @@ body {
 
 body.light-bg {
     --text-color: black;
+    --text-box-bg: #75673c;
     background-image: url('/lightMode.png');
 }
 
 body.dark-bg {
     --text-color: white;
+    --text-box-bg: #574c2c;
     background-image: url('/darkMode.png');
 }

@@ -36,7 +36,37 @@
 
     <div class="main-area">   
         <div class="story-area">
-            <p>Welcome, {{ gameService.player().name }}</p>
+            <!-- This button is just for testing the UI with dummy data -->
+            <!-- <button (click)="loadDummyData()" style="margin-bottom: 1rem; opacity: 0.5; font-size: 0.75rem;">Load Test Data</button> -->
+
+            @if (storyService.isLoading()) {
+                <div class="loading">
+                <p>Loading ...</p>
+                </div>
+            } @else {
+                <div class="scene-image">
+                    @if (storyService.currentImage()) {
+                        <img [src]="storyService.currentImage()" alt="Scene" />
+                    } @else {
+                        <div class="image-placeholder">
+                        <span>?</span>
+                        <p>Image generation is unavailable at this time</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="scene-text">
+                <p>{{ storyService.currentScene() }}</p>
+                </div>
+
+                <div class="choices">
+                    @for (choice of storyService.currentChoices(); track choice.id) {
+                        <button class="choice-btn" (click)="makeChoice(choice)">
+                        {{ choice.text }}
+                        </button>
+                    }
+                </div>
+            }
         </div>
 
         <div class="side-panel">
@@ -48,44 +78,44 @@
 
             <div class="panel-content">
                 @if (activePanel() === 'equipment') {
-                <div>
-                    <h3>Equipment</h3>
-                    <p>No weapon equipped</p>
-                </div>
+                    <div>
+                        <h3>Equipment</h3>
+                        <p>No weapon equipped</p>
+                    </div>
                 }
 
                 @if (activePanel() === 'stats') {
-                <div>
-                    <h3>Stats</h3>
-                    <p>Attack: {{ gameService.player().attackMin }} - {{ gameService.player().attackMax }}</p>
-                    <p>Defense: {{ gameService.player().defense }}</p>
-                    <p>Magic Defense: {{ gameService.player().magicDefense }}</p>
-                    <p>Stamina: {{ gameService.player().stamina }}%</p>
-                </div>
+                    <div>
+                        <h3>Stats</h3>
+                        <p>Attack: {{ gameService.player().attackMin }} - {{ gameService.player().attackMax }}</p>
+                        <p>Defense: {{ gameService.player().defense }}</p>
+                        <p>Magic Defense: {{ gameService.player().magicDefense }}</p>
+                        <p>Stamina: {{ gameService.player().stamina }}%</p>
+                    </div>
                 }
 
                 @if (activePanel() === 'settings') {
-                <div>
-                    <h3>Settings</h3>
-                    <label>Claude API Key</label>
-                    <input type="password" [(ngModel)]="anthropicKey" placeholder="sk-ant-..." />
-                    <button (click)="saveAnthropicKey()">Save</button>
+                    <div>
+                        <h3>Settings</h3>
+                        <label>Claude API Key</label>
+                        <input type="password" [(ngModel)]="anthropicKey" placeholder="sk-ant-..." />
+                        <button (click)="saveAnthropicKey()">Save</button>
 
-                    <div class="divider"></div>
+                        <div class="divider"></div>
 
-                    <label>OpenAI API Key</label>
-                    <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
-                    <button (click)="saveApiKey()">Save</button>
+                        <label>OpenAI API Key</label>
+                        <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
+                        <button (click)="saveApiKey()">Save</button>
 
-                    <div class="divider"></div>
+                        <div class="divider"></div>
 
-                    <label>Dark Mode</label>
-                    <div class="toggle-row">
-                    <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
-                        <div class="toggle-thumb"></div>
+                        <label>Dark Mode</label>
+                        <div class="toggle-row">
+                        <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
                 }
         
         </div> 
