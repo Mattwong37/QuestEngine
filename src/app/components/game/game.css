@@ -290,6 +290,57 @@ button {
     margin: 0;
 }
 
+.card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    }
+
+.nav-arrow {
+    background: rgba(15, 52, 96, 0.6);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.nav-arrow:hover:not(:disabled) {
+    background: rgba(233, 69, 96, 0.6);
+}
+
+.nav-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.card-counter {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.past-choice {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 2px solid rgba(233, 69, 96, 0.6);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
 body {
     margin: 0;
     padding: 0;
