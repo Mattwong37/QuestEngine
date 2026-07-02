@@ -72,6 +72,9 @@ export class StoryService {
 
     async makeChoice(choiceText: string, anthropicKey: string): Promise<void> {
         this.isLoading.set(true);
+        this.history.update(h => h.map((entry, i) =>
+            i === this.currentCardIndex() ? { ...entry, choiceMade: choiceText } : entry
+        ));
         await this.sendMessage(`Player chose: ${choiceText}`, anthropicKey);
     }
 
@@ -109,17 +112,16 @@ export class StoryService {
         }]);
         this.currentCardIndex.set(this.history().length - 1);
 
-
         this.conversationHistory.push({ role: 'assistant', content: text });
         this.currentScene.set(parsed.sceneText);
         this.currentChoices.set(parsed.choices);
 
         } catch (error) {
-        console.error('Story error:', error);
-        this.currentScene.set('Something\'s not right. Check your API key in Settings.');
-        this.currentChoices.set([]);
+            console.error('Story error:', error);
+            this.currentScene.set('Something\'s not right. Check your API key in Settings.');
+            this.currentChoices.set([]);
         } finally {
-        this.isLoading.set(false);
+            this.isLoading.set(false);
         }
     }
 }

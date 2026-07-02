@@ -37,35 +37,51 @@
     <div class="main-area">   
         <div class="story-area">
             <!-- This button is just for testing the UI with dummy data -->
-            <!-- <button (click)="loadDummyData()" style="margin-bottom: 1rem; opacity: 0.5; font-size: 0.75rem;">Load Test Data</button> -->
+            <button (click)="loadDummyData()" style="margin-bottom: 1rem; opacity: 0.5; font-size: 0.75rem;">Load Test Data</button>
 
             @if (storyService.isLoading()) {
                 <div class="loading">
                 <p>Loading ...</p>
                 </div>
             } @else {
+                <div class="card-nav">
+                    <button 
+                        [disabled]="storyService.currentCardIndex() === 0" 
+                        (click)="prevCard()">←</button>
+                        <span class="card-counter">
+                            {{ storyService.currentCardIndex() + 1 }} / {{ storyService.history().length }}
+                        </span>
+                    <button [disabled]="storyService.currentCardIndex() === storyService.history().length - 1" (click)="nextCard()">→</button>
+                </div>
                 <div class="scene-image">
                     @if (storyService.currentImage()) {
                         <img [src]="storyService.currentImage()" alt="Scene" />
                     } @else {
                         <div class="image-placeholder">
-                        <span>?</span>
-                        <p>Image generation is unavailable at this time</p>
+                            <span>?</span>
+                            <p>Image generation is unavailable at this time</p>
                         </div>
                     }
                 </div>
 
-                <div class="scene-text">
-                <p>{{ storyService.currentScene() }}</p>
+                <div class="scene-text" (wheel)="onScroll($event)">
+                    <p>{{ currentCard()?.sceneText }}</p>
                 </div>
 
-                <div class="choices">
+                @if (isCurrentCard()) {
+                    <div class="choices">
                     @for (choice of storyService.currentChoices(); track choice.id) {
                         <button class="choice-btn" (click)="makeChoice(choice)">
                         {{ choice.text }}
                         </button>
                     }
-                </div>
+                    </div>
+                } @else {
+                    <div class="past-choice">
+                    <p>You chose: <em>{{ currentCard()?.choiceMade }}</em></p>
+                    </div>
+                }
+
             }
         </div>
 
