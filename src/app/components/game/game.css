@@ -83,6 +83,9 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .side-panel {
@@ -217,6 +220,7 @@ button {
     flex: 1;
     margin-bottom: 1.5rem;
     line-height: 1.8;
+    max-height: 200px
 }
 
 .choices {
