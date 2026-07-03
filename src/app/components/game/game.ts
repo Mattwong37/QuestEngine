@@ -57,6 +57,10 @@ export class Game implements OnInit {
   saveAnthropicKey() {
     localStorage.setItem('anthropic_key', this.anthropicKey());
     alert('API key saved!');
+
+    if (this.storyService.history().length === 0) {
+      this.storyService.startStory(this.gameService.player().name, this.anthropicKey());
+    }
   }
 
   currentCard() {
@@ -128,6 +132,13 @@ export class Game implements OnInit {
     if (savedAnthropic) this.anthropicKey.set(savedAnthropic);
 
     const key = localStorage.getItem('anthropic_key') ?? '';
+    if (!key) {
+      this.storyService.currentScene.set(
+        'No Anthropic API key found. Please add your anthropic and OpenAI keys in Settings'
+      );
+      return;
+    }
+
     this.storyService.startStory(this.gameService.player().name, key);
   }
 

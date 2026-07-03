@@ -14,7 +14,9 @@ export interface StoryResponse {
     sceneText: string;
     choices: StoryChoice[];
     statsUpdate?: any;
-    imagePrompt: string; 
+    imagePrompt?: string; 
+    characterSummary?: string;
+    newCharacters?: Record<string, string>;
 }
 
 export interface HistoryEntry {
@@ -35,6 +37,7 @@ export class StoryService {
     currentCardIndex = signal(0);
     history = signal<HistoryEntry[]>([]);
     currentImage = signal('');
+    characterRegistry: Record<string, string> = {};
 
     // This prompt was written to be optimized for cost. May come back to make this shorter, but will have to test variations and not effects on the game quality
     private systemPrompt = `You are the Game Master of a persistent isekai fantasy RPG. The player is the protagonist, and every choice permanently affects the world, characters, and future events.
@@ -58,14 +61,21 @@ export class StoryService {
             { "id": "2", "text": "<choice>" },
             { "id": "3", "text": "<choice>" }
         ],
-        "imagePrompt": "<anime scene with consistent character appearances, cinematic lighting, dynamic composition>"
-        }`;
+        "imagePrompt": "<short scene description for image generation>",
+        "characterSummary": "<only on first scene: compressed one-line protagonist appearance>",
+            "newCharacters": {
+                "<character_name>": "<compressed one-line appearance description>"
+            }
+        }
+        Only include "newCharacters" when new named characters are introduced. Only include "characterSummary" on the very first scene.`;
 
     async startStory(playerName: string, anthropicKey: string): Promise<void> {
         this.isLoading.set(true);
         this.conversationHistory = [];
+        this.characterRegistry = {};
 
-        const firstMessage = `The player's name is ${playerName}. Begin the isekai story. Transport them from the modern world into a dangerous fantasy realm. Describe their appearance and surroundings in detail. Then present their first choices.`;
+        const firstMessage = `The player's name is ${playerName}. Begin the isekai story. Transport them from the modern world into a dangerous fantasy realm. Describe their appearance and surroundings in detail. Then present their first choices.
+        Since this is the first scene, include a "characterSummary" field — a single compressed line describing the protagonist's appearance for image consistency. Example: "young male, messy black hair, brown eyes, modern clothes, no weapons yet"`;
 
         await this.sendMessage(firstMessage, anthropicKey);
     }
@@ -78,43 +88,88 @@ export class StoryService {
         await this.sendMessage(`Player chose: ${choiceText}`, anthropicKey);
     }
 
+    async generateImage(imagePrompt: string, openAiKey: string): Promise<string> {
+        const characterDescriptions = Object.entries(this.characterRegistry).map(([name, desc]) => `${name}: ${desc}`).join(', ');
+
+        const fullPrompt = `Anime style, cinematic lighting, dynamic composition. Character: ${characterDescriptions}. Scene: ${imagePrompt}`;
+
+        try {
+            const response = await fetch('https://api.openai.com/v1/images/generations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${openAiKey}`
+            },
+            body: JSON.stringify({
+                model: 'dall-e-3',
+                prompt: fullPrompt,
+                n: 1,
+                size: '1792x1024',
+                quality: 'standard'
+            })
+            });
+
+            const data = await response.json();
+            return data.data[0].url;
+
+        } catch (error) {
+            console.error('Image generation error:', error);
+            return '';
+        }
+    }
+
     private async sendMessage(message: string, anthropicKey: string): Promise<void> {
         this.conversationHistory.push({ role: 'user', content: message });
 
         try {
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': anthropicKey,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true'
-            },
-            body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 1000,
-            system: this.systemPrompt,
-            messages: this.conversationHistory
-            })
-        });
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': anthropicKey,
+                'anthropic-version': '2023-06-01',
+                'anthropic-dangerous-direct-browser-access': 'true'
+                },
+                body: JSON.stringify({
+                model: 'claude-sonnet-4-6',
+                max_tokens: 1000,
+                system: this.systemPrompt,
+                messages: this.conversationHistory
+                })
+            });
 
-        const data = await response.json();
-        const text = data.content[0].text;
-        const parsed: StoryResponse = JSON.parse(text);
+            const data = await response.json();
+            const text = data.content[0].text;
+            const parsed: StoryResponse = JSON.parse(text);
 
-        this.currentScene.set(parsed.sceneText);
-        this.currentChoices.set(parsed.choices);
-        this.history.update(h => [...h, {
-        sceneText: parsed.sceneText,
-        imageUrl: '',
-        choiceMade: '',
-        imagePrompt: parsed.imagePrompt ?? ''
-        }]);
-        this.currentCardIndex.set(this.history().length - 1);
+            if (parsed.characterSummary && !this.characterRegistry['protagonist']) {
+                this.characterRegistry['protagonist'] = parsed.characterSummary;
+            }
 
-        this.conversationHistory.push({ role: 'assistant', content: text });
-        this.currentScene.set(parsed.sceneText);
-        this.currentChoices.set(parsed.choices);
+            if (parsed.newCharacters) {
+                this.characterRegistry = { ...this.characterRegistry, ...parsed.newCharacters };
+            }
+
+            this.currentScene.set(parsed.sceneText);
+            this.currentChoices.set(parsed.choices);
+            this.history.update(h => [...h, {
+                sceneText: parsed.sceneText,
+                imageUrl: '',
+                choiceMade: '',
+                imagePrompt: parsed.imagePrompt ?? ''
+            }]);
+            this.currentCardIndex.set(this.history().length - 1);
+
+            this.conversationHistory.push({ role: 'assistant', content: text });
+
+            const openAiKey = localStorage.getItem('openai_key') ?? '';
+            if (parsed.imagePrompt && openAiKey) {
+                const imageUrl = await this.generateImage(parsed.imagePrompt, openAiKey);
+
+                this.history.update(h => h.map((entry, i) =>
+                    i === h.length - 1 ? { ...entry, imageUrl } : entry
+                ));
+            }
 
         } catch (error) {
             console.error('Story error:', error);
