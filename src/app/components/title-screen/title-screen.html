@@ -18,8 +18,8 @@
             <div class="character-creation-content">
                 <h2>Create Your Character</h2>
                 <p>What is your name?</p>
-                <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." ali/>
-                <button (click)="createCharacter()">Submit</button>
+                <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..."/>
+                <button (click)="createCharacter()" [disabled]="!playerName().trim()">Submit</button>
             </div>
 
         </div>
