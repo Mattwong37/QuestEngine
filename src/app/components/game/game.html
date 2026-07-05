@@ -124,7 +124,7 @@
                     <div>
                         <h3>Settings</h3>
                         <label>Claude API Key</label>
-                        <input type="password" [(ngModel)]="anthropicKey" placeholder="sk-ant-..." />
+                        <input type="password" [ngModel]="anthropicKey()" (ngModelChange)="anthropicKey.set($event)" placeholder="sk-ant-..." />
                         <button (click)="saveAnthropicKey()">Save</button>
 
                         <div class="divider"></div>

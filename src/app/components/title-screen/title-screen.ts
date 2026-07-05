@@ -15,11 +15,32 @@ export class TitleScreen {
   currentScreen = signal('title');
 
   playerName = signal('');
-  private gameService = inject(GameService);
+  gameService = inject(GameService);
+
+  confirmDeleteId = signal<number | null>(null);
 
   startGame() {
     this.currentScreen.set('character-creation');
   } 
+
+  hasSaves() {
+    return this.gameService.saveSlots().length > 0;
+  }
+
+  continueGame() {
+    this.currentScreen.set('load');
+  }
+
+  loadGame(slotId: number) {
+    this.gameService.loadGame(slotId);
+    this.currentScreen.set('game');
+  }
+
+  formatDate(timestamp: number) {
+    return new Date(timestamp).toLocaleString(undefined, {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+  }
 
   createCharacter() {
     this.gameService.initPlayer(this.playerName());
@@ -27,4 +48,64 @@ export class TitleScreen {
     console.log('Player name:', this.playerName());
     console.log('Saved to service:', this.gameService.playerName());
   }
+
+  loadFakeSaves() {
+  const fakeSaves = [
+    {
+      id: 1,
+      name: 'FakeSave1',
+      timestamp: Date.now(),
+      playerName: 'Name1',
+      scenePreview: 'This is a fake save test description. The text that will fill this position will range in size. I should have used lorem ipsum for this one like I did for the other',
+      data: {
+        player: this.gameService.player(),
+        conversationHistory: [],
+        history: [
+          {
+            sceneText: 'Test story piece 1',
+            imageUrl: '',
+            choiceMade: 'Choice1',
+            imagePrompt: ''
+          },
+          {
+            sceneText: 'Test story piece 2',
+            imageUrl: '',
+            choiceMade: '',
+            imagePrompt: ''
+          }
+        ],
+        characterRegistry: {},
+        currentCardIndex: 1,
+        currentChoices: [  
+          { id: '1', text: 'Choice1' },
+          { id: '2', text: 'Choice2' },
+          { id: '3', text: 'Choice3' }
+        ]
+      }
+    },
+    {
+      id: 2,
+      name: 'FakeSave2',
+      timestamp: Date.now(),
+      playerName: 'Name2',
+      scenePreview: 'This is a fake save test description. The text that will fill this position will range in size. I should have used lorem ipsum for this one like I did for the other',
+      data: {
+        player: this.gameService.player(),
+        conversationHistory: [],
+        history: [
+          {
+            sceneText: 'Test story piece 1',
+            imageUrl: '',
+            choiceMade: 'Choice1',
+            imagePrompt: ''
+          }
+        ],
+        characterRegistry: {},
+        currentCardIndex: 1,
+        currentChoices: []
+      }
+    }
+  ];
+  this.gameService.saveSlots.set(fakeSaves as any);
+}
 }

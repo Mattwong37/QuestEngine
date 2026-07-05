@@ -2,21 +2,58 @@
     <div class="title-screen">
         <div class="title-content">
             <h1>Quest Engine</h1>
-            <button (click)="startGame()">Begin Adventure</button>
+            <div class="title-buttons">
+                <button (click)="startGame()">Begin Adventure</button>
+                <!-- @if (hasSaves()) { -->
+                    <button (click)="continueGame()">Continue Adventure</button>
+                <!-- } -->
+            </div>
         </div>
     </div>
     }
 
-    @if (currentScreen() === 'character-creation') {
-    <div class="character-creation">
-        <div class="character-creation-content">
-            <h2>Create Your Character</h2>
-            <p>What is your name?</p>
-            <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." ali/>
-            <button (click)="createCharacter()">Submit</button>
-        </div>
 
-    </div>
+    @if (currentScreen() === 'character-creation') {
+        <div class="character-creation">
+            <div class="character-creation-content">
+                <h2>Create Your Character</h2>
+                <p>What is your name?</p>
+                <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..." ali/>
+                <button (click)="createCharacter()">Submit</button>
+            </div>
+
+        </div>
+    }
+
+
+    @if (currentScreen() === 'load') {
+        <!-- <button (click)="loadFakeSaves()">Load Fake Saves</button> -->
+        <div class="load-screen">
+            <h2>Which Adventure?</h2>
+            <div class="save-slots">
+                @for (slot of gameService.saveSlots(); track slot.id) {
+                    <div class="save-slot">
+                        <div class="slot-info">
+                            <div class="slot-name"><strong>Slot Name:</strong> {{ slot.name }}</div>
+                            <div class="slot-player"><strong>Character Name:</strong> {{ slot.playerName }}</div>
+                            <div class="slot-preview"><strong>Save Preview:</strong> {{ slot.scenePreview }}</div>
+                            <div class="slot-time"><strong>Save Date:</strong> {{ formatDate(slot.timestamp) }}</div>
+                        </div>
+                        <div class="slot-actions">
+                            <button (click)="loadGame(slot.id)">Load</button>
+                            @if (confirmDeleteId() === slot.id) {
+                                <span class="confirm-text">Are you sure?</span>
+                                <button class="confirm-yes" (click)="gameService.deleteSave(slot.id); confirmDeleteId.set(null)">Yes</button>
+                                <button class="confirm-no" (click)="confirmDeleteId.set(null)">No</button>
+                            } @else {
+                                <button (click)="confirmDeleteId.set(slot.id)">Delete</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class= back-button (click)="currentScreen.set('title')">< Back</button>
+        </div>
     }
 
     @if (currentScreen() === 'game') {

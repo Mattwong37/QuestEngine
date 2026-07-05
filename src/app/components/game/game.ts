@@ -131,6 +131,11 @@ export class Game implements OnInit {
     if (savedOpenAi) this.openAiKey.set(savedOpenAi);
     if (savedAnthropic) this.anthropicKey.set(savedAnthropic);
 
+    if (this.gameService.isLoadedFromSave()) {
+      this.gameService.isLoadedFromSave.set(false);
+      return;
+    }
+
     const key = localStorage.getItem('anthropic_key') ?? '';
     if (!key) {
       this.storyService.currentScene.set(
