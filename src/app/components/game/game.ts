@@ -24,6 +24,8 @@ export class Game implements OnInit {
   savingSlot = signal(0);
   saveName = signal('');
 
+  isGameOver = computed(() => this.gameService.player().currentHealth <= 0);
+
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
     const storyArea = document.querySelector('.story-area');
@@ -107,6 +109,34 @@ export class Game implements OnInit {
     document.body.style.backgroundImage = url;
     console.log('Body background after set:', document.body.style.backgroundImage);
   }
+
+  startOver() {
+    this.storyService.history.set([]);
+    this.storyService.currentChoices.set([]);
+    this.storyService.conversationHistory = [];
+    this.storyService.currentCardIndex.set(0);
+    this.gameService.player.set({
+      name: '',
+      level: 1,
+      xp: 0,
+      xpToNextLevel: 100,
+      maxHealth: 100,
+      currentHealth: 100,
+      maxMagic: 100,
+      currentMagic: 100,
+      defense: 0,
+      magicDefense: 0,
+      attackMin: 5,
+      attackMax: 5,
+      stamina: 100,
+      equippedWeapon: null,
+      inventory: [],
+      activeModifiers: [],
+      choiceHistory: [],
+    });
+    // Navigate back to title screen
+    window.location.reload();
+  }   
 
   async makeChoice(choice: any) {
     const key = localStorage.getItem('anthropic_key') ?? '';

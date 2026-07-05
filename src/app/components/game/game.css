@@ -456,3 +456,133 @@ body {
     text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8);
     box-sizing: border-box;
 }
+
+.game-over-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.game-over-panel {
+    background: rgba(20, 15, 10, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 2.5rem;
+    width: 560px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.game-over-title {
+    font-size: 2.5rem;
+    color: #FFD700;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    letter-spacing: 0.05em;
+}
+
+.game-over-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.game-over-stat {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.game-over-stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+    color: white;
+}
+
+.game-over-stat-value {
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.choices-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    align-self: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.choices-history {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 200px;
+    overflow-y: auto;
+    color: white;
+}
+
+.history-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    border-left: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.history-index {
+    font-size: 0.75rem;
+}
+
+.history-choice {
+    font-size: 0.85rem;
+}
+
+.start-over-btn {
+    padding: 14px 36px;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+    background: #1a1510;
+    color: #f1d280;
+    border: 2px solid #d4af37;
+    border-radius: 4px;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 0px 10px rgba(212, 175, 55, 0.2);
+}
+
+.start-over-btn:hover {
+    background: #473623;
+    border-color: #fff1c5;
+    box-shadow: 0px 0px 20px rgba(212, 175, 55, 0.6);
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
+}

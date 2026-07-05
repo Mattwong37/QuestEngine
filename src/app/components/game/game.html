@@ -179,8 +179,55 @@
                         </div>
                     </div>
                 }
-        
+        <!-- Tests game over functionality -->
+        <!-- <button (click)="gameService.player.update(p => ({...p, currentHealth: 0}))">Test Game Over</button> -->
         </div> 
     </div>
         
+    @if (isGameOver()) {
+        <div class="game-over-overlay">
+            <div class="game-over-panel">
+                <h1 class="game-over-title"><strong>Game Over</strong></h1>
+                <div class="game-over-stats">
+                    <div class="game-over-stat">
+                        <span class="game-over-stat-label">Hero</span>
+                        <span class="game-over-stat-value">{{ gameService.player().name }}</span>
+                    </div>
+                    <div class="game-over-stat">
+                        <span class="game-over-stat-label">Level Reached</span>
+                        <span class="game-over-stat-value">{{ gameService.player().level }}</span>
+                    </div>
+                    <div class="game-over-stat">
+                        <span class="game-over-stat-label">Attack</span>
+                        <span class="game-over-stat-value">{{ gameService.player().attackMin }} - {{ gameService.player().attackMax }}</span>
+                    </div>
+                    <div class="game-over-stat">
+                        <span class="game-over-stat-label">Defense</span>
+                        <span class="game-over-stat-value">{{ gameService.player().defense }}</span>
+                    </div>
+                    <div class="game-over-stat">
+                        <span class="game-over-stat-label">Magic Defense</span>
+                        <span class="game-over-stat-value">{{ gameService.player().magicDefense }}</span>
+                    </div>
+                    <div class="game-over-stat">
+                        <span class="game-over-stat-label">Stamina</span>
+                        <span class="game-over-stat-value">{{ gameService.player().stamina }}%</span>
+                    </div>
+                </div>
+
+                <h3 class="choices-title">Your History</h3>
+                <div class="choices-history">
+                    @for (entry of storyService.history(); track $index) {
+                        @if (entry.choiceMade) {
+                            <div class="history-entry">
+                                <span class="history-index">{{ $index + 1 }}</span>
+                                <span class="history-choice">{{ entry.choiceMade }}</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <button class="start-over-btn" (click)="startOver()">Start Over</button>
+            </div>
+        </div>
+        }
 </div>
