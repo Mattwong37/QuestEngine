@@ -21,6 +21,9 @@ export class Game implements OnInit {
 
   thresholdAmount: number = 20;
 
+  savingSlot = signal(0);
+  saveName = signal('');
+
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
     const storyArea = document.querySelector('.story-area');
@@ -145,6 +148,22 @@ export class Game implements OnInit {
     }
 
     this.storyService.startStory(this.gameService.player().name, key);
+  }
+
+  getSlot(id: number) {
+    return this.gameService.saveSlots().find(s => s.id === id);
+  }
+
+  formatDate(timestamp: number) {
+    return new Date(timestamp).toLocaleString(undefined, {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  confirmSave(slot: number) {
+    this.gameService.saveGame(slot, this.saveName() || 'Save ' + slot);
+    this.savingSlot.set(0);
+    this.saveName.set('');
   }
 
   // Dummy Data loading method for testing UI

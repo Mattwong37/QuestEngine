@@ -121,6 +121,7 @@ button {
     cursor: pointer;
     text-align: left;
     transition: background .2s;
+    border: 1px solid rgb(117, 103, 60);
 }
 
 .panel-buttons button:hover,
@@ -403,6 +404,44 @@ button {
     margin: 0.25rem;
 }
 
+.save-slot-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.slot-name-small {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #FFD700;
+}
+
+.slot-preview-small {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    line-height: 1.4;
+}
+
+.slot-time-small {
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.slot-empty-small {
+    font-size: 0.85rem;
+    opacity: 0.4;
+    font-style: italic;
+}
+
+.save-confirm-btns {
+    display: flex;
+    gap: 0.5rem;
+}
 
 body {
     margin: 0;

@@ -99,6 +99,7 @@
             <div class="panel-buttons">
                 <button (click)="activePanel.set('equipment')" [class.active]="activePanel() === 'equipment'">Equipment</button>
                 <button (click)="activePanel.set('stats')" [class.active]="activePanel() === 'stats'">Stats</button>
+                <button (click)="activePanel.set('save')" [class.active]="activePanel() === 'save'">Save</button>
                 <button (click)="activePanel.set('settings')" [class.active]="activePanel() === 'settings'">Settings</button>
             </div>
 
@@ -117,6 +118,41 @@
                         <p>Defense: {{ gameService.player().defense }}</p>
                         <p>Magic Defense: {{ gameService.player().magicDefense }}</p>
                         <p>Stamina: {{ gameService.player().stamina }}%</p>
+                    </div>
+                }
+
+                @if (activePanel() === 'save') {
+                    <div>
+                        <h3>Save Game</h3>
+                        @for (slot of [1, 2, 3]; track slot) {
+                            <div class="save-slot-item">
+                                @if (getSlot(slot)) {
+                                <div class="slot-info-small">
+                                    <div class="slot-name-small">{{ getSlot(slot)?.name }}</div>
+                                    <div class="slot-preview-small">{{ getSlot(slot)?.scenePreview }}</div>
+                                    <div class="slot-time-small">{{ formatDate(getSlot(slot)!.timestamp) }}</div>
+                                </div>
+                                } @else {
+                                <div class="slot-empty-small">Empty Slot {{ slot }}</div>
+                                }
+                                @if (savingSlot() === slot) {
+                                    <input 
+                                        type="text" 
+                                        [ngModel]="saveName()" 
+                                        (ngModelChange)="saveName.set($event)"
+                                        placeholder="Name your save..." 
+                                    />
+                                    <div class="save-confirm-btns">
+                                        <button (click)="confirmSave(slot)">Confirm</button>
+                                        <button (click)="savingSlot.set(0)">Cancel</button>
+                                    </div>
+                                } @else {
+                                    <button (click)="savingSlot.set(slot)">
+                                        {{ getSlot(slot) ? 'Overwrite' : 'Save' }}
+                                    </button>
+                                }
+                            </div>
+                        }
                     </div>
                 }
 
