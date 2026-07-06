@@ -102,7 +102,7 @@ export class StoryService {
                 'Authorization': `Bearer ${openAiKey}`,
             },
             body: JSON.stringify({
-                model: 'gpt-image-1',
+                model: 'gpt-image-1.5',
                 prompt: fullPrompt,
                 n: 1,
                 size: '1536x1024',
