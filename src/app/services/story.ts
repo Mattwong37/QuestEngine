@@ -92,7 +92,7 @@ export class StoryService {
     async generateImage(imagePrompt: string, openAiKey: string): Promise<string> {
         const characterDescriptions = Object.entries(this.characterRegistry).map(([name, desc]) => `${name}: ${desc}`).join(', ');
 
-        const fullPrompt = `Anime style, cinematic lighting, dynamic composition. Character: ${characterDescriptions}. Scene: ${imagePrompt}`;
+        const fullPrompt = `Create a premium-quality fantasy anime promotional illustration that looks like official key art for a AAA JRPG. The image should appear professionally illustrated rather than AI-generated. Prioritize clean linework, carefully designed facial features, elegant composition, refined lighting, and a cohesive color palette. Every element should feel intentional and polished. Avoid amateur-looking rendering, muddy shading, generic AI textures, inconsistent anatomy, or semi-realistic faces. Characters: ${characterDescriptions}. Scene: ${imagePrompt}.`;
 
         try {
             const response = await fetch('https://api.openai.com/v1/images/generations', {
@@ -100,20 +100,20 @@ export class StoryService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${openAiKey}`,
-                'OpenAI-Organization': ''
             },
             body: JSON.stringify({
-                model: 'dall-e-3',
+                model: 'gpt-image-1',
                 prompt: fullPrompt,
                 n: 1,
-                size: '1792x1024',
-                quality: 'standard',
-                response_format: 'url'
+                size: '1536x1024',
+                quality: 'low',
             })
             });
 
             const data = await response.json();
-            return data.data[0].url;
+            const b64 = data.data[0].b64_json;
+            
+            return `data:image/png;base64,${b64}`;
 
         } catch (error) {
             console.error('Image generation error:', error);
@@ -173,6 +173,8 @@ export class StoryService {
                     i === h.length - 1 ? { ...entry, imageUrl } : entry
                 ));
             }
+
+            console.log('Image prompt from Claude:', parsed.imagePrompt);
 
         } catch (error) {
             console.error('Story error:', error);
