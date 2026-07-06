@@ -218,10 +218,11 @@ button {
 }
 
 .scene-text {
-    flex: 1;
-    margin-bottom: 1.5rem;
     line-height: 1.8;
-    max-height: 200px
+    overflow-y: auto;
+    background: rgb(from var(--invert-color) r g b / 0.25);
+    border-radius: 4px;
+    padding: 30px 50px 30px; 
 }
 
 .choices {
@@ -244,7 +245,6 @@ button {
 }
 
 .choice-btn:hover {
-    /* text-shadow: 0px 0px 5px rgba(212, 175, 55, 0.6); */
     box-shadow: 0px 0px 20px rgba(212, 175, 55, 0.6);
     transition: text-shadow 0.2s;
 }

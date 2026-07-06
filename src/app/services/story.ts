@@ -46,6 +46,7 @@ export class StoryService {
         - Choices have real consequences.
         - Characters remember past interactions.
         - The world continues evolving.
+        - Keep sceneText concise. max 4 sentences. Be vivid, but leave room for imagination.
 
         Choices:
         - Return 2–3 meaningful options.
@@ -98,14 +99,16 @@ export class StoryService {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${openAiKey}`
+                'Authorization': `Bearer ${openAiKey}`,
+                'OpenAI-Organization': ''
             },
             body: JSON.stringify({
                 model: 'dall-e-3',
                 prompt: fullPrompt,
                 n: 1,
                 size: '1792x1024',
-                quality: 'standard'
+                quality: 'standard',
+                response_format: 'url'
             })
             });
 
@@ -140,7 +143,7 @@ export class StoryService {
 
             const data = await response.json();
             const text = data.content[0].text;
-            const parsed: StoryResponse = JSON.parse(text);
+            const parsed: StoryResponse = JSON.parse(text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
 
             if (parsed.characterSummary && !this.characterRegistry['protagonist']) {
                 this.characterRegistry['protagonist'] = parsed.characterSummary;
