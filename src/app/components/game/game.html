@@ -39,13 +39,13 @@
             <!-- This button is just for testing the UI with dummy data -->
             <!-- <button (click)="loadDummyData()" style="margin-bottom: 1rem; opacity: 0.5; font-size: 0.75rem;">Load Test Data</button> -->
 
-            @if (storyService.history().length === 0) {
+            @if (storyService.isLoading()) {
+                <div class="loading">
+                    <p>Loading ...</p>
+                </div>
+            } @else if (storyService.history().length === 0) {
                 <div class="no-story">
                     <p>{{ storyService.currentScene() }}</p>
-                </div>
-            } @else if (storyService.isLoading()) {
-                <div class="loading">
-                <p>Loading ...</p>
                 </div>
             } @else {
                 <div class="story-card-wrapper">
