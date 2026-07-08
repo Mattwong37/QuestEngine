@@ -41,6 +41,21 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     overflow: hidden;
+    position: relative;
+}
+
+.bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent calc(10% - 1px),
+        rgba(0, 0, 0, 0.35) calc(10% - 1px),
+        rgba(0, 0, 0, 0.35) 10%
+    );
+    background-size: 10% 100%;
 }
 
 .bar-fill {
