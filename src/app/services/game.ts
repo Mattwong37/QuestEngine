@@ -52,6 +52,7 @@ export class GameService {
         choiceHistory: [],
     });
 
+    
     saveSlots = signal<SaveSlot[]>(this.loadSavesFromStorage());
 
     initPlayer(name: string) {
@@ -63,7 +64,11 @@ export class GameService {
         const saves = [...this.saveSlots()];
         const existingIdx = saves.findIndex(s => s.id === slotId);
 
-        const history = this.storyService.history();
+        const history = this.storyService.history().map(entry => ({
+            ...entry,
+            imageUrl: ''
+        }));
+        
         const scenePreview = history.length > 0 ? history[history.length - 1].sceneText.substring(0, 80) + '...' : 'No scenes yet';
 
         const newSave: SaveSlot = {
@@ -75,7 +80,7 @@ export class GameService {
             data: {
                 player: this.player(),
                 conversationHistory: this.storyService.conversationHistory,
-                history: this.storyService.history(),
+                history: history,
                 characterRegistry: this.storyService.characterRegistry,
                 currentCardIndex: this.storyService.currentCardIndex(),
                 currentChoices: this.storyService.currentChoices(),
@@ -89,7 +94,7 @@ export class GameService {
         }
 
         this.saveSlots.set(saves);
-            localStorage.setItem('quest_engine_saves', JSON.stringify(saves));
+        localStorage.setItem('quest_engine_saves', JSON.stringify(saves));
     }
 
     loadGame(slotId: number) {

@@ -166,6 +166,10 @@ export class Game implements OnInit {
 
     if (this.gameService.isLoadedFromSave()) {
       this.gameService.isLoadedFromSave.set(false);
+      const openAiKey = localStorage.getItem('openai_key') ?? '';
+      if (openAiKey) {
+        this.storyService.regenerateImages(openAiKey);
+      }
       return;
     }
 

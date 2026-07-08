@@ -122,6 +122,9 @@ export class StoryService {
     }
 
     private async sendMessage(message: string, anthropicKey: string): Promise<void> {
+        if (this.conversationHistory.length > 10) {
+            this.conversationHistory = this.conversationHistory.slice(-10);
+        }
         this.conversationHistory.push({ role: 'user', content: message });
 
         try {
@@ -182,6 +185,18 @@ export class StoryService {
             this.currentChoices.set([]);
         } finally {
             this.isLoading.set(false);
+        }
+    }
+
+    async regenerateImages(openAiKey: string): Promise<void> {
+        const history = this.history();
+        for (let i = 0; i < history.length; i++) {
+            if (history[i].imagePrompt && !history[i].imageUrl) {
+                const imageUrl = await this.generateImage(history[i].imagePrompt, openAiKey);
+                this.history.update(h => h.map((entry, idx) =>
+                    idx === i ? { ...entry, imageUrl } : entry
+                ));
+            }
         }
     }
 }
