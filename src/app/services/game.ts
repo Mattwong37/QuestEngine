@@ -151,7 +151,7 @@ export class GameService {
                 newMaxMagic += 5;
                 newDefense += 2;
                 newMagicDefense += 2;
-                newAttackMin += 1;
+                newAttackMin += Math.random() >= 0.5 ? 1 : 2;
                 newAttackMax += 2;
                 update.levelUp = true;
                 newHealth = Math.min(newMaxHealth, newHealth + 5);

@@ -150,7 +150,7 @@ export class Game implements OnInit {
       defense: 0,
       magicDefense: 0,
       attackMin: 5,
-      attackMax: 5,
+      attackMax: 10,
       stamina: 100,
       equippedWeapon: null,
       inventory: [],
