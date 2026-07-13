@@ -36,9 +36,10 @@
 
     <div class="main-area">   
         <div class="story-area">
-            <!-- This button is just for testing the UI with dummy data -->
+            <!-- These buttons just for testing -->
             <!-- <button (click)="loadDummyData()" style="margin-bottom: 1rem; opacity: 0.5; font-size: 0.75rem;">Load Test Data</button> -->
-
+            <!-- <button (click)="testLevelUp()">Test Level Up</button> -->
+            
             @if (storyService.isLoading()) {
                 <div class="loading">
                     <p>Loading ...</p>
@@ -60,6 +61,19 @@
                                 </div>
                             }
                         </div>
+
+                        @if (currentCard()?.statsUpdate?.xpGain && currentCard()?.statsUpdate?.xpGain !== 0) {
+                            <div class="stat-notification">
+                                @if (currentCard()?.statsUpdate?.xpGain) {
+                                    <span class="stat-line xp-gain">
+                                        +{{ currentCard()?.statsUpdate?.xpGain }} XP
+                                        @if (currentCard()?.statsUpdate?.levelUp) {
+                                            <span class="level-up-tag">(Level Up!)</span>
+                                        }
+                                    </span>
+                                }
+                            </div>
+                        }
 
                         <div class="scene-text">
                             <p>{{ currentCard()?.sceneText }}</p>

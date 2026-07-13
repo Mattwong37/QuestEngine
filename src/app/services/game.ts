@@ -146,13 +146,14 @@ export class GameService {
             if (newXp >= newXpToNext) {
                 newLevel += 1;
                 newXp = newXp - newXpToNext;
-                newXpToNext = Math.floor(newXpToNext * 1.5);
+                newXpToNext = Math.floor(newXpToNext * 1.25);
                 newMaxHealth += 5;
                 newMaxMagic += 5;
                 newDefense += 2;
                 newMagicDefense += 2;
                 newAttackMin += 1;
                 newAttackMax += 2;
+                update.levelUp = true;
             }
 
             return {

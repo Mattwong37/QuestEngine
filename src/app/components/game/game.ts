@@ -233,4 +233,26 @@ export class Game implements OnInit {
 
     this.storyService.currentCardIndex.set(1);
   }
+
+  // Immediately levels character up. Only for testing
+  testLevelUp() {
+    const update = {
+      xpGain: this.gameService.player().xpToNextLevel,
+      healthChange: 0,
+      magicChange: 0,
+      defenseChange: 0,
+      magicDefenseChange: 0,
+      attackMinChange: 0,
+      attackMaxChange: 0,
+      staminaChange: 0,
+      levelUp: false
+    };
+
+    this.gameService.applyStatsUpdate(update);
+
+    const currentIndex = this.storyService.currentCardIndex();
+    this.storyService.history.update(h => h.map((entry, i) =>
+      i === currentIndex ? { ...entry, statsUpdate: update } : entry
+    ));
+  }
 }
