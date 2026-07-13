@@ -153,6 +153,14 @@ export class Game implements OnInit {
         document.body.classList.add('light-bg');
       }
     });
+
+    effect(() => {
+      const update = this.storyService.pendingStatsUpdate();
+      if (update) {
+        this.gameService.applyStatsUpdate(update);
+        this.storyService.pendingStatsUpdate.set(null);
+      }
+    });
   }
 
   ngOnInit() {

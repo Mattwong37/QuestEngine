@@ -23,7 +23,18 @@ export interface HistoryEntry {
     sceneText: string;
     imageUrl: string;
     choiceMade: string;
-    imagePrompt: string; 
+    imagePrompt: string;
+    statsUpdate?: {
+        healthChange?: number;
+        magicChange?: number;
+        xpGain?: number;
+        defenseChange?: number;
+        magicDefenseChange?: number;
+        attackMinChange?: number;
+        attackMaxChange?: number;
+        staminaChange?: number;
+        levelUp?: boolean;
+    };
 }
 
 @Injectable({
@@ -38,6 +49,7 @@ export class StoryService {
     history = signal<HistoryEntry[]>([]);
     currentImage = signal('');
     characterRegistry: Record<string, string> = {};
+    pendingStatsUpdate = signal<any>(null);
 
     // This prompt was written to be optimized for cost. May come back to make this shorter, but will have to test variations and not effects on the game quality
     private systemPrompt = `You are the Game Master of a persistent isekai fantasy RPG. The player is the protagonist, and every choice permanently affects the world, characters, and future events.
@@ -47,6 +59,16 @@ export class StoryService {
         - Characters remember past interactions.
         - The world continues evolving.
         - Keep sceneText concise. max 4 sentences. Be vivid, but leave room for imagination.
+
+        statsUpdate rules:
+        - Never give XP on the first scene.
+        - Award XP only for: defeating enemies and solving challenges.
+        - Award 5-15 XP for minor accomplishments, 20-50 for major ones.
+        - staminaChange: decrease during combat, running, or intense physical activity (-5 to -15).
+        - staminaChange: increase during rest, sleeping, eating, or passive scenes (+5 to +10).
+        - Stamina affects combat effectiveness. Low stamina = weaker attacks.
+        - healthChange: negative for damage taken, positive for healing.
+        - Never let stamina go below 0 or above 100.
 
         Choices:
         - Return 2–3 meaningful options.
@@ -64,9 +86,19 @@ export class StoryService {
         ],
         "imagePrompt": "<short scene description for image generation>",
         "characterSummary": "<only on first scene: compressed one-line protagonist appearance>",
-            "newCharacters": {
-                "<character_name>": "<compressed one-line appearance description>"
-            }
+        "newCharacters": {
+            "<character_name>": "<compressed one-line appearance description>"
+        },
+        "statsUpdate": {
+            "healthChange": 0,
+            "magicChange": 0,
+            "xpGain": 0,
+            "defenseChange": 0,
+            "magicDefenseChange": 0,
+            "attackMinChange": 0,
+            "attackMaxChange": 0,
+            "staminaChange": 0
+        }
         }
         Only include "newCharacters" when new named characters are introduced. Only include "characterSummary" on the very first scene.`;
 
@@ -156,13 +188,18 @@ export class StoryService {
                 this.characterRegistry = { ...this.characterRegistry, ...parsed.newCharacters };
             }
 
+            if (parsed.statsUpdate) {
+                this.pendingStatsUpdate.set(parsed.statsUpdate);
+            }
+
             this.currentScene.set(parsed.sceneText);
             this.currentChoices.set(parsed.choices);
             this.history.update(h => [...h, {
                 sceneText: parsed.sceneText,
                 imageUrl: '',
                 choiceMade: '',
-                imagePrompt: parsed.imagePrompt ?? ''
+                imagePrompt: parsed.imagePrompt ?? '',
+                statsUpdate: parsed.statsUpdate ?? null
             }]);
             this.currentCardIndex.set(this.history().length - 1);
 

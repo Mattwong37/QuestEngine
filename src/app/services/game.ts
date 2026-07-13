@@ -125,4 +125,51 @@ export class GameService {
             return [];
         }
     }
+    
+    applyStatsUpdate(update: any) {
+        if (!update) return;
+
+        this.player.update(p => {
+            const newHealth = Math.max(0, Math.min(p.maxHealth, p.currentHealth + (update.healthChange ?? 0)));
+            const newMagic = Math.max(0, Math.min(p.maxMagic, p.currentMagic + (update.magicChange ?? 0)));
+            const newStamina = Math.max(0, Math.min(100, p.stamina + (update.staminaChange ?? 0)));
+            let newXp = p.xp + (update.xpGain ?? 0);
+            let newLevel = p.level;
+            let newXpToNext = p.xpToNextLevel;
+            let newMaxHealth = p.maxHealth;
+            let newMaxMagic = p.maxMagic;
+            let newDefense = p.defense + (update.defenseChange ?? 0);
+            let newMagicDefense = p.magicDefense + (update.magicDefenseChange ?? 0);
+            let newAttackMin = p.attackMin + (update.attackMinChange ?? 0);
+            let newAttackMax = p.attackMax + (update.attackMaxChange ?? 0);
+
+            if (newXp >= newXpToNext) {
+                newLevel += 1;
+                newXp = newXp - newXpToNext;
+                newXpToNext = Math.floor(newXpToNext * 1.5);
+                newMaxHealth += 5;
+                newMaxMagic += 5;
+                newDefense += 2;
+                newMagicDefense += 2;
+                newAttackMin += 1;
+                newAttackMax += 2;
+            }
+
+            return {
+                ...p,
+                currentHealth: newHealth,
+                currentMagic: newMagic,
+                stamina: newStamina,
+                xp: newXp,
+                xpToNextLevel: newXpToNext,
+                level: newLevel,
+                maxHealth: newMaxHealth,
+                maxMagic: newMaxMagic,
+                defense: newDefense,
+                magicDefense: newMagicDefense,
+                attackMin: newAttackMin,
+                attackMax: newAttackMax,
+            };
+        });
+    }
 }
