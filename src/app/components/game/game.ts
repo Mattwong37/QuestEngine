@@ -55,12 +55,35 @@ export class Game implements OnInit {
   }
 
   saveApiKey() {
-    localStorage.setItem('openai_key', this.openAiKey());
+    const newKey = this.openAiKey();
+    localStorage.setItem('openai_key', newKey);
     alert('API key saved!');
+
+    const currentIndex = this.storyService.currentCardIndex();
+    const currentEntry = this.storyService.history()[currentIndex];
+    if (currentEntry && !currentEntry.imageUrl && currentEntry.imagePrompt) {
+      this.storyService.generateImage(currentEntry.imagePrompt, newKey).then(imageUrl => {
+        if (imageUrl) {
+          this.storyService.history.update(h => h.map((entry, i) =>
+            i === currentIndex ? { ...entry, imageUrl } : entry
+          ));
+        }
+      });
+    }
   }
 
   saveAnthropicKey() {
-    localStorage.setItem('anthropic_key', this.anthropicKey());
+    const newKey = this.anthropicKey();
+    const existingKey = localStorage.getItem('anthropic_key');
+
+    if (existingKey) {
+      const confirmed = confirm(
+        'Saving a new Claude key may affect your game. I would advise saving before proceeding'
+      );
+      if (!confirmed) return;
+    }
+
+    localStorage.setItem('anthropic_key', newKey);
     alert('API key saved!');
 
     if (this.storyService.history().length === 0) {
