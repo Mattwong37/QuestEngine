@@ -59,13 +59,13 @@ export class Game implements OnInit {
     localStorage.setItem('openai_key', newKey);
     alert('API key saved!');
 
-    const currentIndex = this.storyService.currentCardIndex();
-    const currentEntry = this.storyService.history()[currentIndex];
-    if (currentEntry && !currentEntry.imageUrl && currentEntry.imagePrompt) {
-      this.storyService.generateImage(currentEntry.imagePrompt, newKey).then(imageUrl => {
+    const lastIndex = this.storyService.history().length - 1;
+    const lastEntry = this.storyService.history()[lastIndex];
+    if (lastEntry && !lastEntry.imageUrl && lastEntry.imagePrompt) {
+      this.storyService.generateImage(lastEntry.imagePrompt, newKey).then(imageUrl => {
         if (imageUrl) {
           this.storyService.history.update(h => h.map((entry, i) =>
-            i === currentIndex ? { ...entry, imageUrl } : entry
+            i === lastIndex ? { ...entry, imageUrl } : entry
           ));
         }
       });
