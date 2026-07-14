@@ -43,6 +43,7 @@ export class TitleScreen {
   loadGame(slotId: number) {
     this.gameService.loadGame(slotId);
     this.currentScreen.set('game');
+    this.showSettingsButton.set(false);
   }
 
   formatDate(timestamp: number) {
