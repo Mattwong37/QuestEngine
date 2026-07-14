@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit, effect, HostListener, computed } fro
 import { GameService } from '../../services/game';
 import { FormsModule } from '@angular/forms';
 import { StoryService } from '../../services/story';
+import { ApiKeyService } from '../../services/api-key';
 
 @Component({
   selector: 'app-game',
@@ -14,8 +15,11 @@ import { StoryService } from '../../services/story';
 export class Game implements OnInit {
   gameService = inject(GameService);
   activePanel = signal('equipment');
-  openAiKey = signal('');
-  anthropicKey = signal('');
+
+  apiKeyService = inject(ApiKeyService);
+  openAiKey = this.apiKeyService.openAiKey;
+  anthropicKey = this.apiKeyService.anthropicKey;
+
   darkMode = signal(false);
   storyService = inject(StoryService);
 
@@ -56,7 +60,7 @@ export class Game implements OnInit {
 
   saveApiKey() {
     const newKey = this.openAiKey();
-    localStorage.setItem('openai_key', newKey);
+    this.apiKeyService.setOpenAiKey(newKey);
     alert('API key saved!');
 
     const lastIndex = this.storyService.history().length - 1;
@@ -74,7 +78,7 @@ export class Game implements OnInit {
 
   saveAnthropicKey() {
     const newKey = this.anthropicKey();
-    const existingKey = localStorage.getItem('anthropic_key');
+    const existingKey = this.apiKeyService.anthropicKey();
 
     if (existingKey) {
       const confirmed = confirm(
@@ -197,14 +201,14 @@ export class Game implements OnInit {
 
     if (this.gameService.isLoadedFromSave()) {
       this.gameService.isLoadedFromSave.set(false);
-      const openAiKey = localStorage.getItem('openai_key') ?? '';
+      const openAiKey = this.apiKeyService.openAiKey();
       if (openAiKey) {
         this.storyService.regenerateImages(openAiKey);
       }
       return;
     }
 
-    const key = localStorage.getItem('anthropic_key') ?? '';
+    const key = this.apiKeyService.anthropicKey();
     if (!key) {
       this.storyService.currentScene.set(
         'No Anthropic API key found. Please add your anthropic and OpenAI keys in Settings'

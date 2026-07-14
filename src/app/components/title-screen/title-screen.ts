@@ -3,6 +3,7 @@ import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../../services/game';
 import { Game } from '../game/game';
+import { ApiKeyService } from '../../services/api-key';
 
 @Component({
   selector: 'app-title-screen',
@@ -22,8 +23,9 @@ export class TitleScreen {
 
   confirmDeleteId = signal<number | null>(null);
 
-  anthropicKey = signal('');
-  openAiKey = signal('');
+  apiKeyService = inject(ApiKeyService);
+  anthropicKey = this.apiKeyService.anthropicKey;
+  openAiKey = this.apiKeyService.openAiKey;
   darkMode = signal(false);
 
   startGame() {
@@ -58,12 +60,12 @@ export class TitleScreen {
   }
 
   saveAnthropicKey() {
-    localStorage.setItem('anthropic_key', this.anthropicKey());
+    this.apiKeyService.setAnthropicKey(this.anthropicKey());
     alert('Claude key saved!');
   }
 
   saveOpenAiKey() {
-    localStorage.setItem('openai_key', this.openAiKey());
+    this.apiKeyService.setOpenAiKey(this.openAiKey());
     alert('OpenAI key saved!');
   }
 
