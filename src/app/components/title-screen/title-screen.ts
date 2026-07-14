@@ -14,10 +14,16 @@ import { Game } from '../game/game';
 export class TitleScreen {
   currentScreen = signal('title');
 
+  showSettings = signal(false);
+
   playerName = signal('');
   gameService = inject(GameService);
 
   confirmDeleteId = signal<number | null>(null);
+
+  anthropicKey = signal('');
+  openAiKey = signal('');
+  darkMode = signal(false);
 
   startGame() {
     this.currentScreen.set('character-creation');
@@ -47,6 +53,27 @@ export class TitleScreen {
     this.currentScreen.set('game');
     console.log('Player name:', this.playerName().trim());
     console.log('Saved to service:', this.gameService.playerName());
+  }
+
+    saveAnthropicKey() {
+    localStorage.setItem('anthropic_key', this.anthropicKey());
+    alert('Claude key saved!');
+  }
+
+  saveOpenAiKey() {
+    localStorage.setItem('openai_key', this.openAiKey());
+    alert('OpenAI key saved!');
+  }
+
+  darkModeToggle() {
+    this.darkMode.set(!this.darkMode());
+    if (this.darkMode()) {
+      document.body.classList.remove('light-bg');
+      document.body.classList.add('dark-bg');
+    } else {
+      document.body.classList.remove('dark-bg');
+      document.body.classList.add('light-bg');
+    }
   }
 
   loadFakeSaves() {

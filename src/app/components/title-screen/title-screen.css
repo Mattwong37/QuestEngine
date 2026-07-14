@@ -28,7 +28,7 @@ p {
 }
 
 .character-creation button,
-.title-content button, .back-button, .save-slot button {
+.title-content button, .back-button, .save-slot button, .settings-button, .close-button, .settings-modal button {
     padding: 14px 36px;
     font-family: 'Cinzel', serif;
     font-size: 1.2rem;
@@ -48,7 +48,9 @@ p {
 
 .character-creation-content input[type="text"]:hover,
 .character-creation button:hover,
-.title-screen button:hover, .back-button:hover, .save-slot button:hover {
+.title-screen button:hover, .back-button:hover, .save-slot button:hover, 
+.settings-button:hover, .close-button:hover, .settings-modal button:hover,
+.key-save-button hover {
     color: #ffffff;
     background: #2a2015;
     border-color: #fff1c5;
@@ -125,11 +127,70 @@ p {
     transition: all 0.3s ease;
 }
 
-.save-slot button {
+.save-slot button, .close-button {
     font-size: .8rem;
     padding: 10px 15px;
     margin: 5px; 
 }
+
+.settings-button {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: .8rem;
+    padding: 11px 30px;
+}
+
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.key-save-button {
+    font-size: .5rem;
+}
+
+.settings-modal {
+    background: rgba(20, 15, 10, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.settings-modal h2 {
+    color: #FFD700;
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
+}
+
+.settings-modal label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: white;
+    font-weight: bold;
+}
+
+.settings-modal input {
+    width: 100%;
+    padding: 0.5rem;
+    background: #1e1a15;
+    border: 1px solid #5c4a37;
+    border-radius: 4px;
+    color: white;
+    box-sizing: border-box;
+}
+
 
 .slot-name, .slot-player, .slot-preview, .slot-time {
     margin-bottom: 5px; 
@@ -140,6 +201,35 @@ p {
 .character-creation-content input[type="text"]:focus {
     border-color: rgb(212, 175, 53, .8);
     box-shadow: 0px 0px 10px rgba(212, 175, 55, 0.3);
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.slide-toggle {
+    width: 44px;
+    height: 24px;
+    background: #0f3460;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s;
+}
+
+.slide-toggle.on { background: #4a90d9; }
+
+.toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.3s;
 }
 
 button:disabled {

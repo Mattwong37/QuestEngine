@@ -1,15 +1,16 @@
+    <button class="settings-button" (click)="showSettings.set(true)">Settings</button>
     @if (currentScreen() === 'title') {
-    <div class="title-screen">
-        <div class="title-content">
-            <h1>Quest Engine</h1>
-            <div class="title-buttons">
-                <button (click)="startGame()">Begin Adventure</button>
-                <!-- @if (hasSaves()) { -->
-                    <button (click)="continueGame()">Continue Adventure</button>
-                <!-- } -->
+        <div class="title-screen">
+            <div class="title-content">
+                <h1>Quest Engine</h1>
+                <div class="title-buttons">
+                    <button (click)="startGame()">Begin Adventure</button>
+                    <!-- @if (hasSaves()) { -->
+                        <button (click)="continueGame()">Continue Adventure</button>
+                    <!-- } -->
+                </div>
             </div>
         </div>
-    </div>
     }
 
 
@@ -59,3 +60,27 @@
     @if (currentScreen() === 'game') {
         <app-game />
     }
+
+    @if (showSettings()) {
+        <div class="settings-overlay">
+            <div class="settings-modal">
+                <h2>Settings</h2>
+                <label>Claude API Key</label>
+                <input type="password" [ngModel]="anthropicKey()" (ngModelChange)="anthropicKey.set($event)" placeholder="sk-ant-..." />
+                <button class=key-save-button (click)="saveAnthropicKey()">Save</button>
+                
+                <label>OpenAI API Key</label>
+                <input type="password" [ngModel]="openAiKey()" (ngModelChange)="openAiKey.set($event)" placeholder="sk-..." />
+                <button class=key-save-button (click)="saveOpenAiKey()">Save</button>
+
+                <label>Dark Mode</label>
+                <div class="toggle-row">
+                    <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
+                    <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+
+                <button class="close-button" (click)="showSettings.set(false)">Close</button>
+            </div>
+        </div>
+}
