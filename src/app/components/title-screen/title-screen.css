@@ -232,6 +232,8 @@ p {
     transition: left 0.3s;
 }
 
+.slide-toggle.on .toggle-thumb { left: 23px; }
+
 button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
