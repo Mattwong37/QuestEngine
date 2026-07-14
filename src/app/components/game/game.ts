@@ -245,9 +245,18 @@ export class Game implements OnInit {
   }
 
   confirmSave(slot: number) {
+    if (!this.hasSaveableProgress()) {
+      alert('Nothing to save yet');
+      return;
+    }
+
     this.gameService.saveGame(slot, this.saveName() || 'Save ' + slot);
     this.savingSlot.set(0);
     this.saveName.set('');
+  }
+
+  hasSaveableProgress(): boolean {
+    return this.storyService.history().length > 0;
   }
 
   // Dummy Data loading method for testing UI

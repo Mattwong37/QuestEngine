@@ -200,7 +200,7 @@
                                         <button (click)="savingSlot.set(0)">Cancel</button>
                                     </div>
                                 } @else {
-                                    <button (click)="savingSlot.set(slot)">
+                                    <button (click)="savingSlot.set(slot)" [hidden]="!hasSaveableProgress()">
                                         {{ getSlot(slot) ? 'Overwrite' : 'Save' }}
                                     </button>
                                 }

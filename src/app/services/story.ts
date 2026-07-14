@@ -175,6 +175,13 @@ export class StoryService {
             });
 
             const data = await response.json();
+
+            if (!response.ok) {
+                console.error('Image generation failed:', data.error?.message ?? data);
+                return '';
+            }
+
+
             const b64 = data.data[0].b64_json;
             
             return `data:image/png;base64,${b64}`;
