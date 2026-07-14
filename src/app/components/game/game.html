@@ -126,14 +126,34 @@
                 }
 
                 @if (activePanel() === 'stats') {
-                    <div>
+                    <div class="stats-panel">
                         <h3>Stats</h3>
-                        <p>Attack: {{ gameService.player().attackMin }} - {{ gameService.player().attackMax }}</p>
-                        <p>Defense: {{ gameService.player().defense }}</p>
-                        <p>Magic Defense: {{ gameService.player().magicDefense }}</p>
-                        <p>Stamina: {{ gameService.player().stamina }}%</p>
+
+                        <div class="stat-row">
+                            <span class="stat-label">Attack</span>
+                            <span class="stat-value">{{ gameService.player().attackMin }}–{{ gameService.player().attackMax }}</span>
+                        </div>
+
+                        <div class="stat-row">
+                            <span class="stat-label">Defense</span>
+                            <span class="stat-value">{{ gameService.player().defense }}</span>
+                        </div>
+
+                        <div class="stat-row">
+                            <span class="stat-label">Magic Defense</span>
+                            <span class="stat-value">{{ gameService.player().magicDefense }}</span>
+                        </div>
+
+                        <div class="stat-row stamina-row">
+                            <span class="stat-label">Stamina</span>
+                            <div class="bar stamina-bar">
+                                <div class="bar-fill stamina" [style.width.%]="gameService.player().stamina"></div>
+                            </div>
+                            <span class="stat-value">{{ gameService.player().stamina }}%</span>
+                        </div>
                     </div>
                 }
+                
 
                 @if (activePanel() === 'save') {
                     <div>
