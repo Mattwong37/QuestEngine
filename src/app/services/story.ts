@@ -17,6 +17,20 @@ export interface StoryResponse {
     imagePrompt?: string; 
     characterSummary?: string;
     newCharacters?: Record<string, string>;
+    itemGain?: {
+        id: string;
+        name: string;
+        description: string;
+        slot: 'mainHand' | 'offHand' | 'shoes' | 'armor';
+        bonus: {
+            attackMinBonus?: number;
+            attackMaxBonus?: number;
+            defenseBonus?: number;
+            magicDefenseBonus?: number;
+            staminaDrainReduction?: number;
+            staminaRecoveryBonus?: number;
+        };
+    };
 }
 
 export interface HistoryEntry {
@@ -51,6 +65,8 @@ export class StoryService {
     characterRegistry: Record<string, string> = {};
     pendingStatsUpdate = signal<any>(null);
 
+    pendingItemGain = signal<StoryResponse['itemGain'] | null>(null);
+
     // This prompt was written to be optimized for cost. May come back to make this shorter, but will have to test variations and not effects on the game quality
     private systemPrompt = `You are the Game Master of a persistent isekai fantasy RPG. The player is the protagonist, and every choice permanently affects the world, characters, and future events.
         Style:
@@ -69,6 +85,16 @@ export class StoryService {
         - Stamina affects combat effectiveness. Low stamina = weaker attacks.
         - healthChange: negative for damage taken, positive for healing.
         - Never let stamina go below 0 or above 100.
+
+        itemGain rules:
+        - Omit "itemGain" entirely unless an item is actually found in this scene's narrative.
+        - Only when narratively justified: found loot, a gift, defeating a notable enemy, completing a task.
+        - slot must be exactly one of: "mainHand", "offHand", "shoes", "armor".
+        - mainHand items: weapons, boost attack by maximum of 50% of their base at the time of receiving.
+        - offHand items: shields (defenseBonus), tomes (magicDefenseBonus), charms (attack bonus).
+        - shoes: use staminaDrainReduction and/or staminaRecoveryBonus.
+        - armor: boost defense; may include a small negative staminaDrainReduction to represent weight.
+        - Keep bonuses small and proportional to player level (roughly 1-4 per stat early on).
 
         Choices:
         - Return 2–3 meaningful options.
@@ -98,6 +124,12 @@ export class StoryService {
             "attackMinChange": 0,
             "attackMaxChange": 0,
             "staminaChange": 0
+        },
+        "itemGain": {
+            "id": "<unique_id>",
+            "name": "<item name>",
+            "slot": "mainHand",
+            "bonus": { "attackMinBonus": 0, "attackMaxBonus": 0 }
         }
         }
         Only include "newCharacters" when new named characters are introduced. Only include "characterSummary" on the very first scene.`;
@@ -190,6 +222,11 @@ export class StoryService {
 
             if (parsed.statsUpdate) {
                 this.pendingStatsUpdate.set(parsed.statsUpdate);
+            }
+
+            if (parsed.itemGain) {
+                console.log('itemGain from Claude:', parsed.itemGain);
+                this.pendingItemGain.set(parsed.itemGain);
             }
 
             this.currentScene.set(parsed.sceneText);

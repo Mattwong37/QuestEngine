@@ -18,7 +18,13 @@ export interface Player {
 
     stamina: number;
 
-    equippedWeapon: Weapon | null;
+    equipment: {
+        mainHand: EquipmentItem | null;
+        offHand: EquipmentItem | null;
+        shoes: EquipmentItem | null;
+        armor: EquipmentItem | null;
+    };
+
     inventory: Item[];
     activeModifiers: StatModifier[];
     choiceHistory: string[];
@@ -30,10 +36,29 @@ export interface StatModifier {
     turnsRemaining: number;
 }
 
-export interface Weapon {
+export type EquipmentSlot = 'mainHand' | 'offHand' | 'shoes' | 'armor';
+
+export interface EquipmentBonus {
+    attackMinBonus?: number;
+    attackMaxBonus?: number;
+    defenseBonus?: number;
+    magicDefenseBonus?: number;
+    staminaDrainReduction?: number;
+    staminaRecoveryBonus?: number;
+}
+
+export interface EquipmentItem {
+    id: string;
     name: string;
-    attackMin: number;
-    attackMax: number;
+    description: string;
+    slot: EquipmentSlot;
+    bonus: EquipmentBonus;
+}
+
+export interface StatModifier {
+    stat: string;
+    value: number;
+    turnsRemaining: number;
 }
 
 export interface Item {

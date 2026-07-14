@@ -1,5 +1,5 @@
-import { Injectable, signal, inject } from '@angular/core';
-import { Player } from '../models/story.model';
+import { Injectable, signal, inject, computed } from '@angular/core';
+import { Player, EquipmentItem, EquipmentSlot } from '../models/story.model';
 import { StoryService } from './story';
 
 export interface SaveSlot {
@@ -25,6 +25,7 @@ export class GameService {
     private storyService = inject(StoryService);
     playerName = signal('');
     isLoadedFromSave = signal(false);
+    equipmentSlots: EquipmentSlot[] = ['mainHand', 'offHand', 'shoes', 'armor'];
 
     player = signal<Player>({
         name: '',
@@ -41,17 +42,19 @@ export class GameService {
         defense: 0,
         magicDefense: 0,
 
-        attackMin: 5,
+        attackMin: 1,
         attackMax: 5,
 
         stamina: 100,
 
-        equippedWeapon: null,
+        equipment: { mainHand: null, offHand: null, shoes: null, armor: null },
+
         inventory: [],
         activeModifiers: [],
         choiceHistory: [],
     });
 
+    effectiveStats = computed(() => this.computeEffectiveStats(this.player()));
     
     saveSlots = signal<SaveSlot[]>(this.loadSavesFromStorage());
 
@@ -117,20 +120,47 @@ export class GameService {
         localStorage.setItem('quest_engine_saves', JSON.stringify(saves));
     }
 
-    private loadSavesFromStorage(): SaveSlot[] {
-        try {
-            const raw = localStorage.getItem('quest_engine_saves');
-            return raw ? JSON.parse(raw) : [];
-        } catch {
-            return [];
-        }
+    computeEffectiveStats(p: Player) {
+        const items = Object.values(p.equipment).filter((i): i is EquipmentItem => i !== null);
+        const totals = items.reduce((acc, item) => ({
+            attackMin: acc.attackMin + (item.bonus.attackMinBonus ?? 0),
+            attackMax: acc.attackMax + (item.bonus.attackMaxBonus ?? 0),
+            defense: acc.defense + (item.bonus.defenseBonus ?? 0),
+            magicDefense: acc.magicDefense + (item.bonus.magicDefenseBonus ?? 0),
+            staminaDrainReduction: acc.staminaDrainReduction + (item.bonus.staminaDrainReduction ?? 0),
+            staminaRecoveryBonus: acc.staminaRecoveryBonus + (item.bonus.staminaRecoveryBonus ?? 0),
+        }), { attackMin: 0, attackMax: 0, defense: 0, magicDefense: 0, staminaDrainReduction: 0, staminaRecoveryBonus: 0 });
+
+        return {
+            attackMin: p.attackMin + totals.attackMin,
+            attackMax: p.attackMax + totals.attackMax,
+            defense: p.defense + totals.defense,
+            magicDefense: p.magicDefense + totals.magicDefense,
+            staminaDrainReduction: totals.staminaDrainReduction,
+            staminaRecoveryBonus: totals.staminaRecoveryBonus,
+        };
     }
-    
+
+    equipItem(item: EquipmentItem) {
+        this.player.update(p => ({
+            ...p,
+            equipment: { ...p.equipment, [item.slot]: item },
+        }));
+    }
+
     applyStatsUpdate(update: any) {
         if (!update) return;
 
         this.player.update(p => {
-            const newStamina = Math.max(0, Math.min(100, p.stamina + (update.staminaChange ?? 0)));
+            const equipBonus = this.computeEffectiveStats(p);
+            const rawStaminaChange = update.staminaChange ?? 0;
+            let staminaChange = rawStaminaChange;
+            if (rawStaminaChange < 0) {
+                staminaChange = Math.min(0, rawStaminaChange + equipBonus.staminaDrainReduction);
+            } else if (rawStaminaChange > 0) {
+                staminaChange = rawStaminaChange + equipBonus.staminaRecoveryBonus;
+            }
+            const newStamina = Math.max(0, Math.min(100, p.stamina + staminaChange));
             let newXp = p.xp + (update.xpGain ?? 0);
             let newLevel = p.level;
             let newXpToNext = p.xpToNextLevel;
@@ -174,5 +204,14 @@ export class GameService {
                 attackMax: newAttackMax,
             };
         });
+    }
+
+    private loadSavesFromStorage(): SaveSlot[] {
+        try {
+            const raw = localStorage.getItem('quest_engine_saves');
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
     }
 }

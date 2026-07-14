@@ -3,6 +3,7 @@ import { GameService } from '../../services/game';
 import { FormsModule } from '@angular/forms';
 import { StoryService } from '../../services/story';
 import { ApiKeyService } from '../../services/api-key';
+import { EquipmentBonus } from '../../models/story.model';
 
 @Component({
   selector: 'app-game',
@@ -56,6 +57,18 @@ export class Game implements OnInit {
   xpPercent() {
     const p = this.gameService.player();
     return (p.xp / p.xpToNextLevel) * 100;
+  }
+
+  formatBonus(bonus: EquipmentBonus): string[] {
+    const parts: string[] = [];
+    if (bonus.attackMinBonus || bonus.attackMaxBonus) {
+      parts.push(`+${bonus.attackMinBonus ?? 0}–${bonus.attackMaxBonus ?? 0} ATK`);
+    }
+    if (bonus.defenseBonus) parts.push(`+${bonus.defenseBonus} DEF`);
+    if (bonus.magicDefenseBonus) parts.push(`+${bonus.magicDefenseBonus} MDEF`);
+    if (bonus.staminaDrainReduction) parts.push(`${bonus.staminaDrainReduction > 0 ? '+' : ''}${bonus.staminaDrainReduction} Stamina Drain`);
+    if (bonus.staminaRecoveryBonus) parts.push(`+${bonus.staminaRecoveryBonus} Stamina Recovery`);
+    return parts;
   }
 
   saveApiKey() {
@@ -156,7 +169,7 @@ export class Game implements OnInit {
       attackMin: 5,
       attackMax: 10,
       stamina: 100,
-      equippedWeapon: null,
+      equipment: { mainHand: null, offHand: null, shoes: null, armor: null },
       inventory: [],
       activeModifiers: [],
       choiceHistory: [],
@@ -186,6 +199,14 @@ export class Game implements OnInit {
       if (update) {
         this.gameService.applyStatsUpdate(update);
         this.storyService.pendingStatsUpdate.set(null);
+      }
+    });
+
+    effect(() => {
+      const item = this.storyService.pendingItemGain();
+      if (item) {
+        this.gameService.equipItem(item);
+        this.storyService.pendingItemGain.set(null);
       }
     });
   }

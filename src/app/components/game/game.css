@@ -692,6 +692,65 @@ body {
     box-shadow: 0 0 8px #d4af37, 0 0 20px 6px #d4af37;
 }
 
+.equip-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.equip-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.75rem 0.85rem;
+    background: rgba(117, 103, 60, 0.2);
+    border: 1px solid rgb(117, 103, 60);
+    border-radius: 6px;
+}
+
+.slot-label {
+    color: rgb(from var(--text-color) r g b / 0.6);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+}
+
+.slot-empty {
+    color: rgb(from var(--text-color) r g b / 0.35);
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.equipped-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.item-name {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-shadow: 0px 0px 6px rgba(212, 175, 55, 0.4);
+}
+
+.item-bonuses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.bonus-tag {
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: #f1d280;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }

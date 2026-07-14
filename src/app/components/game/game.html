@@ -119,9 +119,28 @@
 
             <div class="panel-content">
                 @if (activePanel() === 'equipment') {
-                    <div>
+                    <div class="equipment-panel">
                         <h3>Equipment</h3>
-                        <p>No weapon equipped</p>
+
+                        <div class="equip-slots">
+                            @for (slot of gameService.equipmentSlots; track slot) {
+                                <div class="equip-slot">
+                                    <span class="slot-label">{{ slot === 'mainHand' ? 'Main Hand' : slot === 'offHand' ? 'Off Hand' : slot === 'shoes' ? 'Footgear' : 'Armor' }}</span>
+                                    @if (gameService.player().equipment[slot]; as item) {
+                                        <div class="equipped-item">
+                                            <span class="item-name">{{ item.name }}</span>
+                                            <div class="item-bonuses">
+                                                @for (b of formatBonus(item.bonus); track b) {
+                                                    <span class="bonus-tag">{{ b }}</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    } @else {
+                                        <span class="slot-empty">Empty</span>
+                                    }
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
 
@@ -131,17 +150,17 @@
 
                         <div class="stat-row">
                             <span class="stat-label">Attack</span>
-                            <span class="stat-value">{{ gameService.player().attackMin }}–{{ gameService.player().attackMax }}</span>
+                            <span class="stat-value">{{ gameService.effectiveStats().attackMin }}–{{ gameService.effectiveStats().attackMax }}</span>
                         </div>
 
                         <div class="stat-row">
                             <span class="stat-label">Defense</span>
-                            <span class="stat-value">{{ gameService.player().defense }}</span>
+                            <span class="stat-value">{{ gameService.effectiveStats().defense }}</span>
                         </div>
 
                         <div class="stat-row">
                             <span class="stat-label">Magic Defense</span>
-                            <span class="stat-value">{{ gameService.player().magicDefense }}</span>
+                            <span class="stat-value">{{ gameService.effectiveStats().magicDefense }}</span>
                         </div>
 
                         <div class="stat-row stamina-row">
