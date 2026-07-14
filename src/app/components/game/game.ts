@@ -100,7 +100,7 @@ export class Game implements OnInit {
       if (!confirmed) return;
     }
 
-    localStorage.setItem('anthropic_key', newKey);
+    this.apiKeyService.setAnthropicKey(newKey);
     alert('API key saved!');
 
     if (this.storyService.history().length === 0) {
@@ -179,7 +179,7 @@ export class Game implements OnInit {
   }   
 
   async makeChoice(choice: any) {
-    const key = localStorage.getItem('anthropic_key') ?? '';
+    const key = this.apiKeyService.anthropicKey();
     await this.storyService.makeChoice(choice.text, key);
   }
 
@@ -213,12 +213,6 @@ export class Game implements OnInit {
 
   ngOnInit() {
     document.body.classList.add('light-bg');
-
-    const savedOpenAi = localStorage.getItem('openai_key');
-    const savedAnthropic = localStorage.getItem('anthropic_key');
-    
-    if (savedOpenAi) this.openAiKey.set(savedOpenAi);
-    if (savedAnthropic) this.anthropicKey.set(savedAnthropic);
 
     if (this.gameService.isLoadedFromSave()) {
       this.gameService.isLoadedFromSave.set(false);
