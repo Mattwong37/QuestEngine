@@ -15,6 +15,7 @@ export class TitleScreen {
   currentScreen = signal('title');
 
   showSettings = signal(false);
+  showSettingsButton = signal(true);
 
   playerName = signal('');
   gameService = inject(GameService);
@@ -53,9 +54,10 @@ export class TitleScreen {
     this.currentScreen.set('game');
     console.log('Player name:', this.playerName().trim());
     console.log('Saved to service:', this.gameService.playerName());
+    this.showSettingsButton.set(false);
   }
 
-    saveAnthropicKey() {
+  saveAnthropicKey() {
     localStorage.setItem('anthropic_key', this.anthropicKey());
     alert('Claude key saved!');
   }
