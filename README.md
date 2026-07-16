@@ -20,7 +20,8 @@ Features:
 - AI-generated branching narrative with real consequences
 - AI-generated images with visually consistent character appearances
 - Rolodex-style history to scroll back and see past decisions
-- 3 save slots persisted to localStorage
+- 3 save slots persisted to local browser cache
+- Weapon and character stat tracking
 - Game over screen with a journey summary
 - Light and dark modes
 
@@ -95,12 +96,22 @@ Want to change it to fit your requirements? You can do it at these locations bel
             <sub>Gameplay</sub>
         </td>
         <td align="center">
+            <img src="public/darkModeGamePlay.png" alt="Dark-Mode Gameplay"><br> 
+            <sub>Dark-Mode Gameplay</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/statsPage.png" alt="Stats Section"><br> 
+            <sub>Stats Section</sub>
+        </td>
+        <td align="center">
             <img src="public/gameOver.png" alt="Game Over"><br> 
             <sub>Game Over</sub>
         </td>
     </tr>
     <tr>
-            <td align="center">
+        <td align="center">
             <img src="public/saveSlots.png" alt="Save Slots"><br> 
             <sub>Save Slots</sub>
         </td>
