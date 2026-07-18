@@ -50,7 +50,6 @@ export interface EquipmentBonus {
 export interface EquipmentItem {
     id: string;
     name: string;
-    description: string;
     slot: EquipmentSlot;
     bonus: EquipmentBonus;
 }
