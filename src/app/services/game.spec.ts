@@ -46,6 +46,11 @@ describe('Game', () => {
       expect(service.saveSlots()).toEqual([]);
     });
 
+    it('says "No scenes yet" when blank history', () => {
+      service.saveGame(1, 'Save');
+      expect(service.saveSlots()[0].scenePreview).toBe('No scenes yet');
+    });
+
     it('load existing save', () => {
       const weapon: EquipmentItem = {
         id: 'sword1',
@@ -196,4 +201,77 @@ describe('Game', () => {
     });
   });
 
+  describe('equipping items', () => {
+    it('item equipping and replacement', () => {
+      const weapon: EquipmentItem = {
+        id: 'sword1',
+        name: 'Test Sword',
+        slot: 'mainHand',
+        bonus: { attackMinBonus: 1, attackMaxBonus: 2 }
+      };
+      const baseStats = service.effectiveStats();
+
+      service.equipItem(weapon);
+      expect(service.player().equipment.mainHand?.name).toBe('Test Sword');
+      expect(service.effectiveStats().attackMin).toBe(baseStats.attackMin + 1);
+      expect(service.effectiveStats().attackMax).toBe(baseStats.attackMax + 2);
+
+      const weapon2: EquipmentItem = {
+        id: 'sword2',
+        name: 'Test Sword2',
+        slot: 'mainHand',
+        bonus: { attackMinBonus: 2, attackMaxBonus: 3 }
+      };
+
+      service.equipItem(weapon2);
+      expect(service.player().equipment.mainHand?.name).toBe('Test Sword2');
+      expect(service.effectiveStats().attackMin).toBe(baseStats.attackMin + 2);
+      expect(service.effectiveStats().attackMax).toBe(baseStats.attackMax + 3);
+    });
+
+    it ('equipment stat bonus stacking', () => {
+      const weapon: EquipmentItem = {
+        id: 'sword',
+        name: 'Test Sword',
+        slot: 'mainHand',
+        bonus: { attackMinBonus: 2, attackMaxBonus: 3 }
+      };
+
+      const baseStats = service.effectiveStats();
+
+      service.equipItem(weapon);
+      expect(service.player().equipment.mainHand?.name).toBe('Test Sword2');
+      expect(service.effectiveStats().attackMin).toBe(baseStats.attackMin + 2);
+      expect(service.effectiveStats().attackMax).toBe(baseStats.attackMax + 3);
+
+      const boots: EquipmentItem = {
+        id: 'testBoots', name: 'Test boots', slot: 'shoes',
+        bonus: { staminaDrainReduction: 3, staminaRecoveryBonus: 2 }
+      };
+
+      service.equipItem(boots);
+      expect(service.player().equipment.shoes?.name).toBe('Test boots');
+      expect(service.effectiveStats().staminaDrainReduction).toBe(baseStats.staminaDrainReduction + 3);
+      expect(service.effectiveStats().staminaRecoveryBonus).toBe(baseStats.staminaRecoveryBonus + 2);
+
+      const shield: EquipmentItem = {
+        id: 'shield', name: 'Shield', slot: 'offHand',
+        bonus: { defenseBonus: 6 }
+      };
+      service.equipItem(shield);
+      expect(service.player().equipment.offHand?.name).toBe('Shield');
+      expect(service.effectiveStats().defense).toBe(baseStats.defense + 6);
+
+      const armor: EquipmentItem = {
+        id: 'armour', name: 'Armour', slot: 'armor',
+        bonus: { defenseBonus: 8, staminaDrainReduction: -2 }
+      };
+      service.equipItem(armor);
+      expect(service.player().equipment.armor?.name).toBe('Armour');
+      // Defense bonus is stacked on existing shield bonus
+      expect(service.effectiveStats().defense).toBe(baseStats.defense + 8 + 6);
+      // Defense bonus is stacked on existing boot bonus
+      expect(service.effectiveStats().staminaDrainReduction).toBe(baseStats.staminaDrainReduction - 2 + 3);
+    });
+  });
 });
