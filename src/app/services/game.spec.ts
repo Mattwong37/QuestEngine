@@ -240,7 +240,7 @@ describe('Game', () => {
       const baseStats = service.effectiveStats();
 
       service.equipItem(weapon);
-      expect(service.player().equipment.mainHand?.name).toBe('Test Sword2');
+      expect(service.player().equipment.mainHand?.name).toBe('Test Sword');
       expect(service.effectiveStats().attackMin).toBe(baseStats.attackMin + 2);
       expect(service.effectiveStats().attackMax).toBe(baseStats.attackMax + 3);
 
@@ -274,4 +274,39 @@ describe('Game', () => {
       expect(service.effectiveStats().staminaDrainReduction).toBe(baseStats.staminaDrainReduction - 2 + 3);
     });
   });
+
+  describe('status modifiers and player progression', () => {
+      it('health and magic updates', () => {
+        service.applyStatsUpdate({ healthChange: -20, magicChange: -10 });
+        expect(service.player().currentHealth).toBe(80);
+        expect(service.player().currentMagic).toBe(90);
+      });
+
+    it('health, magic, and stamina never go negative', () => {
+      service.applyStatsUpdate({ healthChange: -101 });
+      expect(service.player().currentHealth).toBe(0);
+
+      service.applyStatsUpdate({ magicChange: -101 });
+      expect(service.player().currentMagic).toBe(0);
+
+      service.applyStatsUpdate({ staminaChange: -101 });
+      expect(service.player().stamina).toBe(0);
+    });
+
+    it('health, magic, and stamina never exceed 100', () => {
+      service.applyStatsUpdate({ healthChange: 101 });
+      expect(service.player().currentHealth).toBe(100);
+      
+      service.applyStatsUpdate({ magicChange: 101 });
+      expect(service.player().currentMagic).toBe(100);
+
+      service.applyStatsUpdate({ staminaChange: 101 });
+      expect(service.player().stamina).toBe(100);
+    });
+
+    it.skip('xp gain and level up', () => {
+      // TODO: Add tests for gaining xp and then leveling up. Will need to make sure that xp is correct, new xp to next level, and level are updated
+    });
+
+  });    
 });
