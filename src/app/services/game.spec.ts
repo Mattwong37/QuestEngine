@@ -304,8 +304,42 @@ describe('Game', () => {
       expect(service.player().stamina).toBe(100);
     });
 
-    it.skip('xp gain and level up', () => {
-      // TODO: Add tests for gaining xp and then leveling up. Will need to make sure that xp is correct, new xp to next level, and level are updated
+    it('xp gain without level up', () => {
+      service.applyStatsUpdate({ xpGain: 50 });
+
+      expect(service.player().xp).toBe(50);
+      expect(service.player().level).toBe(1);
+      expect(service.player().xpToNextLevel).toBe(100);
+    });
+
+    it('xp gain and level up', () => {
+      // Force random to return 90% 
+      vi.spyOn(Math, 'random').mockReturnValue(0.9);
+
+      const beforeStats = service.player();
+
+      service.applyStatsUpdate({ xpGain: 110 });
+
+      expect(service.player().level).toBe(2);
+      expect(service.player().xp).toBe(10);
+      expect(service.player().xpToNextLevel).toBe(125);
+
+      expect(service.player().currentHealth).toBe(service.player().maxHealth);
+      expect(service.player().maxHealth).toBe(beforeStats.maxHealth + 5);
+      expect(service.player().maxMagic).toBe(beforeStats.maxMagic + 5);
+      expect(service.player().defense).toBe(beforeStats.defense + 2);
+      expect(service.player().magicDefense).toBe(beforeStats.magicDefense + 2);
+      expect(service.player().attackMin).toBe(beforeStats.attackMin + 1);
+      expect(service.player().attackMax).toBe(beforeStats.attackMax + 2);
+    });
+
+    it('min attack change when probablity < 50%', () => {
+      vi.spyOn(Math, 'random').mockReturnValue(0.1);
+      const beforeAttackMin = service.player().attackMin;
+
+      service.applyStatsUpdate({ xpGain: 100 });
+
+      expect(service.player().attackMin).toBe(beforeAttackMin + 2);
     });
 
   });    
