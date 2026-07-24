@@ -1,12 +1,10 @@
 import { ApiKeyService } from './api-key';
 
-
 describe('ApiKeyService', () => {
   let service: ApiKeyService;
 
   beforeEach(() => {
     localStorage.clear();
-    // vi.restoreAllMocks();
   });
 
   describe('initial state', () => {
@@ -20,7 +18,7 @@ describe('ApiKeyService', () => {
   });
 
   describe('key modification checks', () => {
-    it('initial set keys', () => {
+    it('initial set keys and makes sure local storage is updated', () => {
       localStorage.setItem('anthropic_key', 'sk-ant-1');
       localStorage.setItem('openai_key', 'sk-oa-1');
 
@@ -32,8 +30,7 @@ describe('ApiKeyService', () => {
       expect(localStorage.getItem('openai_key')).toBe('sk-oa-1');
     });
 
-    it('overwrite keys local', () => {
-      localStorage.clear();
+    it('overwrite keys', () => {
       localStorage.setItem('anthropic_key', 'sk-ant-1');
       localStorage.setItem('openai_key', 'sk-oa-1');
 
@@ -46,19 +43,32 @@ describe('ApiKeyService', () => {
       expect(localStorage.getItem('openai_key')).toBe('sk-oa-1');
     });
 
-    it('removing keys', () => {
+    it('remove anthropic key', () => {
       const service = new ApiKeyService();
       service.setAnthropicKey('sk-ant-1');
       service.setAnthropicKey('');
 
       expect(service.anthropicKey()).toBe('');
       expect(localStorage.getItem('anthropic_key')).toBe('');
+    });
 
-      service.setOpenAiKey('sk-ant-1');
+    it('remove openai key', () => {
+      const service = new ApiKeyService();
+      service.setOpenAiKey('sk-oa-1');
       service.setOpenAiKey('');
 
       expect(service.openAiKey()).toBe('');
       expect(localStorage.getItem('openai_key')).toBe('');
+    });
+
+    it('key updates are exclusive', () => {
+      const service = new ApiKeyService();
+      service.setOpenAiKey('sk-oa-1');
+
+      expect(service.anthropicKey()).toBe('');
+
+      expect(service.openAiKey()).toBe('sk-oa-1');
+      expect(localStorage.getItem('openai_key')).toBe('sk-oa-1');
     });
   });
 });
