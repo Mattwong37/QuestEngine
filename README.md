@@ -64,9 +64,10 @@ Please note that you will still need your own API keys to play. refer to [Add yo
 - **Angular 22** — standalone components, signals, computed, effects, HostListener
 - **TypeScript 5** — strict typing throughout
 - **Claude Sonnet 4.6** — story generation via the Anthropic API
-- **Open AI Image Generation2.0** — scene image generation via the OpenAI API
+- **Open AI Image Generation 2.0** — scene image generation via the OpenAI API
 - **localStorage** — save slots and API key persistence
-- **CSS** — Webpage styling
+- **CSS** — webpage styling
+- **ViTest** — unit testing 
 
 
 ## Modify It For Yourself
