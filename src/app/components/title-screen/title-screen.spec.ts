@@ -2,12 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TitleScreen } from './title-screen';
 import { GameService } from '../../services/game';
-
+import { ApiKeyService } from '../../services/api-key';
 
 describe('TitleScreen', () => {
   let component: TitleScreen;
   let fixture: ComponentFixture<TitleScreen>;
   let gameService: GameService;
+  let apiKeyService: ApiKeyService;
 
   beforeEach(async () => {
     localStorage.clear();
@@ -22,6 +23,7 @@ describe('TitleScreen', () => {
     component = fixture.componentInstance;
     await fixture.whenStable();
     gameService = component.gameService;  
+    apiKeyService = component.apiKeyService;
   });
 
   it('should create', () => {
@@ -66,7 +68,7 @@ describe('TitleScreen', () => {
     expect(fixture.nativeElement.querySelector('.settings-overlay')).not.toBeNull();
   });
 
-  it('close in settinsg closes the pip', () => {
+  it('close in settings closes the pip', () => {
     component.showSettings.set(true);
     fixture.detectChanges();
 
@@ -77,6 +79,22 @@ describe('TitleScreen', () => {
 
     expect(component.showSettings()).toBe(false);
     expect(fixture.nativeElement.querySelector('.settings-overlay')).toBeNull();
+  });
+
+  describe('API key handling', () => {
+    it('saveAnthropicKey is connected to service and pop up triggered', () => {
+      component.anthropicKey.set('sk-ant-1');
+      component.saveAnthropicKey();
+      expect(apiKeyService.anthropicKey()).toBe('sk-ant-1');
+      expect(window.alert).toHaveBeenCalled();
+    });
+
+    it('saveOpenAiKey is connected to service and pop up triggered', () => {
+      component.openAiKey.set('sk-oa-1');
+      component.saveOpenAiKey();
+      expect(apiKeyService.openAiKey()).toBe('sk-oa-1');
+      expect(window.alert).toHaveBeenCalled();
+    });
   });
 
 });
