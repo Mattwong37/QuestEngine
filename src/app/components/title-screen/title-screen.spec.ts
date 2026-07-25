@@ -35,50 +35,50 @@ describe('TitleScreen', () => {
       component.startGame();
       expect(component.currentScreen()).toBe('character-creation');
     });
-  });
 
-  it('creating character goes to game page', () => {
-    component.playerName.set('Matt');
-    component.createCharacter();
-    expect(component.currentScreen()).toBe('game');
+    it('creating character goes to game page', () => {
+      component.playerName.set('Matt');
+      component.createCharacter();
+      expect(component.currentScreen()).toBe('game');
 
-    expect(component.showSettingsButton()).toBe(false);
-  });
+      expect(component.showSettingsButton()).toBe(false);
+    });
 
-  it('continueGame goes to save load page', () => {
-    component.continueGame();
-    expect(component.currentScreen()).toBe('load');
-  });
+    it('continueGame goes to save load page', () => {
+      component.continueGame();
+      expect(component.currentScreen()).toBe('load');
+    });
 
-  it('selecting a save goes to the game page', () => {
-    vi.spyOn(gameService, 'loadGame');
-    component.loadGame(1);
-    expect(component.currentScreen()).toBe('game');
+    it('selecting a save goes to the game page', () => {
+      vi.spyOn(gameService, 'loadGame');
+      component.loadGame(1);
+      expect(component.currentScreen()).toBe('game');
 
-    expect(component.showSettingsButton()).toBe(false);
-  });
+      expect(component.showSettingsButton()).toBe(false);
+    });
 
-  it('settings button brings up pip', () => {
-    const settingsBtn = fixture.nativeElement.querySelector('.settings-button');
-    expect(settingsBtn).not.toBeNull();
-    settingsBtn!.click();
-    fixture.detectChanges();
+    it('settings button brings up pip', () => {
+      const settingsBtn = fixture.nativeElement.querySelector('.settings-button');
+      expect(settingsBtn).not.toBeNull();
+      settingsBtn!.click();
+      fixture.detectChanges();
 
-    expect(component.showSettings()).toBe(true);
-    expect(fixture.nativeElement.querySelector('.settings-overlay')).not.toBeNull();
-  });
+      expect(component.showSettings()).toBe(true);
+      expect(fixture.nativeElement.querySelector('.settings-overlay')).not.toBeNull();
+    });
 
-  it('close in settings closes the pip', () => {
-    component.showSettings.set(true);
-    fixture.detectChanges();
+    it('close in settings closes the pip', () => {
+      component.showSettings.set(true);
+      fixture.detectChanges();
 
-    const closeBtn = fixture.nativeElement.querySelector('.close-button');
-    expect(closeBtn).not.toBeNull();
-    closeBtn!.click();
-    fixture.detectChanges();
+      const closeBtn = fixture.nativeElement.querySelector('.close-button');
+      expect(closeBtn).not.toBeNull();
+      closeBtn!.click();
+      fixture.detectChanges();
 
-    expect(component.showSettings()).toBe(false);
-    expect(fixture.nativeElement.querySelector('.settings-overlay')).toBeNull();
+      expect(component.showSettings()).toBe(false);
+      expect(fixture.nativeElement.querySelector('.settings-overlay')).toBeNull();
+    });
   });
 
   describe('API key handling', () => {
