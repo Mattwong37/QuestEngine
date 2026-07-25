@@ -112,4 +112,24 @@ describe('TitleScreen', () => {
     });
   });
 
+  describe('save page rendering', () => {
+    it('no saves page rendering', () => {
+      component.continueGame();
+      fixture.detectChanges();
+      
+      expect(fixture.nativeElement.textContent).toContain('No saves yet');
+      expect(fixture.nativeElement.querySelectorAll('.save-slot').length).toBe(0);
+    });
+
+    it('populated saves page rendering', () => {
+      gameService.saveSlots.set([
+        { id: 1, name: 'testSave1', timestamp: 1, playerName: 'Matt', scenePreview: '', data: {} as any },
+      ]);
+      component.continueGame();
+      fixture.detectChanges();
+      
+      expect(fixture.nativeElement.textContent).not.toContain('No saves yet');
+      expect(fixture.nativeElement.querySelectorAll('.save-slot').length).toBe(1);
+    });
+  });
 });
