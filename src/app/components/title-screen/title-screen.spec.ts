@@ -39,6 +39,8 @@ describe('TitleScreen', () => {
     component.playerName.set('Matt');
     component.createCharacter();
     expect(component.currentScreen()).toBe('game');
+
+    expect(component.showSettingsButton()).toBe(false);
   });
 
   it('continueGame goes to save load page', () => {
@@ -50,6 +52,8 @@ describe('TitleScreen', () => {
     vi.spyOn(gameService, 'loadGame');
     component.loadGame(1);
     expect(component.currentScreen()).toBe('game');
+
+    expect(component.showSettingsButton()).toBe(false);
   });
 
   it('settings button brings up pip', () => {
@@ -74,5 +78,5 @@ describe('TitleScreen', () => {
     expect(component.showSettings()).toBe(false);
     expect(fixture.nativeElement.querySelector('.settings-overlay')).toBeNull();
   });
-  
+
 });
