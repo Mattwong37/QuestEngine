@@ -132,4 +132,13 @@ describe('TitleScreen', () => {
       expect(fixture.nativeElement.querySelectorAll('.save-slot').length).toBe(1);
     });
   });
+
+  describe('format date', () => {
+    it('format date', () => {
+      const unixTimestamp = 1785013200000;
+      const formattedTime = component.formatDate(unixTimestamp);
+
+      expect(formattedTime).toBe('Jul 25, 05:00 PM');
+    });
+  });
 });
