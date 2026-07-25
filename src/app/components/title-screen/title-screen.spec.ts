@@ -97,4 +97,19 @@ describe('TitleScreen', () => {
     });
   });
 
+  describe('darkModeToggle', () => {
+    it('darkmode toggle on/off', () => {
+      expect(component.darkMode()).toBe(false);
+      expect(document.body.classList.contains('dark-bg')).toBe(false);
+      component.darkModeToggle();
+      expect(component.darkMode()).toBe(true);
+      expect(document.body.classList.contains('dark-bg')).toBe(true);
+      expect(document.body.classList.contains('light-bg')).toBe(false);
+      component.darkModeToggle();
+      expect(component.darkMode()).toBe(false);
+      expect(document.body.classList.contains('light-bg')).toBe(true);
+      expect(document.body.classList.contains('dark-bg')).toBe(false);
+    });
+  });
+
 });
