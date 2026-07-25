@@ -46,12 +46,39 @@ describe('TitleScreen', () => {
       expect(component.currentScreen()).toBe('character-creation');
     });
 
+    it('create character submit button goes to game page', () => {
+      component.startGame();
+      fixture.detectChanges();
+      component.playerName.set('Matt');
+      fixture.detectChanges();
+
+      const submitBtn: HTMLButtonElement = fixture.nativeElement.querySelector('.character-creation-content button');
+      expect(submitBtn.disabled).toBe(false);
+
+      submitBtn.click();
+      fixture.detectChanges();
+
+      expect(gameService.player().name).toBe('Matt');
+      expect(component.currentScreen()).toBe('game');
+      expect(component.showSettingsButton()).toBe(false);
+    });
+
     it('creating character goes to game page', () => {
       component.playerName.set('Matt');
       component.createCharacter();
       expect(component.currentScreen()).toBe('game');
 
       expect(component.showSettingsButton()).toBe(false);
+    });
+
+    it('Continue Adventure button goes to save load page', () => {
+      const continueBtn = fixture.nativeElement.querySelector('.continue-adventure-button');
+      expect(continueBtn).not.toBeNull();
+
+      continueBtn.click();
+      fixture.detectChanges();
+
+      expect(component.currentScreen()).toBe('load');
     });
 
     it('continueGame goes to save load page', () => {
