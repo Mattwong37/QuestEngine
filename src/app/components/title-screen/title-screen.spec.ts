@@ -31,6 +31,16 @@ describe('TitleScreen', () => {
   });
 
   describe('title screen navigation', () => {
+    it('Begin Adventure button goes to character creation', () => {
+      const beginBtn = fixture.nativeElement.querySelector('.begin-adventure-button');
+      expect(beginBtn).not.toBeNull();
+
+      beginBtn!.click();
+      fixture.detectChanges();
+
+      expect(component.currentScreen()).toBe('character-creation');
+    });
+
     it('startGame goes to character creation', () => {
       component.startGame();
       expect(component.currentScreen()).toBe('character-creation');
@@ -79,6 +89,8 @@ describe('TitleScreen', () => {
       expect(component.showSettings()).toBe(false);
       expect(fixture.nativeElement.querySelector('.settings-overlay')).toBeNull();
     });
+
+
   });
 
   describe('API key handling', () => {
