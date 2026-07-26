@@ -34,4 +34,21 @@ describe('Game', () => {
       expect(storyService.startStory).not.toHaveBeenCalled();
     });
   });
+
+  it('start new game with claude key loaded', () => {
+      fixture = TestBed.createComponent(Game);
+      component = fixture.componentInstance;
+      const storyService = component.storyService;
+      const gameService = component.gameService;
+      const apiKeyService = component.apiKeyService;
+      vi.spyOn(storyService, 'startStory').mockResolvedValue();
+      
+      apiKeyService.setAnthropicKey('sk-ant-test');
+      gameService.initPlayer('Matt');
+      fixture.detectChanges();
+
+      expect(storyService.startStory).toHaveBeenCalledWith('Matt', 'sk-ant-test');
+    });
 });
+
+
