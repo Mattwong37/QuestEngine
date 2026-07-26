@@ -6,7 +6,7 @@ Used modified image from Jereme Peabody. Please find his work on [DevianArt](htt
 
 ## Table of Contents
 - [About](#about)
-- [How to Install](#-ow-to-install)
+- [How to Install](#how-to-install)
 - [How to Play](#how-to-play)
 - [Tech Stack](#tech-stack)
 - [Modify It For Yourself](#modify-it-for-yourself)
