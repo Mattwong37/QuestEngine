@@ -46,7 +46,7 @@
                                 <div class="slot-time"><strong>Save Date:</strong> {{ formatDate(slot.timestamp) }}</div>
                             </div>
                             <div class="slot-actions">
-                                <button (click)="loadGame(slot.id)">Load</button>
+                                <button class="load-button" (click)="loadGame(slot.id)">Load</button>
                                 @if (confirmDeleteId() === slot.id) {
                                     <span class="confirm-text">Are you sure?</span>
                                     <button class="confirm-yes" (click)="gameService.deleteSave(slot.id); confirmDeleteId.set(null)">Yes</button>

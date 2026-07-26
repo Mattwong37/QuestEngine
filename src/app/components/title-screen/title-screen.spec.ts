@@ -86,6 +86,32 @@ describe('TitleScreen', () => {
       expect(component.currentScreen()).toBe('load');
     });
 
+    it('Load button goes to the game page ', () => {
+      gameService.saveSlots.set([
+        { id: 1, name: 'testSave1', timestamp: 1, playerName: 'Matt', scenePreview: '', data: { player: {
+          name: 'Matt', level: 1, xp: 0, xpToNextLevel: 100,
+          maxHealth: 100, currentHealth: 100, maxMagic: 100, currentMagic: 100,
+          defense: 0, magicDefense: 0, attackMin: 1, attackMax: 5, stamina: 100,
+          equipment: { mainHand: null, offHand: null, shoes: null, armor: null },
+          inventory: [], activeModifiers: [], choiceHistory: [],
+        },
+        conversationHistory: [],
+        history: [],
+        characterRegistry: {},
+        currentCardIndex: 0,
+        currentChoices: []}
+      }]);
+      component.continueGame();
+      fixture.detectChanges();
+      const loadBtn = fixture.nativeElement.querySelector('.load-button');
+      expect(loadBtn).not.toBeNull();
+
+      loadBtn.click();
+      fixture.detectChanges()
+      expect(component.currentScreen()).toBe('game');
+      expect(component.showSettingsButton()).toBe(false);
+    });
+
     it('selecting a save goes to the game page', () => {
       vi.spyOn(gameService, 'loadGame');
       component.loadGame(1);
@@ -117,6 +143,40 @@ describe('TitleScreen', () => {
       expect(fixture.nativeElement.querySelector('.settings-overlay')).toBeNull();
     });
 
+    it('delete save slot confirm', () => {
+      gameService.saveSlots.set([
+        { id: 1, name: 'testSave1', timestamp: 1, playerName: 'Matt', scenePreview: '', data: {} as any },
+      ]);
+      const deleteBtn = vi.spyOn(gameService, 'deleteSave');
+      component.continueGame();
+      component.confirmDeleteId.set(1);
+      fixture.detectChanges();
+
+      const confirmButton = fixture.nativeElement.querySelector('.confirm-yes');
+
+      confirmButton.click();
+
+      expect(deleteBtn).toHaveBeenCalledWith(1);
+      expect(component.confirmDeleteId()).toBeNull();
+      expect(gameService.saveSlots().find(s => s.id === 1)).toBeUndefined();
+    });
+
+    it('delete save slot deny', () => {
+      gameService.saveSlots.set([
+        { id: 1, name: 'testSave1', timestamp: 1, playerName: 'Matt', scenePreview: '', data: {} as any },
+      ]);
+      const deleteBtn = vi.spyOn(gameService, 'deleteSave');
+      component.continueGame();
+      component.confirmDeleteId.set(1);
+      fixture.detectChanges();
+
+      const denyButton = fixture.nativeElement.querySelector('.confirm-no');
+      denyButton.click();
+
+      expect(deleteBtn).not.toHaveBeenCalled();
+      expect(component.confirmDeleteId()).toBeNull();
+      expect(gameService.saveSlots().find(s => s.id === 1)).not.toBeUndefined();
+    });
 
   });
 
