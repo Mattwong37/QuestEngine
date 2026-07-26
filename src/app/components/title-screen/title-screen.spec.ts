@@ -181,11 +181,35 @@ describe('TitleScreen', () => {
   });
 
   describe('API key handling', () => {
+    it('Save button for claude key', () => {
+      component.showSettings.set(true);
+      fixture.detectChanges();
+      const saveBtn = vi.spyOn(component, 'saveAnthropicKey');
+
+      const buttons = fixture.nativeElement.querySelectorAll('.key-save-button');
+      buttons[0].click();
+      fixture.detectChanges();
+
+      expect(saveBtn).toHaveBeenCalled();
+    });
+
     it('saveAnthropicKey is connected to service and pop up triggered', () => {
       component.anthropicKey.set('sk-ant-1');
       component.saveAnthropicKey();
       expect(apiKeyService.anthropicKey()).toBe('sk-ant-1');
       expect(window.alert).toHaveBeenCalled();
+    });
+
+    it('Save button for openai key', () => {
+      component.showSettings.set(true);
+      fixture.detectChanges();
+      const saveBtn = vi.spyOn(component, 'saveOpenAiKey');
+
+      const buttons = fixture.nativeElement.querySelectorAll('.key-save-button');
+      buttons[1].click();
+      fixture.detectChanges();
+
+      expect(saveBtn).toHaveBeenCalled();
     });
 
     it('saveOpenAiKey is connected to service and pop up triggered', () => {
