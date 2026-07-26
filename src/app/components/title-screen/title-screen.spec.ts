@@ -220,7 +220,21 @@ describe('TitleScreen', () => {
     });
   });
 
+  
   describe('darkModeToggle', () => {
+    it('dark mode toggle button', () => {
+      const darkModeToggleFunc = vi.spyOn(component, 'darkModeToggle');
+      component.showSettings.set(true);
+      fixture.detectChanges();
+
+      const darkModeToggle = fixture.nativeElement.querySelector('.slide-toggle');
+      expect(darkModeToggle).not.toBeNull();
+      darkModeToggle!.click();
+      fixture.detectChanges();
+
+      expect(darkModeToggleFunc).toHaveBeenCalled();
+    });
+
     it('darkmode toggle on/off', () => {
       expect(component.darkMode()).toBe(false);
       expect(document.body.classList.contains('dark-bg')).toBe(false);
