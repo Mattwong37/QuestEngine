@@ -173,7 +173,7 @@ describe('Game', () => {
         { sceneText: 'Scene', imageUrl: '', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
       ]);
       component.openAiKey.set('sk-oa-test');
-      
+
       vi.spyOn(storyService, 'generateImage').mockResolvedValue('filler.png');
       component.saveApiKey();
 
@@ -201,6 +201,23 @@ describe('Game', () => {
       component.saveApiKey();
 
       expect(storyService.generateImage).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('saveAnthropicKey', () => {
+    it('key save and overwrite', () => {
+      const { component, apiKeyService } = setUp();
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+      component.anthropicKey.set('sk-ant-test');
+      component.saveAnthropicKey();
+
+      expect(apiKeyService.anthropicKey()).toBe('sk-ant-test');
+      expect(window.alert).toHaveBeenCalled();
+
+      apiKeyService.setAnthropicKey('sk-ant-test2');
+      expect(apiKeyService.anthropicKey()).toBe('sk-ant-test2');
+      expect(window.alert).toHaveBeenCalled();
     });
   });
 });
