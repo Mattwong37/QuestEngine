@@ -49,6 +49,27 @@ describe('Game', () => {
 
       expect(storyService.startStory).toHaveBeenCalledWith('Matt', 'sk-ant-test');
     });
+
+  it ('regenerate images on load', () => {
+      fixture = TestBed.createComponent(Game);
+      component = fixture.componentInstance;
+
+      const storyService = component.storyService;
+      const gameService = component.gameService;
+      const apiKeyService = component.apiKeyService;
+
+      apiKeyService.setAnthropicKey('sk-ant-test');
+      apiKeyService.setOpenAiKey('sk-oa-test');
+
+      vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
+      vi.spyOn(storyService, 'startStory').mockResolvedValue();
+
+      gameService.isLoadedFromSave.set(true);
+      fixture.detectChanges();
+
+      expect(storyService.regenerateImages).toHaveBeenCalledWith('sk-oa-test');
+      expect(storyService.startStory).not.toHaveBeenCalled();
+  });
 });
 
 
