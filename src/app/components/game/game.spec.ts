@@ -219,6 +219,51 @@ describe('Game', () => {
       expect(apiKeyService.anthropicKey()).toBe('sk-ant-test2');
       expect(window.alert).toHaveBeenCalled();
     });
+
+    it('reject new key save', () => {
+      const { component, apiKeyService } = setUp();
+      apiKeyService.anthropicKey.set('sk-ant-test');
+
+      vi.spyOn(window, 'confirm').mockReturnValue(false);
+      apiKeyService.setAnthropicKey('sk-ant-test1');
+
+      component.saveAnthropicKey();
+      expect(apiKeyService.anthropicKey()).toBe('sk-ant-test1');
+    });
+
+    it('reject new key save', () => {
+      const { component, apiKeyService } = setUp();
+      apiKeyService.anthropicKey.set('sk-ant-test');
+
+      vi.spyOn(window, 'confirm').mockReturnValue(false);
+      apiKeyService.setAnthropicKey('sk-ant-test1');
+
+      component.saveAnthropicKey();
+      expect(apiKeyService.anthropicKey()).toBe('sk-ant-test1');
+    });
+
+    it('does not start new story when has history', () => {
+      const { component, storyService } = setUp();
+      storyService.history.set([
+        { sceneText: 'Scene', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      vi.spyOn(window, 'confirm').mockReturnValue(true)
+      vi.spyOn(storyService, 'startStory').mockResolvedValue();
+      component.anthropicKey.set('sk-ant-test1');
+      component.saveAnthropicKey();
+
+      expect(storyService.startStory).not.toHaveBeenCalled();
+    });
+
+    it('start new story when no history', () => {
+      const { component, storyService } = setUp();
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
+      vi.spyOn(storyService, 'startStory').mockResolvedValue();
+      component.anthropicKey.set('sk-ant-test1');
+      component.saveAnthropicKey();
+
+      expect(storyService.startStory).toHaveBeenCalled();
+    });
   });
 });
 
