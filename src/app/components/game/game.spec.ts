@@ -69,6 +69,19 @@ describe('Game', () => {
       expect(storyService.regenerateImages).toHaveBeenCalledWith('sk-oa-test');
       expect(storyService.startStory).not.toHaveBeenCalled();
   });
+
+  it('image regen not done if no API key', () => {
+    const { gameService, storyService } = setUp();
+    gameService.isLoadedFromSave.set(true);
+
+    vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
+    vi.spyOn(storyService, 'startStory').mockResolvedValue();
+
+    fixture.detectChanges();
+
+    expect(storyService.regenerateImages).not.toHaveBeenCalled();
+    expect(storyService.startStory).not.toHaveBeenCalled();
+  });
 });
 
 
