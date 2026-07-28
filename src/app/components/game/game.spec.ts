@@ -82,6 +82,29 @@ describe('Game', () => {
       expect(storyService.startStory).not.toHaveBeenCalled();
     });
   });
+
+  describe('stat percentage getters', () => {
+    it('health stat', () => {
+      const { component, gameService } = setUp();
+      expect(component.healthPercent()).toBe(100);
+      gameService.player.update(p => ({ ...p, currentHealth: 50, maxHealth: 100 }));
+      expect(component.healthPercent()).toBe(50);
+    });
+
+    it('magic stat', () => {
+      const { component, gameService } = setUp();
+      expect(component.magicPercent()).toBe(100);
+      gameService.player.update(p => ({ ...p, currentMagic: 50, maxMagic: 100 }));
+      expect(component.magicPercent()).toBe(50);
+    });
+
+    it('xp percentage', () => {
+      const { component, gameService } = setUp();
+      expect(component.xpPercent()).toBe(0);
+      gameService.player.update(p => ({ ...p, xp: 50 }));
+      expect(component.xpPercent()).toBe(50);
+    });
+  });
 });
 
 
