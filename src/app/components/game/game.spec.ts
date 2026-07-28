@@ -41,46 +41,46 @@ describe('Game', () => {
       expect(storyService.currentScene()).toContain('No Anthropic API key found');
       expect(storyService.startStory).not.toHaveBeenCalled();
     });
-  });
 
-  it('start new game with claude key loaded', () => {
-      const { storyService, gameService, apiKeyService } = setUp();
-      vi.spyOn(storyService, 'startStory').mockResolvedValue();
-      
-      apiKeyService.setAnthropicKey('sk-ant-test');
-      gameService.initPlayer('Matt');
-      fixture.detectChanges();
+    it('start new game with claude key loaded', () => {
+        const { storyService, gameService, apiKeyService } = setUp();
+        vi.spyOn(storyService, 'startStory').mockResolvedValue();
+        
+        apiKeyService.setAnthropicKey('sk-ant-test');
+        gameService.initPlayer('Matt');
+        fixture.detectChanges();
 
-      expect(storyService.startStory).toHaveBeenCalledWith('Matt', 'sk-ant-test');
+        expect(storyService.startStory).toHaveBeenCalledWith('Matt', 'sk-ant-test');
+      });
+
+    it ('regenerate images on load', () => {
+        const { storyService, gameService, apiKeyService } = setUp();
+
+        apiKeyService.setAnthropicKey('sk-ant-test');
+        apiKeyService.setOpenAiKey('sk-oa-test');
+
+        vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
+        vi.spyOn(storyService, 'startStory').mockResolvedValue();
+
+        gameService.isLoadedFromSave.set(true);
+        fixture.detectChanges();
+
+        expect(storyService.regenerateImages).toHaveBeenCalledWith('sk-oa-test');
+        expect(storyService.startStory).not.toHaveBeenCalled();
     });
 
-  it ('regenerate images on load', () => {
-      const { storyService, gameService, apiKeyService } = setUp();
-
-      apiKeyService.setAnthropicKey('sk-ant-test');
-      apiKeyService.setOpenAiKey('sk-oa-test');
+    it('image regen not done if no API key', () => {
+      const { gameService, storyService } = setUp();
+      gameService.isLoadedFromSave.set(true);
 
       vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
       vi.spyOn(storyService, 'startStory').mockResolvedValue();
 
-      gameService.isLoadedFromSave.set(true);
       fixture.detectChanges();
 
-      expect(storyService.regenerateImages).toHaveBeenCalledWith('sk-oa-test');
+      expect(storyService.regenerateImages).not.toHaveBeenCalled();
       expect(storyService.startStory).not.toHaveBeenCalled();
-  });
-
-  it('image regen not done if no API key', () => {
-    const { gameService, storyService } = setUp();
-    gameService.isLoadedFromSave.set(true);
-
-    vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
-    vi.spyOn(storyService, 'startStory').mockResolvedValue();
-
-    fixture.detectChanges();
-
-    expect(storyService.regenerateImages).not.toHaveBeenCalled();
-    expect(storyService.startStory).not.toHaveBeenCalled();
+    });
   });
 });
 
