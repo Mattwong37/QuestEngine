@@ -18,15 +18,23 @@ describe('Game', () => {
     await fixture.whenStable();
   });
 
+  function setUp() {
+      fixture = TestBed.createComponent(Game);
+      component = fixture.componentInstance;
+      const storyService = component.storyService;
+      const gameService = component.gameService;
+      const apiKeyService = component.apiKeyService;
+      
+      return { fixture, component, gameService, storyService, apiKeyService };
+  }
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   describe('test ngOnInit', () => {
     it('shows "no API key" and stall when no claude key', () => {
-      fixture = TestBed.createComponent(Game);
-      component = fixture.componentInstance;
-      const storyService = component.storyService;
+      const { storyService } =  setUp();
       vi.spyOn(storyService, 'startStory').mockResolvedValue();
       fixture.detectChanges();
       
@@ -36,11 +44,7 @@ describe('Game', () => {
   });
 
   it('start new game with claude key loaded', () => {
-      fixture = TestBed.createComponent(Game);
-      component = fixture.componentInstance;
-      const storyService = component.storyService;
-      const gameService = component.gameService;
-      const apiKeyService = component.apiKeyService;
+      const { storyService, gameService, apiKeyService } = setUp();
       vi.spyOn(storyService, 'startStory').mockResolvedValue();
       
       apiKeyService.setAnthropicKey('sk-ant-test');
@@ -51,12 +55,7 @@ describe('Game', () => {
     });
 
   it ('regenerate images on load', () => {
-      fixture = TestBed.createComponent(Game);
-      component = fixture.componentInstance;
-
-      const storyService = component.storyService;
-      const gameService = component.gameService;
-      const apiKeyService = component.apiKeyService;
+      const { storyService, gameService, apiKeyService } = setUp();
 
       apiKeyService.setAnthropicKey('sk-ant-test');
       apiKeyService.setOpenAiKey('sk-oa-test');
