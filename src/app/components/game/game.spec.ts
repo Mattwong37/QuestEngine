@@ -105,6 +105,43 @@ describe('Game', () => {
       expect(component.xpPercent()).toBe(50);
     });
   });
+
+  describe('format bonus', () => {
+    it('format attack bonus', () => {
+      const { component } = setUp();
+      expect(component.formatBonus({ attackMinBonus: 1, attackMaxBonus: 5 })).toEqual(['+1–5 ATK']);
+    });
+
+    it('format defense bonus', () => {
+      const { component } = setUp();
+      expect(component.formatBonus({ defenseBonus: 5 })).toEqual(['+5 DEF']);
+    });
+
+
+    it('format stamina drain reduction', () => {
+      const { component } = setUp();
+      expect(component.formatBonus({ staminaDrainReduction: 5 })).toEqual(['+5 Stamina Drain']);
+      expect(component.formatBonus({ staminaDrainReduction: -5 })).toEqual(['-5 Stamina Drain']);
+    });
+
+    it('format stamina recovery bonus', () => {
+      const { component } = setUp();
+      expect(component.formatBonus({ staminaRecoveryBonus: 5 })).toEqual(['+5 Stamina Recovery']);
+    });
+
+    it('format all stat bonuses', () => {
+      const { component } = setUp();
+      const result = component.formatBonus({
+        attackMinBonus: 1, attackMaxBonus: 2, defenseBonus: 3, staminaRecoveryBonus: 4,
+      });
+      expect(result).toEqual(['+1–2 ATK', '+3 DEF', '+4 Stamina Recovery']);
+    });
+
+    it('empty inputs', () => {
+      const { component } = setUp();
+      expect(component.formatBonus({})).toEqual([]);
+    });
+  });
 });
 
 
