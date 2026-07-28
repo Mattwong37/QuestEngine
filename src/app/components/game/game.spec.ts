@@ -142,6 +142,67 @@ describe('Game', () => {
       expect(component.formatBonus({})).toEqual([]);
     });
   });
+
+  describe('format bonus', () => {
+    it('empty inputs', () => {
+      const { component } = setUp();
+      expect(component.formatBonus({})).toEqual([]);
+    });
+  });
+
+  describe('saveApiKey', () => {
+    it('openAI key saves and overwrites', () => {
+      const { component, apiKeyService } = setUp();
+      vi.spyOn(window, 'alert');
+      component.openAiKey.set('sk-oa-test');
+      component.saveApiKey();
+
+      expect(apiKeyService.openAiKey()).toBe('sk-oa-test');
+      expect(window.alert).toHaveBeenCalled();
+
+      component.openAiKey.set('sk-oa-test2');
+      component.saveApiKey();
+
+      expect(apiKeyService.openAiKey()).toBe('sk-oa-test2');
+      expect(window.alert).toHaveBeenCalled();
+    });
+
+  it('regen image when no image url', () => {
+      const { component, storyService } = setUp();
+      storyService.history.set([
+        { sceneText: 'Scene', imageUrl: '', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      component.openAiKey.set('sk-oa-test');
+      
+      vi.spyOn(storyService, 'generateImage').mockResolvedValue('filler.png');
+      component.saveApiKey();
+
+      expect(storyService.generateImage).toHaveBeenCalledWith('a field of grass', 'sk-oa-test');
+    });
+
+    it('does not regen image if there is one', () => {
+      const { component, storyService } = setUp();
+      storyService.history.set([
+        { sceneText: 'Scene', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      component.openAiKey.set('sk-oa-test');
+
+      vi.spyOn(storyService, 'generateImage').mockResolvedValue('');
+      component.saveApiKey();
+
+      expect(storyService.generateImage).not.toHaveBeenCalled();
+    });
+
+    it('does not regen an image if there is no history', () => {
+      const { component, storyService } = setUp();
+      component.openAiKey.set('sk-oa-test');
+
+      vi.spyOn(storyService, 'generateImage').mockResolvedValue('');
+      component.saveApiKey();
+
+      expect(storyService.generateImage).not.toHaveBeenCalled();
+    });
+  });
 });
 
 
