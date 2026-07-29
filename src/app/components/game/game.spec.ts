@@ -379,6 +379,17 @@ describe('Game', () => {
       expect(gameService.player().currentHealth).toBe(100);
     });
   });
+
+  describe('make choice logic', () => {
+    it('make choice runs full way through', async () => {
+      const { component, apiKeyService, storyService } = setUp();
+      apiKeyService.setAnthropicKey('sk-ant-test');
+      vi.spyOn(storyService, 'makeChoice').mockResolvedValue();
+
+      component.makeChoice({ id: '1', text: 'Attack' });
+      expect(storyService.makeChoice).toHaveBeenCalledWith('Attack', 'sk-ant-test');
+    });
+  });
 });
 
 
