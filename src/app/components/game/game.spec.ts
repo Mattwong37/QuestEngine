@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Game } from './game';
+import { StoryService } from '../../services/story';
 
 describe('Game', () => {
   let component: Game;
   let fixture: ComponentFixture<Game>;
+  let storyService!: StoryService;
 
   beforeEach(async () => {
     localStorage.clear()
@@ -21,7 +23,7 @@ describe('Game', () => {
   function setUp() {
       fixture = TestBed.createComponent(Game);
       component = fixture.componentInstance;
-      const storyService = component.storyService;
+      storyService = component.storyService;
       const gameService = component.gameService;
       const apiKeyService = component.apiKeyService;
       
@@ -263,6 +265,73 @@ describe('Game', () => {
       component.saveAnthropicKey();
 
       expect(storyService.startStory).toHaveBeenCalled();
+    });
+  });
+
+  describe('card logic', () => {
+    beforeEach(() => {
+      const { storyService } = setUp();
+      storyService.history.set([
+        { sceneText: 'Scene1', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene2', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      storyService.currentCardIndex.set(1);
+    });
+
+    it('currentCard getter', () => {
+      expect(component.currentCard().sceneText).toBe("Scene2");
+    });
+
+    it('nextCard goes to next card', () => {
+      storyService.history.set([
+        { sceneText: 'Scene1', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene2', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene3', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      component.nextCard();
+      expect(storyService.currentCardIndex()).toBe(2);
+    });
+
+    it('if no next card, deny out of bounds error', () => {
+      component.nextCard();
+      expect(storyService.currentCardIndex()).toBe(1);
+    });
+
+    it('if no previous card, deny out of bounds error', () => {
+      storyService.currentCardIndex.set(0);
+      component.prevCard();
+      expect(storyService.currentCardIndex()).toBe(0);
+    });
+
+    it('prevCard moves back one', () => {
+      component.prevCard();
+      expect(storyService.currentCardIndex()).toBe(0);
+    });
+
+    it('isCurrentCard only true on last card', () => {
+      storyService.currentCardIndex.set(1);
+      expect(component.isCurrentCard()).toBe(true);
+
+      storyService.currentCardIndex.set(0);
+      expect(component.isCurrentCard()).toBe(false);
+    });
+
+    it('down scroll calls nextCard', () => {
+      storyService.history.set([
+        { sceneText: 'Scene1', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene2', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene3', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      const event = { deltaY: 10, preventDefault: vi.fn() } as unknown as WheelEvent;
+      component.onScroll(event);
+      expect(storyService.currentCardIndex()).toBe(2);
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('up scroll prevCard', () => {
+      const event = { deltaY: -10, preventDefault: vi.fn() } as unknown as WheelEvent;
+      component.onScroll(event);
+      expect(storyService.currentCardIndex()).toBe(0);
     });
   });
 });
