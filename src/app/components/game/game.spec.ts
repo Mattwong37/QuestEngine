@@ -351,6 +351,34 @@ describe('Game', () => {
       expect(document.body.classList.contains('light-bg')).toBe(true);
     });
   });
+
+  describe('start over logic', () => {
+    it('resets everything on start over', () => {
+      const { component, storyService, gameService } = setUp();
+      storyService.history.set([
+        { sceneText: 'Scene1', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene2', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+        { sceneText: 'Scene3', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' },
+      ]);
+      storyService.currentChoices.set([{ id: '1', text: 'Go' }]);
+      storyService.conversationHistory = [{ role: 'user', content: 'hi' }];
+      gameService.initPlayer('Matt');
+      gameService.player.update(p => ({ ...p, level: 5, currentHealth: 10 }));
+
+      vi.stubGlobal('location', { ...window.location, reload: vi.fn() });
+
+      component.startOver();
+      
+      expect(storyService.history()).toEqual([]);
+      expect(storyService.currentChoices()).toEqual([]);
+      expect(storyService.conversationHistory).toEqual([]);
+      expect(storyService.currentCardIndex()).toBe(0);
+
+      expect(gameService.player().name).toBe('');
+      expect(gameService.player().level).toBe(1);
+      expect(gameService.player().currentHealth).toBe(100);
+    });
+  });
 });
 
 
