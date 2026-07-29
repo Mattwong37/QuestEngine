@@ -334,6 +334,23 @@ describe('Game', () => {
       expect(storyService.currentCardIndex()).toBe(0);
     });
   });
+
+  describe('dark mode toggle function', () => {
+    it('toggle on/off', () => {
+      const { component } = setUp();
+      expect(component.darkMode()).toBe(false);
+      component.darkModeToggle();
+      fixture.detectChanges();
+      expect(component.darkMode()).toBe(true);
+      expect(document.body.classList.contains('dark-bg')).toBe(true);
+      expect(document.body.classList.contains('light-bg')).toBe(false);
+      component.darkModeToggle();
+      fixture.detectChanges();
+      expect(component.darkMode()).toBe(false);
+      expect(document.body.classList.contains('dark-bg')).toBe(false);
+      expect(document.body.classList.contains('light-bg')).toBe(true);
+    });
+  });
 });
 
 

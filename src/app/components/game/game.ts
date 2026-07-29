@@ -141,13 +141,6 @@ export class Game implements OnInit {
 
   darkModeToggle() {
     this.darkMode.set(!this.darkMode());
-    document.body.style.backgroundImage = this.darkMode() 
-      ? 'url(/darkMode.png)' 
-      : 'url(/lightMode.png)';
-      const url = this.darkMode() ? 'url(/darkMode.png)' : 'url(/lightMode.png)';
-      console.log('Setting:', url);
-    document.body.style.backgroundImage = url;
-    console.log('Body background after set:', document.body.style.backgroundImage);
   }
 
   startOver() {
