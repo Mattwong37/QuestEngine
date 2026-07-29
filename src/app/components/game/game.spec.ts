@@ -390,6 +390,28 @@ describe('Game', () => {
       expect(storyService.makeChoice).toHaveBeenCalledWith('Attack', 'sk-ant-test');
     });
   });
+
+  describe('constructor effects', () => {
+    it('stats update', () => {
+      const { gameService, storyService } = setUp();
+      const applyStatsUpdateSpy = vi.spyOn(gameService, 'applyStatsUpdate');
+      storyService.pendingStatsUpdate.set({ healthChange: -10 });
+      fixture.detectChanges();
+
+      expect(applyStatsUpdateSpy).toHaveBeenCalled();
+      expect(storyService.pendingStatsUpdate()).toBeNull();
+    });
+
+    it('item gain', () => {
+      const { gameService, storyService } = setUp();
+      const equipItemSpy = vi.spyOn(gameService, 'equipItem');
+      storyService.pendingItemGain.set({ id: 'weapon1', name: 'testWeapon',  description: "", slot: 'mainHand', bonus: {}});
+      fixture.detectChanges();
+
+      expect(equipItemSpy).toHaveBeenCalled();
+      expect(storyService.pendingItemGain()).toBeNull();
+    });
+  });
 });
 
 
