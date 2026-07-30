@@ -484,5 +484,13 @@ describe('Game', () => {
     it('returns undefined when no slot matches', () => {
       expect(component.getSlot(1)).toBeUndefined();
     });
+
+    describe('formatDate', () => {
+      it('returns formatted date', () => {
+        const testDate = component.formatDate(1785455761781);
+        console.log(Date.now());
+        expect(testDate).toBe('Jul 30, 07:56 PM');
+      });
+    });
   });
 });
