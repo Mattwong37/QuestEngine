@@ -416,10 +416,58 @@ describe('Game', () => {
       const { gameService } = setUp();
       const applyStatsUpdateSpy = vi.spyOn(gameService, 'applyStatsUpdate');
       fixture.detectChanges();
-      
+
       expect(applyStatsUpdateSpy).not.toHaveBeenCalled();
     });
   });
+
+    describe('ngOnInit', () => {
+      it('starts in lightmode', () => {
+        setUp();
+        expect(document.body.classList.contains('light-bg')).toBe(true);
+      });
+
+      it('images are regenerated if key present, load also set back to false', () => {
+        const { gameService, apiKeyService, storyService } = setUp();
+        apiKeyService.setOpenAiKey('sk-oa-test');
+        gameService.isLoadedFromSave.set(true);
+        vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
+        vi.spyOn(storyService, 'startStory').mockResolvedValue();
+        fixture.detectChanges();
+
+        expect(storyService.regenerateImages).toHaveBeenCalledWith('sk-oa-test');
+        expect(storyService.startStory).not.toHaveBeenCalled();
+        expect(gameService.isLoadedFromSave()).toBe(false);
+      });
+
+      it('images are not regenerated if key missing', () => {
+        const { gameService, storyService } = setUp();
+        gameService.isLoadedFromSave.set(true);
+        vi.spyOn(storyService, 'regenerateImages').mockResolvedValue();
+        vi.spyOn(storyService, 'startStory').mockResolvedValue();
+        fixture.detectChanges();
+
+        expect(storyService.regenerateImages).not.toHaveBeenCalled();
+        expect(storyService.startStory).not.toHaveBeenCalled();
+      });
+      
+      it('start new story when new and keys present', () => {
+        const { gameService, apiKeyService, storyService } = setUp();
+        apiKeyService.setAnthropicKey('sk-ant-test');
+        gameService.initPlayer('Matt');
+        vi.spyOn(storyService, 'startStory').mockResolvedValue();
+        fixture.detectChanges();
+
+        expect(storyService.startStory).toHaveBeenCalledWith('Matt', 'sk-ant-test');
+      });
+
+      it('throw warning on missing key', () => {
+        const { storyService } = setUp();
+        vi.spyOn(storyService, 'startStory').mockResolvedValue();
+        expect(storyService.currentScene()).toContain('No Anthropic API key found. Please add your anthropic and OpenAI keys in Settings');
+        expect(storyService.startStory).not.toHaveBeenCalled();
+      });
+    });
 });
 
 
