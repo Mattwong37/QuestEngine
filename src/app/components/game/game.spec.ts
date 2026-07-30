@@ -468,6 +468,21 @@ describe('Game', () => {
         expect(storyService.startStory).not.toHaveBeenCalled();
       });
     });
+
+    describe('getSlot', () => {
+      it('find slot that matches', () => {
+        const { gameService } = setUp();
+        gameService.saveSlots.set([{id: 1, name: 'save1', timestamp: 1785454830781, playerName: 'Matt', scenePreview: 'grass', data: {} as any},
+          {id: 2, name: 'save2', timestamp: 1785455150073, playerName: 'Matt', scenePreview: 'grass', data: {} as any}
+        ]);
+
+        expect(component.getSlot(2)?.id).toBe(2);
+        expect(component.getSlot(2)?.name).toBe('save2');
+        expect(component.getSlot(2)).toStrictEqual({id: 2, name: 'save2', timestamp: 1785455150073, playerName: 'Matt', scenePreview: 'grass', data: {} as any});
+      });
+
+    it('returns undefined when no slot matches', () => {
+      expect(component.getSlot(1)).toBeUndefined();
+    });
+  });
 });
-
-
