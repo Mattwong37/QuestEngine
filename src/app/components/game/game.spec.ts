@@ -411,6 +411,14 @@ describe('Game', () => {
       expect(equipItemSpy).toHaveBeenCalled();
       expect(storyService.pendingItemGain()).toBeNull();
     });
+
+    it('ignore null input to pendingStatsUpdate', () => {
+      const { gameService } = setUp();
+      const applyStatsUpdateSpy = vi.spyOn(gameService, 'applyStatsUpdate');
+      fixture.detectChanges();
+      
+      expect(applyStatsUpdateSpy).not.toHaveBeenCalled();
+    });
   });
 });
 
