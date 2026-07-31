@@ -492,5 +492,32 @@ describe('Game', () => {
         expect(testDate).toBe('Jul 30, 07:56 PM');
       });
     });
+
+    describe('saving game tests', () => {
+      it('check savability', () => {
+        const { storyService } = setUp();
+        expect(component.hasSaveableProgress()).toBeFalsy();
+        storyService.history.set([{ sceneText: 'Scene', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' }]);
+        expect(component.hasSaveableProgress()).toBeTruthy();
+      });
+
+      it('if no savable progress deny', () => {
+        const alertSpy = vi.spyOn(window, 'alert');
+        component.confirmSave(1);
+        expect(alertSpy).toHaveBeenCalledWith('Nothing to save yet');
+      });
+
+      it('if savable progress save', () => {
+        const { gameService, storyService } = setUp();
+        storyService.history.set([{ sceneText: 'Scene', imageUrl: 'filler.png', choiceMade: 'dummyOption', imagePrompt: 'a field of grass' }]);
+        vi.spyOn(gameService, 'saveGame').mockResolvedValue();
+        component.confirmSave(1);
+
+        expect(gameService.saveGame).toHaveBeenCalled();
+        expect(component.savingSlot()).toBe(0);
+        expect(component.saveName()).toBe("");
+      });
+    });
+
   });
 });
