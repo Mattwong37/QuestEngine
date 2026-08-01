@@ -1,21 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
+import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 
 const cache = new Map<string, string>();
+const SECRET_KEYS = new Set(['anthropic_key', 'openai_key']);
+
+async function readSecret(key: string): Promise<string | null> {
+    try {
+        const { value } = await SecureStoragePlugin.get({ key });
+        return value;
+    } catch {
+        return null;
+    }
+}
 
 export async function initStorage(keyLabels: string[]) {
     for (const key of keyLabels) {
-        let { value } = await Preferences.get({ key: key });
+        const secret = SECRET_KEYS.has(key);
+        let value = secret ? await readSecret(key) : (await Preferences.get({ key: key })).value;
 
         if (value === null) {
-            const webData = localStorage.getItem(key);
-            if (webData !== null) {
-                await Preferences.set({ key: key, value: webData });
+            const webData = (await Preferences.get({ key: key })).value ?? localStorage.getItem(key);
+            if (webData) {
+                if (secret) {
+                    await SecureStoragePlugin.set({ key: key, value: webData });
+                    await Preferences.remove({ key: key });
+                }
                 value = webData;
             }
         }
 
-        if (value !== null) cache.set(key, value);
+        if (value) cache.set(key, value);
     }
 }
 
@@ -28,11 +43,19 @@ export class StorageService {
 
     setItem(key: string, value: string) {
         cache.set(key, value);
-        void Preferences.set({ key, value });
+        if (SECRET_KEYS.has(key)) {
+            void SecureStoragePlugin.set({ key, value });
+        } else {
+            void Preferences.set({ key, value });
+        }
     }
 
     removeItem(key: string) {
         cache.delete(key);
-        void Preferences.remove({ key });
+        if (SECRET_KEYS.has(key)) {
+            void SecureStoragePlugin.remove({ key });
+        } else {
+            void Preferences.remove({ key });
+        }
     }
 }
