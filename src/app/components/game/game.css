@@ -841,7 +841,7 @@ body {
         letter-spacing: 0;
     }
     
-    .stat-row, .key-label, .slot-info-small, .slot-label, .item-name, .item-bonuses .slot-empty, .dark-mode-label{
+    .stat-row, .key-label, .slot-info-small, .slot-label, .item-name, .item-bonuses .slot-empty, .dark-mode-label, .stat-value, .slot-empty-small {
         color: white;
     }
     
