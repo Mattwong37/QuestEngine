@@ -207,7 +207,11 @@ export class Game implements OnInit {
 
   async makeChoice(choice: any) {
     const key = this.apiKeyService.anthropicKey();
-    await this.storyService.makeChoice(choice.text, key);
+    if (key !== null && key.trim() !== '') {
+      await this.storyService.makeChoice(choice.text, key);
+    } else {
+      alert('Missing Anthropic API Key');
+    }
   }
 
   constructor() {
