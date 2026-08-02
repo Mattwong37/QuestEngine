@@ -10,6 +10,9 @@ body {
     background-attachment: fixed;
     font-family: 'Cinzel', serif;
     background-image: url('/lightMode.png');
+    --safe-top: env(safe-area-inset-top, 0px);    
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --sheet-h: 68px;
 }
 
 body.light-bg {
