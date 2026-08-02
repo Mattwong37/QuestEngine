@@ -751,7 +751,164 @@ body {
     white-space: nowrap;
 }
 
+
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
+}
+
+@media (hover: none) {
+    .panel-buttons button:hover:not(.active) {
+        background: rgb(117, 103, 60, .4);
+        color: rgb(from var(--text-color) r g b / 0.5);
+        text-shadow: none;
+    }
+
+    .choice-btn:hover,
+    .panel-content button:hover,
+    .start-over-btn:hover {
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .hud-stat {
+        width: 100%;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .hud {
+        flex-direction: column;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .scroll-arrows {
+        display: none;
+    }
+
+    .side-panel {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        background: rgba(18, 13, 9, 0.82);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .panel-content {
+        display: none;
+    }
+
+    .side-panel.panel-open .panel-content {
+        display: block;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        max-height: 58dvh;
+        background: rgba(0, 0, 0, 0.28);
+    }
+
+    .panel-buttons {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.35rem;
+        padding: 0.6rem 0.6rem;
+        border-bottom: none;
+    }
+
+    .side-panel:not(.panel-open) .panel-buttons button:first-child {
+        border-bottom-left-radius: 40px;
+    }
+
+    .side-panel:not(.panel-open) .panel-buttons button:last-child {
+        border-bottom-right-radius: 40px;
+    }
+    
+    .panel-buttons button {
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: center;
+        min-height: 44px;
+        padding: 0.5rem 0.25rem;
+        font-size: 0.72rem;
+        letter-spacing: 0;
+    }
+    
+    .stat-row, .key-label, .slot-info-small, .slot-label, .item-name, .item-bonuses .slot-empty, .dark-mode-label, .stat-value, .slot-empty-small {
+        color: white;
+    }
+    
+    .story-card-wrapper {
+        flex-direction: column;
+        gap: 0.5rem;
+        overflow: visible;
+        max-height: none;
+    }
+    
+    .card-content {
+        overflow: visible;
+        gap: 0.75rem;
+    }
+
+    .main-area {
+        flex-direction: column;
+        gap: 0.6rem;
+        overflow: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    .scene-image {
+        flex-shrink: 0;
+    }
+
+    .story-area {
+        flex: auto;
+        padding: 0.75rem;
+        overflow: visible;
+        max-height: none;
+        touch-action: pan-y;
+        overflow-y: auto;
+    }
+
+    .story-card-wrapper {
+        flex-direction: column;
+        gap: 0.5rem;
+        overflow: visible;
+        max-height: none;
+    }
+
+    .card-content {
+        overflow: visible;
+        gap: 0.75rem;
+    }
+
+    .scene-image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        max-height: 45dvh;
+    }
+
+    .scene-text {
+        padding: 1rem;
+        line-height: 1.65;
+        font-size: 0.95rem;
+        overflow-y: visible;
+    }
+
+    .game-container {
+        padding-bottom: calc(var(--sheet-h, 68px) + var(--safe-bottom, 0px) + 0.5rem);
+        padding-top: calc(1rem + var(--safe-top, 0px));
+        padding-left: max(0.6rem, var(--safe-left, 0px), var(--corner-inset));
+        padding-right: max(0.6rem, var(--safe-right, 0px), var(--corner-inset));
+    }
+
 }

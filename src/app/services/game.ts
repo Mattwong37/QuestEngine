@@ -1,6 +1,7 @@
 import { Injectable, signal, inject, computed } from '@angular/core';
 import { Player, EquipmentItem, EquipmentSlot } from '../models/story.model';
 import { StoryService } from './story';
+import { StorageService } from './storage';
 
 export interface SaveSlot {
     id: number;
@@ -26,6 +27,8 @@ export class GameService {
     playerName = signal('');
     isLoadedFromSave = signal(false);
     equipmentSlots: EquipmentSlot[] = ['mainHand', 'offHand', 'shoes', 'armor'];
+
+    private storage = inject(StorageService);
 
     player = signal<Player>({
         name: '',
@@ -97,7 +100,7 @@ export class GameService {
         }
 
         this.saveSlots.set(saves);
-        localStorage.setItem('quest_engine_saves', JSON.stringify(saves));
+        this.storage.setItem('quest_engine_saves', JSON.stringify(saves));
     }
 
     loadGame(slotId: number) {
@@ -117,7 +120,7 @@ export class GameService {
     deleteSave(slotId: number) {
         const saves = this.saveSlots().filter(s => s.id !== slotId);
         this.saveSlots.set(saves);
-        localStorage.setItem('quest_engine_saves', JSON.stringify(saves));
+        this.storage.setItem('quest_engine_saves', JSON.stringify(saves));
     }
 
     computeEffectiveStats(p: Player) {
@@ -208,7 +211,7 @@ export class GameService {
 
     private loadSavesFromStorage(): SaveSlot[] {
         try {
-            const raw = localStorage.getItem('quest_engine_saves');
+            const raw = this.storage.getItem('quest_engine_saves');
             return raw ? JSON.parse(raw) : [];
         } catch {
             return [];

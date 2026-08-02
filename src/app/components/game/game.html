@@ -109,12 +109,12 @@
             }
         </div>
 
-        <div class="side-panel">
+        <div class="side-panel" [class.panel-open]="activePanel() !== null">
             <div class="panel-buttons">
-                <button (click)="activePanel.set('equipment')" [class.active]="activePanel() === 'equipment'">Equipment</button>
-                <button (click)="activePanel.set('stats')" [class.active]="activePanel() === 'stats'">Stats</button>
-                <button (click)="activePanel.set('save')" [class.active]="activePanel() === 'save'">Save</button>
-                <button (click)="activePanel.set('settings')" [class.active]="activePanel() === 'settings'">Settings</button>
+                <button (click)="setPanelTo('equipment')" [class.active]="activePanel() === 'equipment'">Equipment</button>
+                <button (click)="setPanelTo('stats')" [class.active]="activePanel() === 'stats'">Stats</button>
+                <button (click)="setPanelTo('save')" [class.active]="activePanel() === 'save'">Save</button>
+                <button (click)="setPanelTo('settings')" [class.active]="activePanel() === 'settings'">Settings</button>
             </div>
 
             <div class="panel-content">
@@ -212,19 +212,19 @@
                 @if (activePanel() === 'settings') {
                     <div>
                         <h3>Settings</h3>
-                        <label>Claude API Key</label>
+                        <label class="key-label">Claude API Key</label>
                         <input type="password" [ngModel]="anthropicKey()" (ngModelChange)="anthropicKey.set($event)" placeholder="sk-ant-..." />
                         <button (click)="saveAnthropicKey()">Save</button>
 
                         <div class="divider"></div>
 
-                        <label>OpenAI API Key</label>
+                        <label class="key-label">OpenAI API Key</label>
                         <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
                         <button (click)="saveApiKey()">Save</button>
 
                         <div class="divider"></div>
 
-                        <label>Dark Mode</label>
+                        <label class="dark-mode-label">Dark Mode</label>
                         <div class="toggle-row">
                         <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
                             <div class="toggle-thumb"></div>
@@ -232,10 +232,10 @@
                         </div>
                     </div>
                 }
-        <!-- Tests game over functionality -->
-        <!-- <button (click)="gameService.player.update(p => ({...p, currentHealth: 0}))">Test Game Over</button> -->
+    <!-- Tests game over functionality -->
+    <!-- <button (click)="gameService.player.update(p => ({...p, currentHealth: 0}))">Test Game Over</button> -->
         </div> 
-    </div>
+    </div> 
         
     @if (isGameOver()) {
         <div class="game-over-overlay">

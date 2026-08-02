@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { StoryService } from '../../services/story';
 import { ApiKeyService } from '../../services/api-key';
 import { EquipmentBonus } from '../../models/story.model';
+import { DarkMode } from '../../services/dark-mode';
 
 @Component({
   selector: 'app-game',
@@ -15,13 +16,14 @@ import { EquipmentBonus } from '../../models/story.model';
 
 export class Game implements OnInit {
   gameService = inject(GameService);
-  activePanel = signal('equipment');
+  activePanel = signal<string | null>( window.matchMedia('(max-width: 600px)').matches ? null : 'equipment');
 
   apiKeyService = inject(ApiKeyService);
   openAiKey = this.apiKeyService.openAiKey;
   anthropicKey = this.apiKeyService.anthropicKey;
 
-  darkMode = signal(false);
+  darkModeService = inject(DarkMode);
+  darkMode = this.darkModeService.darkMode;
   storyService = inject(StoryService);
 
   thresholdAmount: number = 20;
@@ -31,8 +33,19 @@ export class Game implements OnInit {
 
   isGameOver = computed(() => this.gameService.player().currentHealth <= 0);
 
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  setPanelTo(panel: string) {
+    this.activePanel.update(current =>
+      window.matchMedia('(max-width: 600px)').matches && current === panel ? null : panel
+    );
+  }
+
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
+    if (window.matchMedia('(max-width: 600px)').matches) return;
+
     const storyArea = document.querySelector('.story-area');
     if (storyArea && storyArea.contains(event.target as Node)) {
       event.preventDefault();
@@ -41,6 +54,29 @@ export class Game implements OnInit {
       } else {
         this.prevCard();
       }
+    }
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].clientX;
+    this.touchStartY = event.changedTouches[0].clientY;
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    const storyArea = document.querySelector('.story-area');
+    if (!storyArea || !storyArea.contains(event.target as Node)) return;
+
+    const dx = event.changedTouches[0].clientX - this.touchStartX;
+    const dy = event.changedTouches[0].clientY - this.touchStartY;
+
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+
+    if (dx < 0) {
+      this.nextCard();
+    } else {
+      this.prevCard();
     }
   }
 
@@ -140,7 +176,7 @@ export class Game implements OnInit {
   }
 
   darkModeToggle() {
-    this.darkMode.set(!this.darkMode());
+    this.darkModeService.setDarkMode(!this.darkModeService.darkMode());
   }
 
   startOver() {
@@ -173,20 +209,14 @@ export class Game implements OnInit {
 
   async makeChoice(choice: any) {
     const key = this.apiKeyService.anthropicKey();
-    await this.storyService.makeChoice(choice.text, key);
+    if (key !== null && key.trim() !== '') {
+      await this.storyService.makeChoice(choice.text, key);
+    } else {
+      alert('Missing Anthropic API Key');
+    }
   }
 
   constructor() {
-    effect(() => {
-      if (this.darkMode()) {
-        document.body.classList.remove('light-bg');
-        document.body.classList.add('dark-bg');
-      } else {
-        document.body.classList.remove('dark-bg');
-        document.body.classList.add('light-bg');
-      }
-    });
-
     effect(() => {
       const update = this.storyService.pendingStatsUpdate();
       if (update) {
@@ -205,8 +235,6 @@ export class Game implements OnInit {
   }
 
   ngOnInit() {
-    document.body.classList.add('light-bg');
-
     if (this.gameService.isLoadedFromSave()) {
       this.gameService.isLoadedFromSave.set(false);
       const openAiKey = this.apiKeyService.openAiKey();
