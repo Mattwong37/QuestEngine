@@ -823,6 +823,14 @@ body {
         border-bottom: none;
     }
 
+    .side-panel:not(.panel-open) .panel-buttons button:first-child {
+        border-bottom-left-radius: 40px;
+    }
+
+    .side-panel:not(.panel-open) .panel-buttons button:last-child {
+        border-bottom-right-radius: 40px;
+    }
+    
     .panel-buttons button {
         flex: 1 1 0;
         min-width: 0;
@@ -843,7 +851,8 @@ body {
         overflow: visible;
         max-height: none;
     }
-        .card-content {
+    
+    .card-content {
         overflow: visible;
         gap: 0.75rem;
     }
@@ -893,5 +902,8 @@ body {
     .game-container {
         padding-bottom: calc(var(--sheet-h, 68px) + var(--safe-bottom, 0px) + 0.5rem);
         padding-top: calc(1rem + var(--safe-top, 0px));
+        padding-left: max(0.6rem, var(--safe-left, 0px), var(--corner-inset));
+        padding-right: max(0.6rem, var(--safe-right, 0px), var(--corner-inset));
     }
+
 }
