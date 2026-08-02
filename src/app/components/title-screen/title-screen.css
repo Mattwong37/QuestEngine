@@ -9,20 +9,23 @@
 }
 
 h1 {
-    font-size: 90px;
+    font-size: clamp(2.75rem, 15vw, 90px);
+    margin: 0 0;
     color:blanchedalmond;
     text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8);
 }
 
 h2 {
-    font-size: 90px;
+    font-size: clamp(2rem, 10vw, 90px);
+    margin: 0 0;
+    line-height: 1.15;
     color:blanchedalmond;
     text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8);
     text-align: center;
 }
 
 p {
-    font-size: 50px;
+    font-size: clamp(1.4rem, 5vw, 50px);
     color:blanchedalmond;
     text-shadow: 1px 1px 3px rgba(99, 99, 99, 0.8); 
 }
@@ -238,4 +241,86 @@ button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+@media (hover: none) {
+    .character-creation-content input[type="text"]:hover,
+    .character-creation button:hover,
+    .title-screen button:hover, .back-button:hover, .save-slot button:hover, 
+    .settings-button:hover, .close-button:hover, .settings-modal button:hover,
+    .key-save-button hover {
+        color: #f1d280;
+        background: #1a1510;
+        border-color: #d4af37;
+        box-shadow: 0px 0px 10px rgba(212, 175, 55, 0.2);
+        text-shadow: none;
+    }
+}
+
+.load-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: calc(5.5rem + var(--safe-top, 0px)) 1rem calc(6rem + var(--safe-bottom, 0px));
+    overflow: scroll;
+    box-sizing: border-box;
+}
+
+
+@media (max-width: 600px) {
+    .slot-name,
+    .slot-player,
+    .slot-preview,
+    .slot-time {
+        padding: 0;
+        text-align: left;
+        overflow-wrap: anywhere;
+    }
+
+    .back-button {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        font-size: .8rem;
+        padding: 11px 30px;
+        height: max-content;
+        top: auto !important;
+    }
+
+    .title-buttons {
+        gap: 16px;
+    }
+
+    .character-creation button,
+    .title-content button,
+    .settings-modal button {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+    
+    .save-slots {
+        width: 100%;
+        max-width: 900px;
+        box-sizing: border-box;
+        padding: 14px;
+        margin: 0;
+        overflow-y: auto; 
+    }
+    
+    .save-slot {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 16px 14px;
+        font-size: 1rem;
+    }
+    
+    .slot-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+    }
 }
