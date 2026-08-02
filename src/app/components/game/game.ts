@@ -34,6 +34,12 @@ export class Game implements OnInit {
   private touchStartX = 0;
   private touchStartY = 0;
 
+  setPanelTo(panel: string) {
+    this.activePanel.update(current =>
+      window.matchMedia('(max-width: 600px)').matches && current === panel ? null : panel
+    );
+  }
+
   @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
     if (window.matchMedia('(max-width: 600px)').matches) return;

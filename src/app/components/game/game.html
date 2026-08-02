@@ -110,130 +110,132 @@
         </div>
 
         <div class="side-panel">
-            <div class="panel-buttons">
-                <button (click)="activePanel.set('equipment')" [class.active]="activePanel() === 'equipment'">Equipment</button>
-                <button (click)="activePanel.set('stats')" [class.active]="activePanel() === 'stats'">Stats</button>
-                <button (click)="activePanel.set('save')" [class.active]="activePanel() === 'save'">Save</button>
-                <button (click)="activePanel.set('settings')" [class.active]="activePanel() === 'settings'">Settings</button>
-            </div>
+            <div class="side-panel" [class.panel-open]="activePanel() !== null">
+                <div class="panel-buttons">
+                    <button (click)="setPanelTo('equipment')" [class.active]="activePanel() === 'equipment'">Equipment</button>
+                    <button (click)="setPanelTo('stats')" [class.active]="activePanel() === 'stats'">Stats</button>
+                    <button (click)="setPanelTo('save')" [class.active]="activePanel() === 'save'">Save</button>
+                    <button (click)="setPanelTo('settings')" [class.active]="activePanel() === 'settings'">Settings</button>
+                </div>
 
-            <div class="panel-content">
-                @if (activePanel() === 'equipment') {
-                    <div class="equipment-panel">
-                        <h3>Equipment</h3>
+                <div class="panel-content">
+                    @if (activePanel() === 'equipment') {
+                        <div class="equipment-panel">
+                            <h3>Equipment</h3>
 
-                        <div class="equip-slots">
-                            @for (slot of gameService.equipmentSlots; track slot) {
-                                <div class="equip-slot">
-                                    <span class="slot-label">{{ slot === 'mainHand' ? 'Main Hand' : slot === 'offHand' ? 'Off Hand' : slot === 'shoes' ? 'Footgear' : 'Armor' }}</span>
-                                    @if (gameService.player().equipment[slot]; as item) {
-                                        <div class="equipped-item">
-                                            <span class="item-name">{{ item.name }}</span>
-                                            <div class="item-bonuses">
-                                                @for (b of formatBonus(item.bonus); track b) {
-                                                    <span class="bonus-tag">{{ b }}</span>
-                                                }
+                            <div class="equip-slots">
+                                @for (slot of gameService.equipmentSlots; track slot) {
+                                    <div class="equip-slot">
+                                        <span class="slot-label">{{ slot === 'mainHand' ? 'Main Hand' : slot === 'offHand' ? 'Off Hand' : slot === 'shoes' ? 'Footgear' : 'Armor' }}</span>
+                                        @if (gameService.player().equipment[slot]; as item) {
+                                            <div class="equipped-item">
+                                                <span class="item-name">{{ item.name }}</span>
+                                                <div class="item-bonuses">
+                                                    @for (b of formatBonus(item.bonus); track b) {
+                                                        <span class="bonus-tag">{{ b }}</span>
+                                                    }
+                                                </div>
                                             </div>
+                                        } @else {
+                                            <span class="slot-empty">Empty</span>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (activePanel() === 'stats') {
+                        <div class="stats-panel">
+                            <h3>Stats</h3>
+
+                            <div class="stat-row">
+                                <span class="stat-label">Attack</span>
+                                <span class="stat-value">{{ gameService.effectiveStats().attackMin }}–{{ gameService.effectiveStats().attackMax }}</span>
+                            </div>
+
+                            <div class="stat-row">
+                                <span class="stat-label">Defense</span>
+                                <span class="stat-value">{{ gameService.effectiveStats().defense }}</span>
+                            </div>
+
+                            <div class="stat-row">
+                                <span class="stat-label">Magic Defense</span>
+                                <span class="stat-value">{{ gameService.effectiveStats().magicDefense }}</span>
+                            </div>
+
+                            <div class="stat-row stamina-row">
+                                <span class="stat-label">Stamina</span>
+                                <div class="bar stamina-bar">
+                                    <div class="bar-fill stamina" [style.width.%]="gameService.player().stamina"></div>
+                                </div>
+                                <span class="stat-value">{{ gameService.player().stamina }}%</span>
+                            </div>
+                        </div>
+                    }
+                    
+
+                    @if (activePanel() === 'save') {
+                        <div>
+                            <h3>Save Game</h3>
+                            @for (slot of [1, 2, 3]; track slot) {
+                                <div class="save-slot-item">
+                                    @if (getSlot(slot)) {
+                                    <div class="slot-info-small">
+                                        <div class="slot-name-small">{{ getSlot(slot)?.name }}</div>
+                                        <div class="slot-preview-small">{{ getSlot(slot)?.scenePreview }}</div>
+                                        <div class="slot-time-small">{{ formatDate(getSlot(slot)!.timestamp) }}</div>
+                                    </div>
+                                    } @else {
+                                    <div class="slot-empty-small">Empty Slot {{ slot }}</div>
+                                    }
+                                    @if (savingSlot() === slot) {
+                                        <input 
+                                            type="text" 
+                                            [ngModel]="saveName()" 
+                                            (ngModelChange)="saveName.set($event)"
+                                            placeholder="Name your save..." 
+                                        />
+                                        <div class="save-confirm-btns">
+                                            <button (click)="confirmSave(slot)">Confirm</button>
+                                            <button (click)="savingSlot.set(0)">Cancel</button>
                                         </div>
                                     } @else {
-                                        <span class="slot-empty">Empty</span>
+                                        <button (click)="savingSlot.set(slot)" [hidden]="!hasSaveableProgress()">
+                                            {{ getSlot(slot) ? 'Overwrite' : 'Save' }}
+                                        </button>
                                     }
                                 </div>
                             }
                         </div>
-                    </div>
-                }
+                    }
 
-                @if (activePanel() === 'stats') {
-                    <div class="stats-panel">
-                        <h3>Stats</h3>
+                    @if (activePanel() === 'settings') {
+                        <div>
+                            <h3>Settings</h3>
+                            <label class="key-label">Claude API Key</label>
+                            <input type="password" [ngModel]="anthropicKey()" (ngModelChange)="anthropicKey.set($event)" placeholder="sk-ant-..." />
+                            <button (click)="saveAnthropicKey()">Save</button>
 
-                        <div class="stat-row">
-                            <span class="stat-label">Attack</span>
-                            <span class="stat-value">{{ gameService.effectiveStats().attackMin }}–{{ gameService.effectiveStats().attackMax }}</span>
-                        </div>
+                            <div class="divider"></div>
 
-                        <div class="stat-row">
-                            <span class="stat-label">Defense</span>
-                            <span class="stat-value">{{ gameService.effectiveStats().defense }}</span>
-                        </div>
+                            <label class="key-label">OpenAI API Key</label>
+                            <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
+                            <button (click)="saveApiKey()">Save</button>
 
-                        <div class="stat-row">
-                            <span class="stat-label">Magic Defense</span>
-                            <span class="stat-value">{{ gameService.effectiveStats().magicDefense }}</span>
-                        </div>
+                            <div class="divider"></div>
 
-                        <div class="stat-row stamina-row">
-                            <span class="stat-label">Stamina</span>
-                            <div class="bar stamina-bar">
-                                <div class="bar-fill stamina" [style.width.%]="gameService.player().stamina"></div>
+                            <label class="dark-mode-label">Dark Mode</label>
+                            <div class="toggle-row">
+                            <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
+                                <div class="toggle-thumb"></div>
                             </div>
-                            <span class="stat-value">{{ gameService.player().stamina }}%</span>
-                        </div>
-                    </div>
-                }
-                
-
-                @if (activePanel() === 'save') {
-                    <div>
-                        <h3>Save Game</h3>
-                        @for (slot of [1, 2, 3]; track slot) {
-                            <div class="save-slot-item">
-                                @if (getSlot(slot)) {
-                                <div class="slot-info-small">
-                                    <div class="slot-name-small">{{ getSlot(slot)?.name }}</div>
-                                    <div class="slot-preview-small">{{ getSlot(slot)?.scenePreview }}</div>
-                                    <div class="slot-time-small">{{ formatDate(getSlot(slot)!.timestamp) }}</div>
-                                </div>
-                                } @else {
-                                <div class="slot-empty-small">Empty Slot {{ slot }}</div>
-                                }
-                                @if (savingSlot() === slot) {
-                                    <input 
-                                        type="text" 
-                                        [ngModel]="saveName()" 
-                                        (ngModelChange)="saveName.set($event)"
-                                        placeholder="Name your save..." 
-                                    />
-                                    <div class="save-confirm-btns">
-                                        <button (click)="confirmSave(slot)">Confirm</button>
-                                        <button (click)="savingSlot.set(0)">Cancel</button>
-                                    </div>
-                                } @else {
-                                    <button (click)="savingSlot.set(slot)" [hidden]="!hasSaveableProgress()">
-                                        {{ getSlot(slot) ? 'Overwrite' : 'Save' }}
-                                    </button>
-                                }
                             </div>
-                        }
-                    </div>
-                }
-
-                @if (activePanel() === 'settings') {
-                    <div>
-                        <h3>Settings</h3>
-                        <label>Claude API Key</label>
-                        <input type="password" [ngModel]="anthropicKey()" (ngModelChange)="anthropicKey.set($event)" placeholder="sk-ant-..." />
-                        <button (click)="saveAnthropicKey()">Save</button>
-
-                        <div class="divider"></div>
-
-                        <label>OpenAI API Key</label>
-                        <input type="password" [(ngModel)]="openAiKey" placeholder="sk-..." />
-                        <button (click)="saveApiKey()">Save</button>
-
-                        <div class="divider"></div>
-
-                        <label>Dark Mode</label>
-                        <div class="toggle-row">
-                        <div class="slide-toggle" [class.on]="darkMode()" (click)="darkModeToggle()">
-                            <div class="toggle-thumb"></div>
                         </div>
-                        </div>
-                    </div>
-                }
+                    }
         <!-- Tests game over functionality -->
         <!-- <button (click)="gameService.player.update(p => ({...p, currentHealth: 0}))">Test Game Over</button> -->
+            </div> 
         </div> 
     </div>
         
