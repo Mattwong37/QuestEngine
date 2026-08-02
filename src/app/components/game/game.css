@@ -860,17 +860,22 @@ body {
     .main-area {
         flex-direction: column;
         gap: 0.6rem;
-        overflow-y: auto;
+        overflow: hidden;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
     }
 
+    .scene-image {
+        flex-shrink: 0;
+    }
+
     .story-area {
-        flex: 0 0 auto;
+        flex: auto;
         padding: 0.75rem;
         overflow: visible;
         max-height: none;
         touch-action: pan-y;
+        overflow-y: auto;
     }
 
     .story-card-wrapper {
