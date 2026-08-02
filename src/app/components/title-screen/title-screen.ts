@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { GameService } from '../../services/game';
 import { Game } from '../game/game';
 import { ApiKeyService } from '../../services/api-key';
+import { DarkMode } from '../../services/dark-mode';
 
 @Component({
   selector: 'app-title-screen',
@@ -26,7 +27,9 @@ export class TitleScreen {
   apiKeyService = inject(ApiKeyService);
   anthropicKey = this.apiKeyService.anthropicKey;
   openAiKey = this.apiKeyService.openAiKey;
-  darkMode = signal(false);
+
+  darkModeService = inject(DarkMode);
+  darkMode = this.darkModeService.darkMode;
 
   startGame() {
     this.currentScreen.set('character-creation');
@@ -71,14 +74,7 @@ export class TitleScreen {
   }
 
   darkModeToggle() {
-    this.darkMode.set(!this.darkMode());
-    if (this.darkMode()) {
-      document.body.classList.remove('light-bg');
-      document.body.classList.add('dark-bg');
-    } else {
-      document.body.classList.remove('dark-bg');
-      document.body.classList.add('light-bg');
-    }
+    this.darkModeService.setDarkMode(!this.darkModeService.darkMode());
   }
 
   loadFakeSaves() {

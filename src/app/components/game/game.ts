@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { StoryService } from '../../services/story';
 import { ApiKeyService } from '../../services/api-key';
 import { EquipmentBonus } from '../../models/story.model';
+import { DarkMode } from '../../services/dark-mode';
 
 @Component({
   selector: 'app-game',
@@ -21,7 +22,8 @@ export class Game implements OnInit {
   openAiKey = this.apiKeyService.openAiKey;
   anthropicKey = this.apiKeyService.anthropicKey;
 
-  darkMode = signal(false);
+  darkModeService = inject(DarkMode);
+  darkMode = this.darkModeService.darkMode;
   storyService = inject(StoryService);
 
   thresholdAmount: number = 20;
@@ -174,7 +176,7 @@ export class Game implements OnInit {
   }
 
   darkModeToggle() {
-    this.darkMode.set(!this.darkMode());
+    this.darkModeService.setDarkMode(!this.darkModeService.darkMode());
   }
 
   startOver() {
@@ -216,16 +218,6 @@ export class Game implements OnInit {
 
   constructor() {
     effect(() => {
-      if (this.darkMode()) {
-        document.body.classList.remove('light-bg');
-        document.body.classList.add('dark-bg');
-      } else {
-        document.body.classList.remove('dark-bg');
-        document.body.classList.add('light-bg');
-      }
-    });
-
-    effect(() => {
       const update = this.storyService.pendingStatsUpdate();
       if (update) {
         this.gameService.applyStatsUpdate(update);
@@ -243,8 +235,6 @@ export class Game implements OnInit {
   }
 
   ngOnInit() {
-    document.body.classList.add('light-bg');
-
     if (this.gameService.isLoadedFromSave()) {
       this.gameService.isLoadedFromSave.set(false);
       const openAiKey = this.apiKeyService.openAiKey();
