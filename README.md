@@ -1,7 +1,9 @@
 # QuestEngine
 
-This project uses [Angular 22.0.4](https://github.com/angular/angular-cli), [Claude Sonnet 4.6](https://www-cdn.anthropic.com/bbd8ef16d70b7a1665f14f306ee88b53f686aa75/Claude%20Sonnet%204.6%20System%20Card.pdf) for story generation, and [OpenAI Image Generation 2.0](https://developers.openai.com/api/docs/models/gpt-image-2) for image generation.
+This project uses [Angular 22.0.4](https://github.com/angular/angular-cli), [Claude Sonnet 4.6](https://www-cdn.anthropic.com/bbd8ef16d70b7a1665f14f306ee88b53f686aa75/Claude%20Sonnet%204.6%20System%20Card.pdf) for story generation, [OpenAI Image Generation 2.0](https://developers.openai.com/api/docs/models/gpt-image-2) for image generation, and [Capacitor 8.5.0](https://capacitorjs.com/solution/angular) for iOS build.
+
 Hosted on [Vercel](https://vercel.com/home)
+
 Used modified image from Jereme Peabody. Please find his work on [DevianArt](https://www.deviantart.com/jjpeabody)
 
 ## Table of Contents
@@ -20,20 +22,21 @@ Features:
 - AI-generated branching narrative with real consequences
 - AI-generated images with visually consistent character appearances
 - Rolodex-style history to scroll back and see past decisions
-- 3 save slots persisted to local browser cache
+- 3 save slots persisted to device storage
 - Weapon and character stat tracking
 - Game over screen with a journey summary
 - Light and dark modes
 
 
 ## How to Install
-### 1. Install dependencies
+### Desktop Version
+#### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Run the dev server
+#### 2. Run the dev server
 
 ```bash
 ng serve
@@ -41,7 +44,7 @@ ng serve
 
 Open `http://localhost:4200` in your browser
 
-### 3. Add your API keys
+#### 3. Add your API keys
 
 Once the app is running, start a game, enter a name, and go to **Settings** in the side panel:
 Provide your Claude and OpenAI keys and hit save for each.
@@ -51,6 +54,20 @@ Provide your Claude and OpenAI keys and hit save for each.
 
 Keys are saved to localStorage and persist between sessions, but if you clear your browser cache, you will lose them and whatever stories you have saved.
 
+### iOS Version
+#### 1. Install dependencies
+```bash
+npm install
+```
+
+#### 2. Build and sync the app
+```bash
+ng build
+npx cap sync ios
+```
+
+#### 3. Open Xcode and run the simulator
+_Note that to reflect changes to in the source code, you need to rebuild and sync the application._
 
 ## How to Play
 
@@ -65,9 +82,11 @@ Please note that you will still need your own API keys to play. refer to [Add yo
 - **TypeScript 5** — strict typing throughout
 - **Claude Sonnet 4.6** — story generation via the Anthropic API
 - **Open AI Image Generation 2.0** — scene image generation via the OpenAI API
-- **localStorage** — save slots and API key persistence
+- **Device Storage** — save slots and API key persistence
 - **CSS** — webpage styling
-- **ViTest** — unit testing 
+- **ViTest** — unit testing
+- **Capacitor 8** - native iOS wrapper
+  - **capacitor-secure-storage-plugin** — stores API keys in the iOS Keychain
 
 
 ## Modify It For Yourself
