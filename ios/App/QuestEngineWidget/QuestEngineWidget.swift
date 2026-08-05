@@ -16,10 +16,10 @@ struct Provider: TimelineProvider {
           .flatMap { $0.data(using: .utf8) }
           .flatMap { try? JSONDecoder().decode(QuestView.self, from: $0) }
 
-      
+      let printedPlayerName = snap?.playerName ?? ""
       return SceneEntry(
           date: Date(),
-          playerName: snap?.playerName ?? "Adventurer",
+          playerName: printedPlayerName.isEmpty ? "Adventurer" :  printedPlayerName,
           sceneText: snap?.sceneText ?? "Nothing exciting here... For now"
       )
     }

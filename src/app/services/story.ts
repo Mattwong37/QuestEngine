@@ -65,6 +65,7 @@ export class StoryService {
     currentImage = signal('');
     characterRegistry: Record<string, string> = {};
     pendingStatsUpdate = signal<any>(null);
+    playerName = '';
 
     pendingItemGain = signal<StoryResponse['itemGain'] | null>(null);
 
@@ -139,7 +140,8 @@ export class StoryService {
         this.isLoading.set(true);
         this.conversationHistory = [];
         this.characterRegistry = {};
-
+        this.playerName = playerName;
+        
         const firstMessage = `The player's name is ${playerName}. Begin the isekai story. Transport them from the modern world into a dangerous fantasy realm. Describe their appearance and surroundings in detail. Then present their first choices.
         Since this is the first scene, include a "characterSummary" field — a single compressed line describing the protagonist's appearance for image consistency. Example: "young male, messy black hair, brown eyes, modern clothes, no weapons yet"`;
 
@@ -237,12 +239,11 @@ export class StoryService {
                 this.pendingItemGain.set(parsed.itemGain);
             }
 
-            console.log('ABOUT TO SYNC', parsed.sceneText);
-
             WidgetBridge.sync({
-                playerName: "Adventurer",
+                playerName: this.playerName,
                 sceneText: parsed.sceneText
             });
+            
             this.currentScene.set(parsed.sceneText);
             this.currentChoices.set(parsed.choices);
             this.history.update(h => [...h, {
