@@ -19,6 +19,8 @@
 		C7FD8205301FED2900B50F09 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FD8204301FED2900B50F09 /* WidgetKit.framework */; };
 		C7FD8207301FED2900B50F09 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FD8206301FED2900B50F09 /* SwiftUI.framework */; };
 		C7FD8214301FED2A00B50F09 /* QuestEngineWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C7FD8202301FED2900B50F09 /* QuestEngineWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C7FD822F3022B6CB00B50F09 /* WidgetBridgePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD822E3022B67100B50F09 /* WidgetBridgePlugin.swift */; };
+		C7FD82313022BAB100B50F09 /* QuestEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD82303022BA9B00B50F09 /* QuestEngineViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		C7FD8204301FED2900B50F09 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		C7FD8206301FED2900B50F09 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		C7FD821A301FF58B00B50F09 /* QuestEngineWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuestEngineWidgetExtension.entitlements; sourceTree = "<group>"; };
+		C7FD822E3022B67100B50F09 /* WidgetBridgePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBridgePlugin.swift; sourceTree = "<group>"; };
+		C7FD82303022BA9B00B50F09 /* QuestEngineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestEngineViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -123,6 +127,8 @@
 		504EC3061FED79650016851F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C7FD82303022BA9B00B50F09 /* QuestEngineViewController.swift */,
+				C7FD822E3022B67100B50F09 /* WidgetBridgePlugin.swift */,
 				C7FD81FD301E2D8200B50F09 /* App.entitlements */,
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
@@ -262,6 +268,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7FD822F3022B6CB00B50F09 /* WidgetBridgePlugin.swift in Sources */,
+				C7FD82313022BAB100B50F09 /* QuestEngineViewController.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
 			);

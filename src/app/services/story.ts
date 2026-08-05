@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { WidgetBridge } from './widget-bridge';
 
 export interface StoryMessage {
     role: 'user' | 'assistant';
@@ -236,6 +237,12 @@ export class StoryService {
                 this.pendingItemGain.set(parsed.itemGain);
             }
 
+            console.log('ABOUT TO SYNC', parsed.sceneText);
+
+            WidgetBridge.sync({
+                playerName: "Adventurer",
+                sceneText: parsed.sceneText
+            });
             this.currentScene.set(parsed.sceneText);
             this.currentChoices.set(parsed.choices);
             this.history.update(h => [...h, {

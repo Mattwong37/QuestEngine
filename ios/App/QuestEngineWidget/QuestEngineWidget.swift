@@ -9,76 +9,76 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), emoji: "😀")
+    func currentEntry() -> SceneEntry {
+      let defaults = UserDefaults(suiteName: "group.io.github.mattwong37.questengine")
+      let raw = defaults?.string(forKey: "snapshot")
+      let snap = raw
+          .flatMap { $0.data(using: .utf8) }
+          .flatMap { try? JSONDecoder().decode(QuestView.self, from: $0) }
+
+      
+      return SceneEntry(
+          date: Date(),
+          playerName: snap?.playerName ?? "Adventurer",
+          sceneText: snap?.sceneText ?? "Nothing exciting here... For now"
+      )
+    }
+  
+    func placeholder(in context: Context) -> SceneEntry {
+      SceneEntry(date: Date(), playerName: "Adventurer", sceneText: "Grassy field with a tree in the distance.")
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), emoji: "😀")
-        completion(entry)
-    }
+  func getSnapshot(in context: Context, completion: @escaping (SceneEntry) -> Void) {
+      completion(currentEntry())
+  }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
+  func getTimeline(in context: Context, completion: @escaping (Timeline<SceneEntry>) -> Void) {
+      completion(Timeline(entries: [currentEntry()], policy: .never))
+  }
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, emoji: "😀")
-            entries.append(entry)
-        }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
-    }
-
-//    func relevances() async -> WidgetRelevances<Void> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct QuestView: Codable {
+    let playerName: String
+    let sceneText: String
+}
+
+struct SceneEntry: TimelineEntry {
     let date: Date
-    let emoji: String
+    let playerName: String
+    let sceneText: String
 }
 
-struct QuestEngineWidgetEntryView : View {
-    var entry: Provider.Entry
+struct SceneView: View {
+    var entry: SceneEntry
 
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Text("Emoji:")
-            Text(entry.emoji)
+        VStack(alignment: .leading, spacing: 4) {
+            Text(entry.playerName.uppercased())
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text(entry.sceneText)
+                .font(.system(.footnote, design: .serif))
+                .lineLimit(4)
+            Spacer(minLength: 0)
         }
+        .containerBackground(for: .widget) { Color(.systemBackground) }
     }
 }
 
 struct QuestEngineWidget: Widget {
-    let kind: String = "QuestEngineWidget"
-
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
-                QuestEngineWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                QuestEngineWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
-            }
-        }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
-    }
+  var body: some WidgetConfiguration {
+          StaticConfiguration(kind: "QuestEngineWidget", provider: Provider()) {
+              SceneView(entry: $0)
+          }
+          .configurationDisplayName("QuestEngine")
+          .description("Where your story left off...")
+          .supportedFamilies([.systemMedium])
+      }
 }
 
-#Preview(as: .systemSmall) {
-    QuestEngineWidget()
+#Preview(as: .systemMedium) {
+  QuestEngineWidget()
 } timeline: {
-    SimpleEntry(date: .now, emoji: "😀")
-    SimpleEntry(date: .now, emoji: "🤩")
+  SceneEntry(date: .now, playerName: "Adventurer", sceneText: "Grassy field with a tree in the distance. Explore?")
 }
