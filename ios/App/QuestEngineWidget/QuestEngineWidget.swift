@@ -55,13 +55,16 @@ struct SceneView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
           HStack {
-              Text(entry.playerName.uppercased())
+            Text(entry.playerName.uppercased())
                   .font(.caption2)
                   .fontWeight(.semibold)
                   .tracking(1.2)
-              Text(entry.date, style: .date)
-                  .font(.caption2)
-                  .foregroundStyle(.secondary)
+            Text("·")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text(entry.date, style: .date)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
           }
           
           Rectangle()
@@ -74,7 +77,19 @@ struct SceneView: View {
               .lineLimit(5)
               .minimumScaleFactor(0.85)
               .foregroundStyle(.primary)
-          Spacer(minLength: 0)
+          
+          Rectangle()
+              .fill(.secondary.opacity(0.25))
+              .frame(height: 0.5)
+          
+          HStack(spacing: 4) {
+              Text("Continue your adventure")
+                  .font(.caption2)
+                  .fontWeight(.medium)
+              Image(systemName: "chevron.right")
+                  .font(.system(size: 8, weight: .semibold))
+          }
+          .foregroundStyle(.secondary)
         }
         .containerBackground(for: .widget) { Color(.systemBackground) }
     }
