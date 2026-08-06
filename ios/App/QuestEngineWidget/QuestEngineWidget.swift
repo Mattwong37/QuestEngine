@@ -56,14 +56,20 @@ struct SceneView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(entry.playerName.uppercased())
                 .font(.caption2)
-                .foregroundStyle(.secondary)
-            Text(entry.sceneText)
-                .font(.system(.footnote, design: .serif))
-                .lineSpacing(2)
-                .lineLimit(5)
-                .minimumScaleFactor(0.85)
-                .foregroundStyle(.primary)
-            Spacer(minLength: 0)
+                .fontWeight(.semibold)
+                .tracking(1.2)
+          
+          Rectangle()
+              .fill(.secondary.opacity(0.25))
+              .frame(height: 0.5)
+          
+          Text(entry.sceneText)
+              .font(.system(.footnote, design: .serif))
+              .lineSpacing(2)
+              .lineLimit(5)
+              .minimumScaleFactor(0.85)
+              .foregroundStyle(.primary)
+          Spacer(minLength: 0)
         }
         .containerBackground(for: .widget) { Color(.systemBackground) }
     }
