@@ -59,7 +59,10 @@ struct SceneView: View {
                 .foregroundStyle(.secondary)
             Text(entry.sceneText)
                 .font(.system(.footnote, design: .serif))
-                .lineLimit(4)
+                .lineSpacing(2)
+                .lineLimit(5)
+                .minimumScaleFactor(0.85)
+                .foregroundStyle(.primary)
             Spacer(minLength: 0)
         }
         .containerBackground(for: .widget) { Color(.systemBackground) }
