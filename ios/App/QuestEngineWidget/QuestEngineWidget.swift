@@ -54,10 +54,15 @@ struct SceneView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(entry.playerName.uppercased())
-                .font(.caption2)
-                .fontWeight(.semibold)
-                .tracking(1.2)
+          HStack {
+              Text(entry.playerName.uppercased())
+                  .font(.caption2)
+                  .fontWeight(.semibold)
+                  .tracking(1.2)
+              Text(entry.date, style: .date)
+                  .font(.caption2)
+                  .foregroundStyle(.secondary)
+          }
           
           Rectangle()
               .fill(.secondary.opacity(0.25))
