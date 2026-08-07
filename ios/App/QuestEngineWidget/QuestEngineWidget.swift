@@ -52,46 +52,45 @@ struct SceneEntry: TimelineEntry {
 struct SceneView: View {
     var entry: SceneEntry
 
+    private var divider: some View {
+      Rectangle()
+        .fill(.secondary.opacity(0.25))
+        .frame(height: 2)
+        .foregroundStyle(Theme.gold)
+    }
+  
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
           HStack {
             Text(entry.playerName.uppercased())
-                  .font(.caption2)
+                  .font(Theme.serif(12))
                   .fontWeight(.semibold)
                   .tracking(1.2)
+                  .foregroundStyle(Theme.gold)
             Text("·")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
             Text(entry.date, style: .date)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-          }
+          }.foregroundStyle(Color(.systemGray))
+           .font(Theme.serif(12))
           
-          Rectangle()
-              .fill(.secondary.opacity(0.25))
-              .frame(height: 0.5)
+          divider
           
           Text(entry.sceneText)
               .font(.system(.footnote, design: .serif))
               .lineSpacing(2)
               .lineLimit(5)
               .minimumScaleFactor(0.85)
-              .foregroundStyle(.primary)
           
-          Rectangle()
-              .fill(.secondary.opacity(0.25))
-              .frame(height: 0.5)
+          divider
           
           HStack(spacing: 4) {
               Text("Continue your adventure")
-                  .font(.caption2)
+              .font(Theme.serif(10))
                   .fontWeight(.medium)
               Image(systemName: "chevron.right")
                   .font(.system(size: 8, weight: .semibold))
           }
-          .foregroundStyle(.secondary)
-        }
-        .containerBackground(for: .widget) { Color(.systemBackground) }
+        }.foregroundStyle(Theme.subText)
+         .containerBackground(for: .widget) { Theme.background }
     }
 }
 
@@ -100,7 +99,7 @@ struct QuestEngineWidget: Widget {
           StaticConfiguration(kind: "QuestEngineWidget", provider: Provider()) {
               SceneView(entry: $0)
           }
-          .configurationDisplayName("QuestEngine")
+          .configurationDisplayName("Recent Scene")
           .description("Where your story left off...")
           .supportedFamilies([.systemMedium])
       }
@@ -109,5 +108,5 @@ struct QuestEngineWidget: Widget {
 #Preview(as: .systemMedium) {
   QuestEngineWidget()
 } timeline: {
-  SceneEntry(date: .now, playerName: "Adventurer", sceneText: "Grassy field with a tree in the distance. Explore?")
+  SceneEntry(date: .now, playerName: "Sharkey", sceneText: "One moment Sharkey was slouched on his couch, energy drink in hand, watching some late-night documentary about ancient ruins — the next, a blinding fracture of violet light swallowed the room whole. He crashes hard onto cold, mossy stone, gasping as the air hits his lungs like ice water. Around him looms a shattered forest of black-barked trees, their canopies bleeding red leaves that drift like burning embers in the moonless dark. Somewhere deep in the treeline, something massive exhales — slow, deliberate, and very aware of him.")
 }
