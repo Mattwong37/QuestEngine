@@ -143,12 +143,22 @@ Want to change it to fit your requirements? You can do it at these locations bel
 <table align="center" border="0">
     <tr>
         <td align="center">
-            <img src="public/storySummaryWidget-Light.png" alt="Scene Sumamry Widget Light"><br> 
+            <img src="public/storySummaryWidget-Light.png" alt="Scene Summary Widget Light"><br> 
             <sub>Scene Sumamry Widget - Light</sub>
         </td>
         <td align="center">
-            <img src="public/storySummaryWidget-Dark.png" alt="Scene Sumamry Widget Dark"><br> 
+            <img src="public/storySummaryWidget-Dark.png" alt="Scene Summary Widget Dark"><br> 
             <sub>Scene Sumamry Widget - Dark</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/statViewWidget-Light.png" alt="Stat View Widget Light"><br> 
+            <sub>Player Stat Widget - Light</sub>
+        </td>
+        <td align="center">
+            <img src="public/statViewWidget-Dark.png" alt="Stat View Widget Dark"><br> 
+            <sub>Player Stat Widget - Dark</sub>
         </td>
     </tr>
     <tr>
