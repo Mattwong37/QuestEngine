@@ -153,12 +153,22 @@ Want to change it to fit your requirements? You can do it at these locations bel
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light.png" alt="Stat View Widget Light"><br> 
-            <sub>Player Stat Widget - Light</sub>
+            <img src="public/statViewWidget-Light-Medium.png" alt="Stat View Widget Light Medium"><br> 
+            <sub>Player Stat Widget - Medium - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark.png" alt="Stat View Widget Dark"><br> 
-            <sub>Player Stat Widget - Dark</sub>
+            <img src="public/statViewWidget-Dark-Medium.png" alt="Stat View Widget Dark Medium"><br> 
+            <sub>Player Stat Widget - Medium - Dark</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/statViewWidget-Light-Small.png" alt="Stat View Widget Light Small"><br> 
+            <sub>Player Stat Widget - Small - Light</sub>
+        </td>
+        <td align="center">
+            <img src="public/statViewWidget-Dark-Small.png" alt="Stat View Widget Dark Small"><br> 
+            <sub>Player Stat Widget - Small - Dark</sub>
         </td>
     </tr>
     <tr>
