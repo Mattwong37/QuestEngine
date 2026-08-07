@@ -29,12 +29,11 @@ struct StatProvider: TimelineProvider {
       )
     }
     func placeholder(in context: Context) -> StatEntry {
-      StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 100, maxMana: 100, curLevel: 0, xp: 10, playerName: "")
+      StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 100, maxMana: 100, curLevel: 0, xp: 10, playerName: "Adventurer")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (StatEntry) -> ()) {
-        let entry = StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 100, maxMana: 100, curLevel: 0, xp: 10, playerName: "")
-        completion(entry)
+        completion(currentEntry())
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
@@ -190,6 +189,7 @@ struct statSummary: Widget {
     }
     .configurationDisplayName("Stat Summary")
     .description("See your stats at a glance")
+    .supportedFamilies([.systemMedium])
   }
 }
 
