@@ -238,11 +238,6 @@ export class StoryService {
                 console.log('itemGain from Claude:', parsed.itemGain);
                 this.pendingItemGain.set(parsed.itemGain);
             }
-
-            WidgetBridge.sync({
-                playerName: this.playerName,
-                sceneText: parsed.sceneText
-            });
             
             this.currentScene.set(parsed.sceneText);
             this.currentChoices.set(parsed.choices);
