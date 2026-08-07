@@ -51,12 +51,15 @@ struct SceneEntry: TimelineEntry {
 
 struct SceneView: View {
     var entry: SceneEntry
-
+  
+    @Environment(\.colorScheme) private var scheme
+    private var theme: Theme { Theme(scheme: scheme) }
+  
     private var divider: some View {
       Rectangle()
         .fill(.secondary.opacity(0.25))
         .frame(height: 2)
-        .foregroundStyle(Theme.gold)
+        .foregroundStyle(theme.gold)
     }
   
     var body: some View {
@@ -66,10 +69,10 @@ struct SceneView: View {
                   .font(Theme.serif(12))
                   .fontWeight(.semibold)
                   .tracking(1.2)
-                  .foregroundStyle(Theme.gold)
+                  .foregroundStyle(theme.gold)
             Text("·")
             Text(entry.date, style: .date)
-          }.foregroundStyle(Color(.systemGray))
+          }.foregroundStyle(theme.secondaryText)
            .font(Theme.serif(12))
           
           divider
@@ -89,8 +92,8 @@ struct SceneView: View {
               Image(systemName: "chevron.right")
                   .font(.system(size: 8, weight: .semibold))
           }
-        }.foregroundStyle(Theme.subText)
-         .containerBackground(for: .widget) { Theme.background }
+        }.foregroundStyle(theme.subText)
+         .containerBackground(for: .widget) { theme.background }
     }
 }
 

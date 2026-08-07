@@ -3,15 +3,27 @@
 
 import SwiftUI
 
-enum Theme {
-    static let gold        = Color(hex: 0xC9A227)
-    static let goldFaint   = Color(hex: 0xC9A227).opacity(0.25)
-    static let background  = Color(hex: 0x2A2015)
-    static let subText    = Color(hex: 0xFFEBCD)
-
-    static func serif(_ size: CGFloat, _ weight: Font.Weight = .medium) -> Font {
-        .system(size: size, weight: weight, design: .serif)
-    }
+struct Theme {
+  let scheme: ColorScheme
+  var gold: Color {
+    scheme == .dark ? Color(hex: 0xC9A227) : Color(hex: 0x8A6A16)
+  }
+  
+  var background: Color {
+    scheme == .dark ? Color(hex: 0x2A2015) : Color(hex: 0xCCC2AB)
+  }
+  
+  var subText: Color {
+    scheme == .dark ? Color(hex: 0xFFEBCD) : Color(hex: 0x5A4A2A)
+  }
+  
+  var secondaryText: Color {
+    scheme == .dark ? Color(.systemGray) : Color(hex: 0x5C5B5B)
+  }
+  
+  static func serif(_ size: CGFloat, _ weight: Font.Weight = .medium) -> Font {
+      .system(size: size, weight: weight, design: .serif)
+  }
 }
 
 extension Color {

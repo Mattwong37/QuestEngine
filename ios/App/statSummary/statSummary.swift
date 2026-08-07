@@ -70,6 +70,9 @@ struct StatBar: View {
     var color: Color
     var name: String
 
+    @Environment(\.colorScheme) private var scheme
+    private var theme: Theme { Theme(scheme: scheme) }
+  
     private var value: CGFloat {
         guard max > 0 else { return 0 }
         return CGFloat(current) / CGFloat(max)
@@ -90,13 +93,13 @@ struct StatBar: View {
     private var label: some View {
         Text(name)
             .font(Theme.serif(12, .medium))
-            .foregroundStyle(Theme.subText)
+            .foregroundStyle(theme.subText)
     }
 
     private var statFraction: some View {
         Text("\(current)/\(max)")
             .font(Theme.serif(9))
-            .foregroundStyle(Theme.subText.opacity(0.6))
+            .foregroundStyle(theme.subText.opacity(0.6))
     }
   
     var body: some View {
@@ -126,6 +129,8 @@ struct StatBar: View {
 
 struct StatSummaryEntryView: View {
   var entry: StatEntry
+  @Environment(\.colorScheme) private var scheme
+  private var theme: Theme { Theme(scheme: scheme) }
   
   private var healthPct: CGFloat {
     guard entry.maxHealth > 0 else { return 0 }
@@ -141,7 +146,7 @@ struct StatSummaryEntryView: View {
     Rectangle()
       .fill(.secondary.opacity(0.25))
       .frame(height: 2)
-      .foregroundStyle(Theme.gold)
+      .foregroundStyle(theme.gold)
   }
   @Environment(\.widgetFamily) var widgetFamily
   
@@ -152,7 +157,7 @@ struct StatSummaryEntryView: View {
           .font(Theme.serif(widgetFamily != .systemSmall ? 12 : 10))
           .fontWeight(.semibold)
           .tracking(1.2)
-          .foregroundStyle(Theme.gold)
+          .foregroundStyle(theme.gold)
         Text("·")
           .font(.caption2)
         if (widgetFamily != .systemSmall){
@@ -161,7 +166,7 @@ struct StatSummaryEntryView: View {
         }
         Text("LV \(entry.curLevel)")
       }.font(Theme.serif(10))
-        .foregroundStyle(Color(.systemGray))
+        .foregroundStyle(theme.secondaryText)
       divider
       Spacer(minLength: 0)
       StatBar(viewMode: .systemMedium, current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
@@ -176,7 +181,9 @@ struct StatSummaryEntryView: View {
         Image(systemName: "chevron.right")
           .font(.system(size: 8, weight: .semibold))
       }
-      .foregroundStyle(Theme.subText)
+      .foregroundStyle(theme.subText)
+    }.containerBackground(for: .widget) {
+      theme.background
     }
   }
 }
@@ -201,9 +208,6 @@ struct statSummary: Widget {
     StaticConfiguration(kind: kind, provider: StatProvider()) { entry in
       if #available(iOS 17.0, *) {
         StatSummaryEntryView(entry: entry)
-          .containerBackground(for: .widget) {
-            Theme.background
-          }
       }
     }
     .configurationDisplayName("Stat Summary")
