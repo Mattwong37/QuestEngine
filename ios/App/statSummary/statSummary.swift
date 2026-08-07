@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 
+
 struct StatProvider: TimelineProvider {
     func currentEntry() -> StatEntry {
       let defaults = UserDefaults(suiteName: "group.io.github.mattwong37.questengine")
@@ -63,6 +64,7 @@ struct StatEntry: TimelineEntry {
 }
 
 struct StatBar: View {
+    let viewMode: WidgetFamily
     var current: Int
     var max: Int
     var color: Color
@@ -74,86 +76,151 @@ struct StatBar: View {
     }
 
     var body: some View {
-      HStack(spacing: 8) {
+      if (viewMode == .systemSmall) {
+          GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+              Capsule()
+                .fill(Color(.systemGray5))
+              Capsule()
+                .fill(color)
+                .frame(width: geometry.size.width * Swift.max(0, Swift.min(value, 1)))
+            }
+          }
+          .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
+          
+          HStack(){
+            Text(name)
+              .font(.caption2)
+              .fontWeight(.medium)
+            Text("·")
+              .font(.caption2)
+              .foregroundStyle(.secondary)
+            Text("\(current)/\(max)")
+              .font(.system(size: 9))
+              .foregroundStyle(.secondary)
+          }
+        
+      } else {
+        HStack(spacing: 8) {
           VStack(alignment: .leading, spacing: 1) {
-              Text(name)
-                  .font(.caption2)
-                  .fontWeight(.medium)
-              Text("\(current)/\(max)")
-                  .font(.system(size: 9))
-                  .foregroundStyle(.secondary)
+            Text(name)
+              .font(.caption2)
+              .fontWeight(.medium)
+            Text("\(current)/\(max)")
+              .font(.system(size: 9))
+              .foregroundStyle(.secondary)
           }
           .frame(width: 46, alignment: .leading)
           .fixedSize(horizontal: false, vertical: true)
-
-        GeometryReader { geometry in
+          
+          GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color(.systemGray5))
-                Capsule()
-                    .fill(color)
-                    .frame(width: geometry.size.width * Swift.max(0, Swift.min(value, 1)))
+              Capsule()
+                .fill(Color(.systemGray5))
+              Capsule()
+                .fill(color)
+                .frame(width: geometry.size.width * Swift.max(0, Swift.min(value, 1)))
             }
+          }
+          .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
         }
-        .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
       }
     }
 }
 
 struct StatSummaryEntryView: View {
-    var entry: StatEntry
-
-    private var healthPct: CGFloat {
-        guard entry.maxHealth > 0 else { return 0 }
-        return CGFloat(entry.curHealth) / CGFloat(entry.maxHealth)
-    }
-
-    private var manaPct: CGFloat {
-        guard entry.maxMana > 0 else { return 0 }
-        return CGFloat(entry.curMana) / CGFloat(entry.maxMana)
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-          HStack {
-            Text(entry.playerName.uppercased())
-                  .font(.caption2)
-                  .fontWeight(.semibold)
-                  .tracking(1.2)
-            Text("·")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Text(entry.date, style: .date)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Spacer()
-            Text("LV \(entry.curLevel)")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-          }
-          
-          Rectangle()
-              .fill(.secondary.opacity(0.25))
-              .frame(height: 0.5)
-
-            StatBar(current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
-            StatBar(current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
-          
-            Spacer(minLength: 0)
-            Rectangle()
-                .fill(.secondary.opacity(0.25))
-                .frame(height: 0.5)
-            HStack(spacing: 4) {
-                Text("Continue your adventure")
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 8, weight: .semibold))
-            }
+  var entry: StatEntry
+  
+  private var healthPct: CGFloat {
+    guard entry.maxHealth > 0 else { return 0 }
+    return CGFloat(entry.curHealth) / CGFloat(entry.maxHealth)
+  }
+  
+  private var manaPct: CGFloat {
+    guard entry.maxMana > 0 else { return 0 }
+    return CGFloat(entry.curMana) / CGFloat(entry.maxMana)
+  }
+  @Environment(\.widgetFamily) var widgetFamily
+  
+  var body: some View {
+    switch widgetFamily {
+    case .systemMedium:
+      VStack(alignment: .leading, spacing: 8) {
+        HStack {
+          Text(entry.playerName.uppercased())
+            .font(.caption2)
+            .fontWeight(.semibold)
+            .tracking(1.2)
+          Text("·")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+          Text(entry.date, style: .date)
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+          Spacer()
+          Text("LV \(entry.curLevel)")
+            .font(.caption2)
             .foregroundStyle(.secondary)
         }
+        
+        Rectangle()
+          .fill(.secondary.opacity(0.25))
+          .frame(height: 0.5)
+        
+        StatBar(viewMode: .systemMedium, current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
+        StatBar(viewMode: .systemMedium, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
+        
+        Spacer(minLength: 0)
+        Rectangle()
+          .fill(.secondary.opacity(0.25))
+          .frame(height: 0.5)
+        HStack(spacing: 4) {
+          Text("Continue your adventure")
+            .font(.caption2)
+            .fontWeight(.medium)
+          Image(systemName: "chevron.right")
+            .font(.system(size: 8, weight: .semibold))
+        }
+        .foregroundStyle(.secondary)
+      }
+    case .systemSmall, _:
+      VStack(alignment: .leading, spacing: 7) {
+        HStack() {
+          Text(entry.playerName.isEmpty ? "Adventure" : entry.playerName.uppercased())
+            .font(.caption2)
+            .fontWeight(.semibold)
+            .tracking(1.2)
+          Text("·")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+          Text("LV \(entry.curLevel)")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+        }
+        Rectangle()
+          .fill(.secondary.opacity(0.25))
+          .frame(height: 0.5)
+        
+        StatBar(viewMode: .systemSmall, current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
+        StatBar(viewMode: .systemSmall, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
+        
+        Rectangle()
+          .fill(.secondary.opacity(0.25))
+          .frame(height: 0.5)
+        HStack(spacing: 4) {
+          Text("Continue Adventure")
+            .font(.caption2)
+            .fontWeight(.medium)
+          Image(systemName: "chevron.right")
+            .font(.system(size: 8, weight: .semibold))
+        }
+        .foregroundStyle(.secondary)
+        
+      }
     }
+  }
 }
+
 
 private func healthColor(for value: CGFloat) -> Color {
     if value > 0.5 { return Color(hex: 0x4e9f3d ) }
@@ -189,7 +256,7 @@ struct statSummary: Widget {
     }
     .configurationDisplayName("Stat Summary")
     .description("See your stats at a glance")
-    .supportedFamilies([.systemMedium])
+    .supportedFamilies([.systemMedium, .systemSmall])
   }
 }
 
