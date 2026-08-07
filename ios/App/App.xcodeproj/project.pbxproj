@@ -19,6 +19,8 @@
 		C77084C130256409000B592D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FD8204301FED2900B50F09 /* WidgetKit.framework */; };
 		C77084C230256409000B592D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FD8206301FED2900B50F09 /* SwiftUI.framework */; };
 		C77084CF3025640B000B592D /* statSummaryExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C77084C030256409000B592D /* statSummaryExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C7DC13B030263BD000485AE9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DC13AF30263BCA00485AE9 /* Theme.swift */; };
+		C7DC13B13026445700485AE9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DC13AF30263BCA00485AE9 /* Theme.swift */; };
 		C7FD8205301FED2900B50F09 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FD8204301FED2900B50F09 /* WidgetKit.framework */; };
 		C7FD8207301FED2900B50F09 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FD8206301FED2900B50F09 /* SwiftUI.framework */; };
 		C7FD8214301FED2A00B50F09 /* QuestEngineWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C7FD8202301FED2900B50F09 /* QuestEngineWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -72,6 +74,7 @@
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
 		C77084C030256409000B592D /* statSummaryExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = statSummaryExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7DC13AC3025811700485AE9 /* statSummaryExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = statSummaryExtension.entitlements; sourceTree = "<group>"; };
+		C7DC13AF30263BCA00485AE9 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C7FD81FD301E2D8200B50F09 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		C7FD8202301FED2900B50F09 /* QuestEngineWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuestEngineWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7FD8204301FED2900B50F09 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -136,6 +139,7 @@
 		504EC2FB1FED79650016851F = {
 			isa = PBXGroup;
 			children = (
+				C7DC13AF30263BCA00485AE9 /* Theme.swift */,
 				C7DC13AC3025811700485AE9 /* statSummaryExtension.entitlements */,
 				C7FD821A301FF58B00B50F09 /* QuestEngineWidgetExtension.entitlements */,
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
@@ -346,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7DC13B13026445700485AE9 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +358,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7DC13B030263BD000485AE9 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

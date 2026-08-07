@@ -75,54 +75,50 @@ struct StatBar: View {
         return CGFloat(current) / CGFloat(max)
     }
 
+    private var statBarCapsule: some View {
+        ZStack(alignment: .leading) {
+            Capsule().fill(Color(.systemGray5))
+            GeometryReader { geo in
+                Capsule()
+                    .fill(color)
+                    .frame(width: geo.size.width * Swift.max(0, Swift.min(value, 1)))
+            }
+        }
+        .frame(height: 8)
+    }
+  
+    private var label: some View {
+        Text(name)
+            .font(Theme.serif(12, .medium))
+            .foregroundStyle(Theme.subText)
+    }
+
+    private var statFraction: some View {
+        Text("\(current)/\(max)")
+            .font(Theme.serif(9))
+            .foregroundStyle(Theme.subText.opacity(0.6))
+    }
+  
     var body: some View {
       if (viewMode == .systemSmall) {
-          GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-              Capsule()
-                .fill(Color(.systemGray5))
-              Capsule()
-                .fill(color)
-                .frame(width: geometry.size.width * Swift.max(0, Swift.min(value, 1)))
+        VStack(alignment: .leading, spacing: 3) {
+          HStack(spacing: 4) {
+                label
+                Spacer()
+                statFraction
             }
-          }
-          .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
-          
-          HStack(){
-            Text(name)
-              .font(.caption2)
-              .fontWeight(.medium)
-            Text("·")
-              .font(.caption2)
-              .foregroundStyle(.secondary)
-            Text("\(current)/\(max)")
-              .font(.system(size: 9))
-              .foregroundStyle(.secondary)
-          }
-        
+            statBarCapsule
+        }
       } else {
         HStack(spacing: 8) {
           VStack(alignment: .leading, spacing: 1) {
-            Text(name)
-              .font(.caption2)
-              .fontWeight(.medium)
-            Text("\(current)/\(max)")
-              .font(.system(size: 9))
-              .foregroundStyle(.secondary)
+            label
+            statFraction
           }
           .frame(width: 46, alignment: .leading)
           .fixedSize(horizontal: false, vertical: true)
           
-          GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-              Capsule()
-                .fill(Color(.systemGray5))
-              Capsule()
-                .fill(color)
-                .frame(width: geometry.size.width * Swift.max(0, Swift.min(value, 1)))
-            }
-          }
-          .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
+          statBarCapsule
         }
       }
     }
@@ -140,83 +136,47 @@ struct StatSummaryEntryView: View {
     guard entry.maxMana > 0 else { return 0 }
     return CGFloat(entry.curMana) / CGFloat(entry.maxMana)
   }
+  
+  private var divider: some View {
+    Rectangle()
+      .fill(.secondary.opacity(0.25))
+      .frame(height: 2)
+      .foregroundStyle(Theme.gold)
+  }
   @Environment(\.widgetFamily) var widgetFamily
   
   var body: some View {
-    switch widgetFamily {
-    case .systemMedium:
-      VStack(alignment: .leading, spacing: 8) {
-        HStack {
-          Text(entry.playerName.uppercased())
-            .font(.caption2)
-            .fontWeight(.semibold)
-            .tracking(1.2)
-          Text("·")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
+    VStack(alignment: .leading, spacing: 5) {
+      HStack() {
+        Text(entry.playerName.uppercased())
+          .font(Theme.serif(widgetFamily != .systemSmall ? 12 : 10))
+          .fontWeight(.semibold)
+          .tracking(1.2)
+          .foregroundStyle(Theme.gold)
+        Text("·")
+          .font(.caption2)
+        if (widgetFamily != .systemSmall){
           Text(entry.date, style: .date)
-            .font(.caption2)
-            .foregroundStyle(.secondary)
           Spacer()
-          Text("LV \(entry.curLevel)")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
         }
-        
-        Rectangle()
-          .fill(.secondary.opacity(0.25))
-          .frame(height: 0.5)
-        
-        StatBar(viewMode: .systemMedium, current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
-        StatBar(viewMode: .systemMedium, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
-        
-        Spacer(minLength: 0)
-        Rectangle()
-          .fill(.secondary.opacity(0.25))
-          .frame(height: 0.5)
-        HStack(spacing: 4) {
-          Text("Continue your adventure")
-            .font(.caption2)
-            .fontWeight(.medium)
-          Image(systemName: "chevron.right")
-            .font(.system(size: 8, weight: .semibold))
-        }
-        .foregroundStyle(.secondary)
+        Text("LV \(entry.curLevel)")
+      }.font(Theme.serif(10))
+        .foregroundStyle(Color(.systemGray))
+      divider
+      Spacer(minLength: 0)
+      StatBar(viewMode: .systemMedium, current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
+      Spacer(minLength: 0)
+      StatBar(viewMode: .systemMedium, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
+      Spacer(minLength: 0)
+      divider
+      HStack(spacing: 4) {
+        Text(widgetFamily != .systemSmall ? "Continue your adventure" : "Continue Adventure")
+          .font(Theme.serif(widgetFamily != .systemSmall ? 12 : 10))
+          .fontWeight(.medium)
+        Image(systemName: "chevron.right")
+          .font(.system(size: 8, weight: .semibold))
       }
-    case .systemSmall, _:
-      VStack(alignment: .leading, spacing: 7) {
-        HStack() {
-          Text(entry.playerName.isEmpty ? "Adventure" : entry.playerName.uppercased())
-            .font(.caption2)
-            .fontWeight(.semibold)
-            .tracking(1.2)
-          Text("·")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-          Text("LV \(entry.curLevel)")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-        }
-        Rectangle()
-          .fill(.secondary.opacity(0.25))
-          .frame(height: 0.5)
-        
-        StatBar(viewMode: .systemSmall, current: entry.curHealth, max: entry.maxHealth, color: healthColor(for: healthPct), name: "Health")
-        StatBar(viewMode: .systemSmall, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
-        
-        Rectangle()
-          .fill(.secondary.opacity(0.25))
-          .frame(height: 0.5)
-        HStack(spacing: 4) {
-          Text("Continue Adventure")
-            .font(.caption2)
-            .fontWeight(.medium)
-          Image(systemName: "chevron.right")
-            .font(.system(size: 8, weight: .semibold))
-        }
-        .foregroundStyle(.secondary)
-        
-      }
+      .foregroundStyle(Theme.subText)
     }
   }
 }
@@ -234,16 +194,6 @@ private func manaColor(for value: CGFloat) -> Color {
     return .red
 }
 
-extension Color {
-    init(hex: UInt32, alpha: Double = 1.0) {
-        let red = Double((hex >> 16) & 0xFF) / 255.0
-        let green = Double((hex >> 8) & 0xFF) / 255.0
-        let blue = Double(hex & 0xFF) / 255.0
-        self.init(.sRGB, red: red, green: green, blue: blue, opacity: alpha)
-    }
-}
-
-
 struct statSummary: Widget {
   let kind: String = "statSummary"
 
@@ -251,7 +201,9 @@ struct statSummary: Widget {
     StaticConfiguration(kind: kind, provider: StatProvider()) { entry in
       if #available(iOS 17.0, *) {
         StatSummaryEntryView(entry: entry)
-          .containerBackground(.fill.tertiary, for: .widget)
+          .containerBackground(for: .widget) {
+            Theme.background
+          }
       }
     }
     .configurationDisplayName("Stat Summary")
@@ -263,5 +215,5 @@ struct statSummary: Widget {
 #Preview(as: .systemSmall) {
     statSummary()
 } timeline: {
-  StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 100, maxMana: 100, curLevel: 0, xp: 10, playerName: "")
+  StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 50, maxMana: 100, curLevel: 0, xp: 10, playerName: "Adventurer")
 }
