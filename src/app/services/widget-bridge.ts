@@ -25,6 +25,8 @@ const native = registerPlugin<WidgetBridgePlugin>('WidgetBridge');
 
 export const WidgetBridge = {
     async sync(data: WidgetPayload) {
-        if (Capacitor.getPlatform() !== 'ios') return;        return native.sync({ payload: JSON.stringify(data) });
+        const platform = Capacitor.getPlatform();
+        if (platform !== 'ios' && platform !== 'android') return;        
+        return native.sync({ payload: JSON.stringify(data) });
     }
 };
