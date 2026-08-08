@@ -2,6 +2,8 @@ import { Injectable, signal, inject, computed } from '@angular/core';
 import { Player, EquipmentItem, EquipmentSlot } from '../models/story.model';
 import { StoryService } from './story';
 import { StorageService } from './storage';
+import { WidgetBridge } from './widget-bridge';
+import { TestBed } from '@angular/core/testing';
 
 export interface SaveSlot {
     id: number;
@@ -206,6 +208,26 @@ export class GameService {
                 attackMin: newAttackMin,
                 attackMax: newAttackMax,
             };
+        });
+
+        const p = this.player(); 
+        const bonuses = this.effectiveStats();
+        WidgetBridge.sync({
+            playerName: p.name,
+            sceneText: this.storyService.currentScene(),
+            curHealth: p.currentHealth,
+            maxHealth: p.maxHealth,
+            curMana: p.currentMagic,
+            maxMana: p.maxMagic,
+            curLevel: p.level,
+            xp: p.xp,
+            xpToNextLevel: p.xpToNextLevel,
+            stamina: p.stamina,
+            defense: bonuses.defense,
+            magicDefense: bonuses.magicDefense,
+            attackMin: bonuses.attackMin,
+            attackMax: bonuses.attackMax
+            
         });
     }
 
