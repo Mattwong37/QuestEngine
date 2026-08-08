@@ -9,6 +9,12 @@ export interface WidgetPayload {
     maxMana: number;
     curLevel: number;
     xp: number;
+    xpToNextLevel: number;
+    stamina: number;
+    defense: number;
+    magicDefense: number;
+    attackMin: number;
+    attackMax: number;
 }
 
 interface WidgetBridgePlugin {

@@ -211,6 +211,7 @@ export class GameService {
         });
 
         const p = this.player(); 
+        const bonuses = this.effectiveStats();
         WidgetBridge.sync({
             playerName: p.name,
             sceneText: this.storyService.currentScene(),
@@ -220,6 +221,13 @@ export class GameService {
             maxMana: p.maxMagic,
             curLevel: p.level,
             xp: p.xp,
+            xpToNextLevel: p.xpToNextLevel,
+            stamina: p.stamina,
+            defense: bonuses.defense,
+            magicDefense: bonuses.magicDefense,
+            attackMin: bonuses.attackMin,
+            attackMax: bonuses.attackMax
+            
         });
     }
 

@@ -26,11 +26,17 @@ struct StatProvider: TimelineProvider {
           maxMana: snap?.maxMana ?? 0,
           curLevel: snap?.curLevel ?? 0,
           xp: snap?.xp ?? 0,
+          xpToNextLevel: snap?.xpToNextLevel ?? 0,
+          stamina: snap?.stamina ?? 0,
+          defense: snap?.defense ?? 0,
+          magicDefense: snap?.magicDefense ?? 0,
+          attackMin: snap?.attackMin ?? 0,
+          attackMax: snap?.attackMax ?? 0,
           playerName: printedPlayerName.isEmpty ? "Adventurer" : printedPlayerName
       )
     }
     func placeholder(in context: Context) -> StatEntry {
-      StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 100, maxMana: 100, curLevel: 0, xp: 10, playerName: "Adventurer")
+      StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 100, maxMana: 100, curLevel: 0, xp: 100, xpToNextLevel: 10, stamina: 10, defense: 30, magicDefense: 30, attackMin: 1, attackMax: 5, playerName: "Adventurer")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (StatEntry) -> ()) {
@@ -49,6 +55,12 @@ struct StatView: Codable {
     let maxMana: Int?
     let curLevel: Int?
     let xp: Int?
+    let xpToNextLevel: Int?
+    let stamina: Int?
+    let defense: Int?
+    let magicDefense: Int?
+    let attackMin: Int?
+    let attackMax: Int?
     let playerName: String?
 }
 
@@ -60,6 +72,12 @@ struct StatEntry: TimelineEntry {
     let maxMana: Int
     let curLevel: Int
     let xp: Int
+    let xpToNextLevel: Int
+    let stamina: Int
+    let defense: Int
+    let magicDefense: Int
+    let attackMin: Int
+    let attackMax: Int
     let playerName: String
 }
 
@@ -142,6 +160,20 @@ struct StatSummaryEntryView: View {
     return CGFloat(entry.curMana) / CGFloat(entry.maxMana)
   }
   
+  private func statReadout(name: String, value: String, low: Bool) -> some View {
+    VStack(alignment: .center, spacing: 2) {
+      Text(name.uppercased())
+        .font(Theme.serif(8))
+        .tracking(0.8)
+        .foregroundStyle(theme.subText.opacity(0.7))
+        .multilineTextAlignment(.center)
+      Text(value)
+        .font(Theme.serif(12, .semibold))
+        .foregroundStyle(low ? .red : theme.gold)
+    }
+    .frame(maxWidth: .infinity)
+  }
+  
   private var divider: some View {
     Rectangle()
       .fill(.secondary.opacity(0.25))
@@ -173,7 +205,20 @@ struct StatSummaryEntryView: View {
       Spacer(minLength: 0)
       StatBar(viewMode: .systemMedium, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
       Spacer(minLength: 0)
+      if (widgetFamily == .systemLarge) {
+        StatBar(viewMode: .systemMedium, current: entry.xpToNextLevel, max: entry.xp, color: Color(hex: 0xFFD700), name: "XP")
+        Spacer(minLength: 0)
+        divider
+        HStack(alignment: .center) {
+          statReadout(name: "Defense", value: "\(entry.defense)", low: (entry.defense < 1))
+          statReadout(name: "Magic\nDefense", value: "\(entry.magicDefense)", low: (entry.magicDefense < 10))
+          statReadout(name: "Stamina", value: "\(entry.stamina)%",low: (entry.stamina < 30))
+          statReadout(name: "Attack", value: "\(entry.attackMin) – \(entry.attackMax)", low: (entry.magicDefense < 1))
+        }.font(Theme.serif(widgetFamily != .systemSmall ? 12 : 10))
+        
+      }
       divider
+      if (widgetFamily == .systemLarge) { Spacer(minLength: 0) }
       HStack(spacing: 4) {
         Text(widgetFamily != .systemSmall ? "Continue your adventure" : "Continue Adventure")
           .font(Theme.serif(widgetFamily != .systemSmall ? 12 : 10))
@@ -187,6 +232,7 @@ struct StatSummaryEntryView: View {
     }
   }
 }
+
 
 
 private func healthColor(for value: CGFloat) -> Color {
@@ -219,5 +265,5 @@ struct statSummary: Widget {
 #Preview(as: .systemSmall) {
     statSummary()
 } timeline: {
-  StatEntry(date: Date(), curHealth: 100, maxHealth: 100, curMana: 50, maxMana: 100, curLevel: 0, xp: 10, playerName: "Adventurer")
+  StatEntry(date: Date(), curHealth: 88, maxHealth: 100, curMana: 50, maxMana: 100, curLevel: 0, xp: 100, xpToNextLevel: 10, stamina: 18, defense: 17, magicDefense: 30, attackMin: 1, attackMax: 5, playerName: "Adventurer")
 }
