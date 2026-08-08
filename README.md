@@ -143,41 +143,41 @@ Want to change it to fit your requirements? You can do it at these locations bel
 <table align="center" border="0">
     <tr>
         <td align="center">
-            <img src="public/storySummaryWidget-Light.png" alt="Scene Summary Widget Light"><br> 
-            <sub>Scene Sumamry Widget - Light</sub>
+            <img src="public/storySummaryWidget-Light.png" alt="Scene Summary Widget Light" width="500"><br> 
+            <sub>Scene Summary Widget - Light</sub>
         </td>
         <td align="center">
-            <img src="public/storySummaryWidget-Dark.png" alt="Scene Summary Widget Dark"><br> 
-            <sub>Scene Sumamry Widget - Dark</sub>
+            <img src="public/storySummaryWidget-Dark.png" alt="Scene Summary Widget Dark" width="500"><br> 
+            <sub>Scene Summary Widget - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light-Medium.png" alt="Stat View Widget Light Medium"><br> 
+            <img src="public/statViewWidget-Light-Medium.png" alt="Stat View Widget Light Medium" width="500"><br> 
             <sub>Player Stat Widget - Medium - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark-Medium.png" alt="Stat View Widget Dark Medium"><br> 
+            <img src="public/statViewWidget-Dark-Medium.png" alt="Stat View Widget Dark Medium" width="500"><br> 
             <sub>Player Stat Widget - Medium - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light-Small.png" alt="Stat View Widget Light Small"><br> 
+            <img src="public/statViewWidget-Light-Small.png" alt="Stat View Widget Light Small" width="300"><br> 
             <sub>Player Stat Widget - Small - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark-Small.png" alt="Stat View Widget Dark Small"><br> 
+            <img src="public/statViewWidget-Dark-Small.png" alt="Stat View Widget Dark Small" width="300"><br> 
             <sub>Player Stat Widget - Small - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light-Large.png" alt="Stat View Widget Light Large"><br> 
+            <img src="public/statViewWidget-Light-Large.png" alt="Stat View Widget Light Large" width="500"><br> 
             <sub>Player Stat Widget - Small - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large"><br> 
+            <img src="public/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large" width="500"><br> 
             <sub>Player Stat Widget - Small - Dark</sub>
         </td>
     </tr>

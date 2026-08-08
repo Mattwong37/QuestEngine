@@ -110,13 +110,13 @@ struct StatBar: View {
   
     private var label: some View {
         Text(name)
-            .font(Theme.serif(12, .medium))
+            .font(Theme.serif(13, .medium))
             .foregroundStyle(theme.subText)
     }
 
     private var statFraction: some View {
         Text("\(current)/\(max)")
-            .font(Theme.serif(9))
+            .font(Theme.serif(12))
             .foregroundStyle(theme.subText.opacity(0.6))
     }
   
@@ -206,14 +206,14 @@ struct StatSummaryEntryView: View {
       StatBar(viewMode: .systemMedium, current: entry.curMana, max: entry.maxMana, color: manaColor(for: manaPct), name: "Mana")
       Spacer(minLength: 0)
       if (widgetFamily == .systemLarge) {
-        StatBar(viewMode: .systemMedium, current: entry.xpToNextLevel, max: entry.xp, color: Color(hex: 0xFFD700), name: "XP")
+        StatBar(viewMode: .systemMedium, current: entry.xp, max: entry.xpToNextLevel, color: Color(hex: 0xFFD700), name: "XP")
         Spacer(minLength: 0)
         divider
         HStack(alignment: .center) {
           statReadout(name: "Defense", value: "\(entry.defense)", low: (entry.defense < 1))
           statReadout(name: "Magic\nDefense", value: "\(entry.magicDefense)", low: (entry.magicDefense < 10))
           statReadout(name: "Stamina", value: "\(entry.stamina)%",low: (entry.stamina < 30))
-          statReadout(name: "Attack", value: "\(entry.attackMin) – \(entry.attackMax)", low: (entry.magicDefense < 1))
+          statReadout(name: "Attack", value: "\(entry.attackMin) – \(entry.attackMax)", low: (entry.attackMin < 1))
         }.font(Theme.serif(widgetFamily != .systemSmall ? 12 : 10))
         
       }
@@ -258,7 +258,7 @@ struct statSummary: Widget {
     }
     .configurationDisplayName("Stat Summary")
     .description("See your stats at a glance")
-    .supportedFamilies([.systemMedium, .systemSmall])
+    .supportedFamilies([.systemMedium, .systemSmall, .systemLarge])
   }
 }
 
