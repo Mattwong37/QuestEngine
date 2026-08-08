@@ -27,7 +27,6 @@ Features:
 - Game over screen with a journey summary
 - Light and dark modes
 
-
 ## How to Install
 ### Desktop Version
 #### 1. Install dependencies
@@ -97,6 +96,17 @@ Want to change it to fit your requirements? You can do it at these locations bel
 **Change the opening scene** — edit `firstMessage` in `startStory()` in `story.ts` to change the opening scene. I chose an anime-isekai start, but you can choose what you want.
 
 **Change the image style** — edit `fullPrompt` in `generateImage()` in `story.ts` to change the genre of image or the Open AI image generation model. Please note that if you change the model, the body and acceptable image dimensions may need to chaneg as well.
+
+## Roadmap
+- [x] Build web app with Angular
+- [x] Create Vitest test suite
+- [x] Port to iOS via Capacitor
+- [x] iOS home screen widgets — current scene, stat summary
+- [ ] Port to Android via Capacitor *(in progress)*
+- [ ] Update test suite
+- [ ] Android widgets via Jetpack Glance — current scene, stat summary
+- [ ] Additional widgets — pending choices, image gallery/carousel, lock screen
+
 
 ## Images
 ### Webapp Version
