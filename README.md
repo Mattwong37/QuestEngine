@@ -173,6 +173,16 @@ Want to change it to fit your requirements? You can do it at these locations bel
     </tr>
     <tr>
         <td align="center">
+            <img src="public/statViewWidget-Light-Large.png" alt="Stat View Widget Light Large"><br> 
+            <sub>Player Stat Widget - Small - Light</sub>
+        </td>
+        <td align="center">
+            <img src="public/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large"><br> 
+            <sub>Player Stat Widget - Small - Dark</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
             <img src="public/startPage-iOS.png" alt="Start Screen" width="200"><br> 
             <sub>Starting Screen</sub>
         </td>
