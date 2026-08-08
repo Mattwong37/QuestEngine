@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+
 android {
     kotlinOptions {
         jvmTarget = '21'
@@ -25,6 +27,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+      compose true
+    }
 }
 
 repositories {
@@ -43,6 +48,8 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+    implementation "androidx.glance:glance-appwidget:1.1.1"
+    implementation "androidx.glance:glance-material3:1.1.1"
 }
 
 apply from: 'capacitor.build.gradle'
