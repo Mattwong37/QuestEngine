@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.jetbrains.kotlin.android'
 android {
+    kotlinOptions {
+        jvmTarget = '21'
+    }
     namespace = "io.github.mattwong37.questengine"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
