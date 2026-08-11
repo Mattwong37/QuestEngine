@@ -5,8 +5,26 @@ import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.glance.GlanceModifier
+import androidx.glance.LocalSize
+import androidx.glance.appwidget.cornerRadius
+import androidx.glance.background
+import androidx.glance.layout.Box
+import androidx.glance.layout.Column
+import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxHeight
+import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
+import androidx.glance.layout.padding
 import androidx.glance.text.Text
+
+import androidx.glance.layout.width
 import org.json.JSONObject
+
 
 const val PREFS_NAME = "quest_widget"
 const val SNAPSHOT_KEY = "snapshot"
@@ -30,9 +48,9 @@ object QuestWidget : GlanceAppWidget() {
 
   private fun parseSnapshot(raw: String?): StorySnapshot {
     if (raw == null) return StorySnapshot()
-    return try{
+    return try {
       val json = JSONObject(raw)
-      StorySnapshot (
+      StorySnapshot(
         name = json.getString("playerName"),
         curHealth = json.getInt("curHealth"),
         maxHealth = json.getInt("maxHealth"),
@@ -47,7 +65,7 @@ object QuestWidget : GlanceAppWidget() {
         attackMin = json.getInt("attackMin"),
         attackMax = json.getInt("attackMax"),
       )
-    } catch(e: Exception) {
+    } catch (e: Exception) {
 
       StorySnapshot()
     }
@@ -66,9 +84,59 @@ object QuestWidget : GlanceAppWidget() {
   }
 
   @Composable
+  private fun StatBar(current: Int, max: Int, color: Color) {
+    val safeMax = if (max > 0) max else 1
+    val fraction = current.coerceIn(0, safeMax).toFloat() / safeMax
+    
+    val available = LocalSize.current.width - 24.dp
+    val filledWidth = available * fraction
+
+    Box(
+      modifier = GlanceModifier
+        .fillMaxWidth()
+        .height(10.dp)
+        .background(Color(0xFF2A2015))
+        .cornerRadius(5.dp)
+    ) {
+      Box(
+        modifier = GlanceModifier
+          .width(filledWidth)
+          .fillMaxHeight()
+          .background(color)
+          .cornerRadius(5.dp)
+      ) {}
+    }
+  }
+
+@Composable
   private fun Content(snapshot: StorySnapshot) {
-    Text(snapshot.name)
-    Text(snapshot.curLevel.toString())
+    Column(
+      modifier = GlanceModifier.fillMaxSize().padding(12.dp)
+    ) {
+      Text("${snapshot.name} • LV ${snapshot.curLevel}")
+      Row() {
+        Column() {
+          Text("Health")
+          Text("${snapshot.curHealth}/${snapshot.maxHealth}")
+        }
+        StatBar(
+          snapshot.curHealth, snapshot.maxHealth,
+          color = Color(0xFF2A2015)
+        )
+      }
+      Row() {
+        Column() {
+          Text("Mana")
+          Text("${snapshot.curMana}/${snapshot.maxMana}")
+        }
+        StatBar(
+          snapshot.curMana, snapshot.maxMana,
+          color = Color(0xFF2A2015)
+        )
+      }
+
+      Text("Continue your adventure")
+    }
   }
 }
 
