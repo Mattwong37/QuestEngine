@@ -1,6 +1,5 @@
 package io.github.mattwong37.questengine
 
-import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.glance.GlanceId
@@ -14,6 +13,8 @@ import androidx.glance.GlanceModifier
 import androidx.glance.LocalSize
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
+import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
@@ -29,7 +30,6 @@ import androidx.glance.layout.width
 import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
 import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
 
@@ -95,14 +95,14 @@ object QuestWidget : GlanceAppWidget() {
     val safeMax = if (max > 0) max else 1
     val fraction = current.coerceIn(0, safeMax).toFloat() / safeMax
 
-    val available = LocalSize.current.width - 24.dp
+    val available = LocalSize.current.width
     val filledWidth = available * fraction
 
     Box(
       modifier = GlanceModifier
         .fillMaxWidth()
         .height(10.dp)
-        .background(Color(0xFFCCC2AB))
+        .background(WidgetColors.secondaryText)
         .cornerRadius(5.dp)
     ) {
       Box(
@@ -125,35 +125,62 @@ object QuestWidget : GlanceAppWidget() {
     fontWeight = weight,
     fontFamily = FontFamily.Serif
   )
+
+  @Composable
+  private fun Divider() {
+    Spacer(modifier = GlanceModifier.height(8.dp))
+    Box(
+      modifier = GlanceModifier
+        .fillMaxWidth()
+        .height(1.dp)
+        .background(Color(0xFF4A3D1A))
+    ) {}
+    Spacer(modifier = GlanceModifier.height(8.dp))
+  }
+
+  private object WidgetColors {
+    val gold            = ColorProvider(night = Color(0xFFC9A227), day = Color(0xFF8A6A16))
+    val background      = ColorProvider(night = Color(0xFF2A2015), day = Color(0xFFCCC2AB))
+    val subtext         = ColorProvider(night = Color(0xFFFFEBCD), day = Color(0xFF5A4A2A))
+    val secondaryText   = ColorProvider(night = Color(0xFF8E8E93), day = Color(0xFF5C5B5B))
+    val health          = Color(0xFF4E9F3D)
+    val mana            = Color(0xFF1E88E5)
+  }
   @SuppressLint("RestrictedApi")
   @Composable
   private fun Content(snapshot: StorySnapshot) {
     Column(
-      modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(Color(0xFFCCC2AB)).padding(16.dp)
+      modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(16.dp)
     ) {
-      Text("${snapshot.name} • LV ${snapshot.curLevel}", style = styling(ColorProvider(Color(0xFF5A4A2A)), 15))
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Text("${snapshot.name}", style = styling(WidgetColors.gold, 15))
+
+        Text("  •  LV ${snapshot.curLevel}",
+          style = styling(WidgetColors.secondaryText, 15)
+        )
+      }
       Row() {
         Column() {
-          Text("Health", style = styling(ColorProvider(Color(0xFF5A4A2A)), 15))
-          Text("${snapshot.curHealth}/${snapshot.maxHealth}", style = styling(ColorProvider(Color(0xFF5A4A2A)), 15))
+          Text("Health", style = styling(WidgetColors.subtext, 15))
+          Text("${snapshot.curHealth}/${snapshot.maxHealth}", style = styling(WidgetColors.subtext, 15))
         }
         StatBar(
           snapshot.curHealth, snapshot.maxHealth,
-          color = Color(0xFF2A2015)
+          color = WidgetColors.health
         )
       }
       Row() {
         Column() {
-          Text("Mana", style = styling(ColorProvider(Color(0xFF5A4A2A)), 15))
-          Text("${snapshot.curMana}/${snapshot.maxMana}", style = styling(ColorProvider(Color(0xFF5A4A2A)), 15))
+          Text("Mana", style = styling(WidgetColors.subtext, 15))
+          Text("${snapshot.curMana}/${snapshot.maxMana}", style = styling(WidgetColors.subtext, 15))
         }
         StatBar(
           snapshot.curMana, snapshot.maxMana,
-          color = Color(0xFF2A2015)
+          color = WidgetColors.mana
         )
       }
-
-      Text("Continue your adventure", style = styling(ColorProvider(Color(0xFF5A4A2A)), 15))
+      Divider()
+      Text("Continue your adventure", style = styling(WidgetColors.subtext, 15))
     }
   }
 }
