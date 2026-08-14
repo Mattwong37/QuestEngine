@@ -102,16 +102,16 @@ object QuestWidget : GlanceAppWidget() {
       modifier = GlanceModifier
         .fillMaxWidth()
         .height(10.dp)
-        .background(WidgetColors.secondaryText)
+        .background(color)
         .cornerRadius(5.dp)
     ) {
-      Box(
-        modifier = GlanceModifier
-          .width(filledWidth)
-          .fillMaxHeight()
-          .background(color)
-          .cornerRadius(5.dp)
-      ) {}
+      repeat(20) { i ->
+        Box(
+          modifier = GlanceModifier
+            .fillMaxHeight()
+            .background(Color(0xFF696965))
+        ) {}
+      }
     }
   }
 
