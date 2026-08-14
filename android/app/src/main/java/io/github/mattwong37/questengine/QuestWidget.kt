@@ -150,7 +150,7 @@ object QuestWidget : GlanceAppWidget() {
   @Composable
   private fun Content(snapshot: StorySnapshot) {
     Column(
-      modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(16.dp)
+      modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(1.dp)
     ) {
       Row(verticalAlignment = Alignment.CenterVertically) {
         Text("${snapshot.name}", style = styling(WidgetColors.gold, 15))
@@ -159,25 +159,31 @@ object QuestWidget : GlanceAppWidget() {
           style = styling(WidgetColors.secondaryText, 15)
         )
       }
+      Divider()
       Row() {
         Column() {
           Text("Health", style = styling(WidgetColors.subtext, 15))
           Text("${snapshot.curHealth}/${snapshot.maxHealth}", style = styling(WidgetColors.subtext, 15))
         }
+
+        Box(modifier = GlanceModifier.padding(top = 8.dp)) {
         StatBar(
           snapshot.curHealth, snapshot.maxHealth,
           color = WidgetColors.health
         )
       }
+        }
       Row() {
         Column() {
           Text("Mana", style = styling(WidgetColors.subtext, 15))
           Text("${snapshot.curMana}/${snapshot.maxMana}", style = styling(WidgetColors.subtext, 15))
         }
-        StatBar(
-          snapshot.curMana, snapshot.maxMana,
-          color = WidgetColors.mana
-        )
+        Box(modifier = GlanceModifier.padding(top = 8.dp)) {
+          StatBar(
+            snapshot.curMana, snapshot.maxMana,
+            color = WidgetColors.mana
+          )
+        }
       }
       Divider()
       Text("Continue your adventure", style = styling(WidgetColors.subtext, 15))
