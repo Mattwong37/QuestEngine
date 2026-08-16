@@ -96,26 +96,20 @@ object QuestWidget : GlanceAppWidget() {
 
   @Composable
   private fun StatBar(current: Int, max: Int, color: Color) {
+    val track = Color(0xFF696965)
     val safeMax = if (max > 0) max else 1
     val fraction = current.coerceIn(0, safeMax).toFloat() / safeMax
-    val filledWidth = (fraction * 20).toInt().coerceIn(0, 20)
-    val track = Color(0xFF696965)
+    val filled = (fraction * 10).toInt().coerceIn(0, 10)
 
-    Row(
-      modifier = GlanceModifier
-        .fillMaxWidth()
-        .height(10.dp)
-        .background(WidgetColors.secondaryText)
-        .cornerRadius(5.dp)
-    ) {
-      repeat(20) { i ->
-        Box(
-          modifier = GlanceModifier
-            .defaultWeight()
-            .fillMaxHeight()
-            .background(if (i < filledWidth) color else track)
-        ) {}
-      }
+      Row(
+        modifier = GlanceModifier.fillMaxWidth().height(10.dp)
+          .background(track).cornerRadius(5.dp)
+      ) {
+        repeat(10) { i ->
+          Box(modifier = GlanceModifier.defaultWeight().fillMaxHeight()
+            .background(if (i < filled) color else track)) {}
+        }
+
     }
   }
 
@@ -208,6 +202,7 @@ object QuestWidget : GlanceAppWidget() {
         Text("  •  LV ${snapshot.curLevel}",
           style = styling(WidgetColors.secondaryText, 15,FontWeight.Bold)
         )
+        Spacer(modifier = GlanceModifier.defaultWeight())
       }
       Divider()
       Column (modifier = GlanceModifier.defaultWeight()) {
@@ -228,7 +223,7 @@ object QuestWidget : GlanceAppWidget() {
 
       Column() {
         Divider()
-        Text("Continue your adventure", style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
+        Text("Continue your adventure >", style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
       }
     }
   }
