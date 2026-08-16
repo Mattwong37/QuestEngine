@@ -2,7 +2,6 @@ package io.github.mattwong37.questengine
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.health.connect.datatypes.units.Percentage
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
@@ -31,6 +30,7 @@ import androidx.glance.text.Text
 
 import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
+import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
@@ -127,20 +127,21 @@ object QuestWidget : GlanceAppWidget() {
     color = color,
     fontSize = size.sp,
     fontWeight = weight,
-    fontFamily = FontFamily.Serif
+    fontFamily = FontFamily.Serif,
+    textAlign = TextAlign.Center
   )
 
   @Composable
   private fun Divider() {
     Column {
-      Spacer(modifier = GlanceModifier.height(12.dp))
+      Spacer(modifier = GlanceModifier.height(4.dp))
       Box(
         modifier = GlanceModifier
           .fillMaxWidth()
           .height(1.dp)
           .background(Color(0xFF4A3D1A))
       ) {}
-      Spacer(modifier = GlanceModifier.height(12.dp))
+      Spacer(modifier = GlanceModifier.height(4.dp))
     }
   }
 
@@ -155,9 +156,9 @@ object QuestWidget : GlanceAppWidget() {
   }
 
   @Composable
-  private fun statReadOut(name: String, curStat: Int, totalStat: Int, barColor: Color) {
+  private fun StatReadOut(name: String, curStat: Int, totalStat: Int, barColor: Color) {
     Row() {
-      Column(modifier = GlanceModifier.width(68.dp).height(40.dp)) {
+      Column(modifier = GlanceModifier.width(68.dp)) {
         Text(name, style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
         Text("${curStat}/${totalStat}", style = styling(WidgetColors.subtext, 15))
       }
@@ -191,17 +192,14 @@ object QuestWidget : GlanceAppWidget() {
       modifier = modifier,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      Text(label, style = styling(WidgetColors.secondaryText, 10, FontWeight.Bold))
-      Text(value, style = styling(WidgetColors.gold, 12, FontWeight.Bold))
+      Text(label, style = styling(WidgetColors.secondaryText, 13, FontWeight.Bold))
+      Text(value, style = styling(WidgetColors.gold, 13, FontWeight.Bold))
     }
   }
 
   @SuppressLint("RestrictedApi")
   @Composable
   private fun Content(snapshot: StorySnapshot) {
-    val size = LocalSize.current
-    val small = size.height <= 203.dp
-
     Column(
       modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(10.dp)
     ) {
@@ -212,20 +210,26 @@ object QuestWidget : GlanceAppWidget() {
         )
       }
       Divider()
-      statReadOut("Health", snapshot.curHealth, snapshot.maxHealth, WidgetColors.health)
-      Spacer(modifier = GlanceModifier.defaultWeight())
-      statReadOut("Mana", snapshot.curMana, snapshot.maxMana, WidgetColors.mana)
-
-      if (!small) {
+      Column (modifier = GlanceModifier.defaultWeight()) {
         Spacer(modifier = GlanceModifier.defaultWeight())
-        Column() {
-          statReadOut("XP", snapshot.xp, snapshot.xpToNextLevel, WidgetColors.xp)
+        StatReadOut("Health", snapshot.curHealth, snapshot.maxHealth, WidgetColors.health)
+        Spacer(modifier = GlanceModifier.defaultWeight())
+        StatReadOut("Mana", snapshot.curMana, snapshot.maxMana, WidgetColors.mana)
+        Spacer(modifier = GlanceModifier.defaultWeight())
+
+        val size = LocalSize.current
+        if (size.height > 203.dp) {
+          StatReadOut("XP", snapshot.xp, snapshot.xpToNextLevel, WidgetColors.xp)
+          Spacer(modifier = GlanceModifier.defaultWeight())
           Divider()
           StatGrid(snapshot)
         }
       }
-      Divider()
-      Text("Continue your adventure", style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
+
+      Column() {
+        Divider()
+        Text("Continue your adventure", style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
+      }
     }
   }
 }
