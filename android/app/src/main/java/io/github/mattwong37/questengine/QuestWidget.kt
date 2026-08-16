@@ -2,6 +2,7 @@ package io.github.mattwong37.questengine
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.health.connect.datatypes.units.Percentage
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
@@ -11,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
 import androidx.glance.LocalSize
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.color.ColorProvider
@@ -24,12 +26,13 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.width
 import androidx.glance.text.Text
 
-import androidx.glance.layout.width
 import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
 import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
 
@@ -37,6 +40,7 @@ const val PREFS_NAME = "quest_widget"
 const val SNAPSHOT_KEY = "snapshot"
 
 object QuestWidget : GlanceAppWidget() {
+  override val sizeMode = SizeMode.Exact
   data class StorySnapshot(
     val name: String = "Adventurer",
     val curHealth: Int = 0,
@@ -94,29 +98,29 @@ object QuestWidget : GlanceAppWidget() {
   private fun StatBar(current: Int, max: Int, color: Color) {
     val safeMax = if (max > 0) max else 1
     val fraction = current.coerceIn(0, safeMax).toFloat() / safeMax
+    val filledWidth = (fraction * 20).toInt().coerceIn(0, 20)
+    val track = Color(0xFF696965)
 
-    val available = LocalSize.current.width
-    val filledWidth = available * fraction
-
-    Box(
+    Row(
       modifier = GlanceModifier
         .fillMaxWidth()
         .height(10.dp)
-        .background(color)
+        .background(WidgetColors.secondaryText)
         .cornerRadius(5.dp)
     ) {
       repeat(20) { i ->
         Box(
           modifier = GlanceModifier
+            .defaultWeight()
             .fillMaxHeight()
-            .background(Color(0xFF696965))
+            .background(if (i < filledWidth) color else track)
         ) {}
       }
     }
   }
 
   private fun styling (
-    color: androidx.glance.unit.ColorProvider,
+    color: ColorProvider,
     size: Int,
     weight: FontWeight = FontWeight.Normal
   ) = TextStyle(
@@ -128,14 +132,16 @@ object QuestWidget : GlanceAppWidget() {
 
   @Composable
   private fun Divider() {
-    Spacer(modifier = GlanceModifier.height(8.dp))
-    Box(
-      modifier = GlanceModifier
-        .fillMaxWidth()
-        .height(1.dp)
-        .background(Color(0xFF4A3D1A))
-    ) {}
-    Spacer(modifier = GlanceModifier.height(8.dp))
+    Column {
+      Spacer(modifier = GlanceModifier.height(12.dp))
+      Box(
+        modifier = GlanceModifier
+          .fillMaxWidth()
+          .height(1.dp)
+          .background(Color(0xFF4A3D1A))
+      ) {}
+      Spacer(modifier = GlanceModifier.height(12.dp))
+    }
   }
 
   private object WidgetColors {
@@ -145,48 +151,81 @@ object QuestWidget : GlanceAppWidget() {
     val secondaryText   = ColorProvider(night = Color(0xFF8E8E93), day = Color(0xFF5C5B5B))
     val health          = Color(0xFF4E9F3D)
     val mana            = Color(0xFF1E88E5)
+    val xp              = Color(0xFFFFD700)
   }
+
+  @Composable
+  private fun statReadOut(name: String, curStat: Int, totalStat: Int, barColor: Color) {
+    Row() {
+      Column(modifier = GlanceModifier.width(68.dp).height(40.dp)) {
+        Text(name, style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
+        Text("${curStat}/${totalStat}", style = styling(WidgetColors.subtext, 15))
+      }
+
+      Box(modifier = GlanceModifier.padding(top = 8.dp)) {
+        StatBar(
+          curStat, totalStat,
+          color = barColor
+        )
+      }
+    }
+  }
+
+  @Composable
+  private fun StatGrid(snapshot: StorySnapshot) {
+    Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+      StatCell("Defense", snapshot.defense.toString(), GlanceModifier.defaultWeight())
+      StatCell("Magic Defense", snapshot.magicDefense.toString(), GlanceModifier.defaultWeight())
+      StatCell("Stamina", "${snapshot.stamina}%", GlanceModifier.defaultWeight())
+      StatCell("Attack", "${snapshot.attackMin}-${snapshot.attackMax}", GlanceModifier.defaultWeight())
+    }
+  }
+
+  @Composable
+  private fun StatCell(
+    label: String,
+    value: String,
+    modifier: GlanceModifier = GlanceModifier
+  ) {
+    Column(
+      modifier = modifier,
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      Text(label, style = styling(WidgetColors.secondaryText, 10, FontWeight.Bold))
+      Text(value, style = styling(WidgetColors.gold, 12, FontWeight.Bold))
+    }
+  }
+
   @SuppressLint("RestrictedApi")
   @Composable
   private fun Content(snapshot: StorySnapshot) {
+    val size = LocalSize.current
+    val small = size.height <= 203.dp
+
     Column(
-      modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(1.dp)
+      modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(10.dp)
     ) {
       Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("${snapshot.name}", style = styling(WidgetColors.gold, 15))
-
+        Text("${snapshot.name}", style = styling(WidgetColors.gold, 15, FontWeight.Bold))
         Text("  •  LV ${snapshot.curLevel}",
-          style = styling(WidgetColors.secondaryText, 15)
+          style = styling(WidgetColors.secondaryText, 15,FontWeight.Bold)
         )
       }
       Divider()
-      Row() {
-        Column() {
-          Text("Health", style = styling(WidgetColors.subtext, 15))
-          Text("${snapshot.curHealth}/${snapshot.maxHealth}", style = styling(WidgetColors.subtext, 15))
-        }
+      statReadOut("Health", snapshot.curHealth, snapshot.maxHealth, WidgetColors.health)
+      Spacer(modifier = GlanceModifier.defaultWeight())
+      statReadOut("Mana", snapshot.curMana, snapshot.maxMana, WidgetColors.mana)
 
-        Box(modifier = GlanceModifier.padding(top = 8.dp)) {
-        StatBar(
-          snapshot.curHealth, snapshot.maxHealth,
-          color = WidgetColors.health
-        )
-      }
-        }
-      Row() {
+      if (!small) {
+        Spacer(modifier = GlanceModifier.defaultWeight())
         Column() {
-          Text("Mana", style = styling(WidgetColors.subtext, 15))
-          Text("${snapshot.curMana}/${snapshot.maxMana}", style = styling(WidgetColors.subtext, 15))
-        }
-        Box(modifier = GlanceModifier.padding(top = 8.dp)) {
-          StatBar(
-            snapshot.curMana, snapshot.maxMana,
-            color = WidgetColors.mana
-          )
+          statReadOut("XP", snapshot.xp, snapshot.xpToNextLevel, WidgetColors.xp)
+          Divider()
+          StatGrid(snapshot)
         }
       }
       Divider()
-      Text("Continue your adventure", style = styling(WidgetColors.subtext, 15))
+      Text("Continue your adventure", style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
     }
   }
 }
