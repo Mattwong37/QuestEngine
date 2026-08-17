@@ -147,6 +147,7 @@ object QuestWidget : GlanceAppWidget() {
     val health          = Color(0xFF4E9F3D)
     val mana            = Color(0xFF1E88E5)
     val xp              = Color(0xFFFFD700)
+    val lowWarning      = ColorProvider(day = Color(0xFFD32F2F), night = Color(0xFF781C1C))
   }
 
   @Composable
@@ -169,10 +170,10 @@ object QuestWidget : GlanceAppWidget() {
   @Composable
   private fun StatGrid(snapshot: StorySnapshot) {
     Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-      StatCell("Defense", snapshot.defense.toString(), GlanceModifier.defaultWeight())
-      StatCell("Magic Defense", snapshot.magicDefense.toString(), GlanceModifier.defaultWeight())
-      StatCell("Stamina", "${snapshot.stamina}%", GlanceModifier.defaultWeight())
-      StatCell("Attack", "${snapshot.attackMin}-${snapshot.attackMax}", GlanceModifier.defaultWeight())
+      StatCell("Defense", snapshot.defense.toString(), GlanceModifier.defaultWeight(), snapshot.defense < 1)
+      StatCell("Magic Defense", snapshot.magicDefense.toString(), GlanceModifier.defaultWeight(), snapshot.magicDefense < 10)
+      StatCell("Stamina", "${snapshot.stamina}%", GlanceModifier.defaultWeight(), snapshot.stamina < 20)
+      StatCell("Attack", "${snapshot.attackMin}-${snapshot.attackMax}", GlanceModifier.defaultWeight(), snapshot.attackMin < 1)
     }
   }
 
@@ -180,14 +181,15 @@ object QuestWidget : GlanceAppWidget() {
   private fun StatCell(
     label: String,
     value: String,
-    modifier: GlanceModifier = GlanceModifier
+    modifier: GlanceModifier = GlanceModifier,
+    belowThreshold: Boolean = false
   ) {
     Column(
       modifier = modifier,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(label, style = styling(WidgetColors.secondaryText, 13, FontWeight.Bold))
-      Text(value, style = styling(WidgetColors.gold, 13, FontWeight.Bold))
+      Text(value, style = styling(if (belowThreshold) WidgetColors.lowWarning else WidgetColors.gold, 13, FontWeight.Bold))
     }
   }
 
