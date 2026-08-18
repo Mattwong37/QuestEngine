@@ -752,6 +752,36 @@ body {
 }
 
 
+.image-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.image-modal {
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.image-modal img {
+    display: block;
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+.modal-close {
+    position: fixed;
+}
+
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -910,5 +940,4 @@ body {
         padding-left: max(0.6rem, var(--safe-left, 0px), var(--corner-inset));
         padding-right: max(0.6rem, var(--safe-right, 0px), var(--corner-inset));
     }
-
 }

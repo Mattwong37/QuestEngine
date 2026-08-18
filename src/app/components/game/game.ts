@@ -33,6 +33,8 @@ export class Game implements OnInit {
 
   isGameOver = computed(() => this.gameService.player().currentHealth <= 0);
 
+  expandedImage = signal<string | null>(null);
+
   private touchStartX = 0;
   private touchStartY = 0;
 
@@ -93,6 +95,14 @@ export class Game implements OnInit {
   xpPercent() {
     const p = this.gameService.player();
     return (p.xp / p.xpToNextLevel) * 100;
+  }
+
+  openImage(url: string) {
+    if (url) this.expandedImage.set(url);
+  }
+
+  closeImage() {
+    this.expandedImage.set(null);
   }
 
   formatBonus(bonus: EquipmentBonus): string[] {
