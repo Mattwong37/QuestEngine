@@ -113,37 +113,37 @@ Want to change it to fit your requirements? You can do it at these locations bel
 <table align="center" border="0">
     <tr>
         <td align="center">
-            <img src="public/startPage.png" alt="Start Screen"><br> 
+            <img src="public/web/startPage.png" alt="Start Screen"><br> 
             <sub>Starting Screen</sub>
         </td>
         <td align="center">
-            <img src="public/characterCreation.png" alt="Character Creation"><br>
+            <img src="public/web/characterCreation.png" alt="Character Creation"><br>
             <sub>Character Creation</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/gameplay.png" alt="Gameplay"><br> 
+            <img src="public/web/gameplay.png" alt="Gameplay"><br> 
             <sub>Gameplay</sub>
         </td>
         <td align="center">
-            <img src="public/darkModeGamePlay.png" alt="Dark-Mode Gameplay"><br> 
+            <img src="public/web/darkModeGamePlay.png" alt="Dark-Mode Gameplay"><br> 
             <sub>Dark-Mode Gameplay</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statsPage.png" alt="Stats Section"><br> 
+            <img src="public/web/statsPage.png" alt="Stats Section"><br> 
             <sub>Stats Section</sub>
         </td>
         <td align="center">
-            <img src="public/gameOver.png" alt="Game Over"><br> 
+            <img src="public/web/gameOver.png" alt="Game Over"><br> 
             <sub>Game Over</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/saveSlots.png" alt="Save Slots"><br> 
+            <img src="public/web/saveSlots.png" alt="Save Slots"><br> 
             <sub>Save Slots</sub>
         </td>
     </tr>
@@ -153,62 +153,96 @@ Want to change it to fit your requirements? You can do it at these locations bel
 <table align="center" border="0">
     <tr>
         <td align="center">
-            <img src="public/storySummaryWidget-Light.png" alt="Scene Summary Widget Light" width="500"><br> 
+            <img src="public/ios/storySummaryWidget-Light.png" alt="Scene Summary Widget Light" width="500"><br> 
             <sub>Scene Summary Widget - Light</sub>
         </td>
         <td align="center">
-            <img src="public/storySummaryWidget-Dark.png" alt="Scene Summary Widget Dark" width="500"><br> 
+            <img src="public/ios/storySummaryWidget-Dark.png" alt="Scene Summary Widget Dark" width="500"><br> 
             <sub>Scene Summary Widget - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light-Medium.png" alt="Stat View Widget Light Medium" width="500"><br> 
+            <img src="public/ios/statViewWidget-Light-Medium.png" alt="Stat View Widget Light Medium" width="500"><br> 
             <sub>Player Stat Widget - Medium - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark-Medium.png" alt="Stat View Widget Dark Medium" width="500"><br> 
+            <img src="public/ios/statViewWidget-Dark-Medium.png" alt="Stat View Widget Dark Medium" width="500"><br> 
             <sub>Player Stat Widget - Medium - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light-Small.png" alt="Stat View Widget Light Small" width="300"><br> 
+            <img src="public/ios/statViewWidget-Light-Small.png" alt="Stat View Widget Light Small" width="300"><br> 
             <sub>Player Stat Widget - Small - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark-Small.png" alt="Stat View Widget Dark Small" width="300"><br> 
+            <img src="public/ios/statViewWidget-Dark-Small.png" alt="Stat View Widget Dark Small" width="300"><br> 
             <sub>Player Stat Widget - Small - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/statViewWidget-Light-Large.png" alt="Stat View Widget Light Large" width="500"><br> 
+            <img src="public/ios/statViewWidget-Light-Large.png" alt="Stat View Widget Light Large" width="500"><br> 
             <sub>Player Stat Widget - Small - Light</sub>
         </td>
         <td align="center">
-            <img src="public/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large" width="500"><br> 
+            <img src="public/ios/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large" width="500"><br> 
             <sub>Player Stat Widget - Small - Dark</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/startPage-iOS.png" alt="Start Screen" width="200"><br> 
+            <img src="public/ios/startPage-iOS.png" alt="Start Screen" width="200"><br> 
             <sub>Starting Screen</sub>
         </td>
         <td align="center">
-            <img src="public/gamePlay-iOS.png" alt="Gameplay" width="200"><br> 
+            <img src="public/ios/gamePlay-iOS.png" alt="Gameplay" width="200"><br> 
             <sub>Gameplay</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/darkModeGamePlay-iOS.png" alt="Dark-Mode Gameplay" width="200"><br> 
+            <img src="public/ios/darkModeGamePlay-iOS.png" alt="Dark-Mode Gameplay" width="200"><br> 
             <sub>Dark-Mode Gameplay</sub>
         </td>
                 <td align="center">
-            <img src="public/statsPage-iOS.png" alt="Stats Section" width="200"><br>
+            <img src="public/ios/statsPage-iOS.png" alt="Stats Section" width="200"><br>
             <sub>Stats Section</sub>
+        </td>
+    </tr>
+</table>
+
+### Android
+<table align="center" border="0">
+    <tr>
+        <td align="center">
+            <img src="public/android/statViewWidget-Light-Medium.png" alt="Stat View Widget Light Medium" width="500"><br> 
+            <sub>Player Stat Widget - Medium - Light</sub>
+        </td>
+        <td align="center">
+            <img src="public/android/statViewWidget-Dark-Medium.png" alt="Stat View Widget Dark Medium" width="500"><br> 
+            <sub>Player Stat Widget - Medium - Dark</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/android/statViewWidget-Light-Small.png" alt="Stat View Widget Light Small" width="300"><br> 
+            <sub>Player Stat Widget - Small - Light</sub>
+        </td>
+        <td align="center">
+            <img src="public/android/statViewWidget-Dark-Small.png" alt="Stat View Widget Dark Small" width="300"><br> 
+            <sub>Player Stat Widget - Small - Dark</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/android/statViewWidget-Light-Large.png" alt="Stat View Widget Light Large" width="500"><br> 
+            <sub>Player Stat Widget - Small - Light</sub>
+        </td>
+        <td align="center">
+            <img src="public/android/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large" width="500"><br> 
+            <sub>Player Stat Widget - Small - Dark</sub>
         </td>
     </tr>
 </table>
