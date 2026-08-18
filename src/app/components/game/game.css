@@ -780,6 +780,17 @@ body {
 
 .modal-close {
     position: fixed;
+    cursor: pointer;
+    border-radius: 50%;
+    background: rgba(240, 240, 240, 0.25);
+    z-index: 1;
+    color: white;
+    opacity: 75%;
+    border: none;
+}
+
+.modal-close:hover {
+    opacity: 100%;
 }
 
 @keyframes pulse {
