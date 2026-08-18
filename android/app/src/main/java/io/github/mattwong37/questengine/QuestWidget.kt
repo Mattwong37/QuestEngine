@@ -139,19 +139,22 @@ object QuestWidget : GlanceAppWidget() {
     }
   }
 
+  private data class BarColors(val normal: Color, val low: Color? = null)
+
   private object WidgetColors {
     val gold            = ColorProvider(night = Color(0xFFC9A227), day = Color(0xFF8A6A16))
     val background      = ColorProvider(night = Color(0xFF2A2015), day = Color(0xFFCCC2AB))
     val subtext         = ColorProvider(night = Color(0xFFFFEBCD), day = Color(0xFF5A4A2A))
     val secondaryText   = ColorProvider(night = Color(0xFF8E8E93), day = Color(0xFF5C5B5B))
-    val health          = Color(0xFF4E9F3D)
-    val mana            = Color(0xFF1E88E5)
-    val xp              = Color(0xFFFFD700)
-    val lowWarning      = ColorProvider(day = Color(0xFFD32F2F), night = Color(0xFF781C1C))
+    val health          = BarColors(Color(0xFF4E9F3D), low = Color(0xFFD32F2F))
+    val mana            = BarColors(Color(0xFF1E88E5), low = Color(0xFF8E24BC))
+    val xp              = BarColors(Color(0xFFFFD700))
+    val lowWarning      = ColorProvider(day = Color(0xFFD32F2F), night = Color(0xFF962323))
   }
 
   @Composable
-  private fun StatReadOut(name: String, curStat: Int, totalStat: Int, barColor: Color) {
+  private fun StatReadOut(name: String, curStat: Int, totalStat: Int, color: BarColors) {
+    val barColor = if (totalStat > 0 && curStat.toFloat() / totalStat < 0.2f) { color.low ?: color.normal } else color.normal
     Row() {
       Column(modifier = GlanceModifier.width(68.dp)) {
         Text(name, style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
