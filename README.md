@@ -193,21 +193,21 @@ Want to change it to fit your requirements? You can do it at these locations bel
     </tr>
     <tr>
         <td align="center">
-            <img src="public/ios/startPage-iOS.png" alt="Start Screen" width="200"><br> 
+            <img src="public/ios/startPage.png" alt="Start Screen" width="200"><br> 
             <sub>Starting Screen</sub>
         </td>
         <td align="center">
-            <img src="public/ios/gamePlay-iOS.png" alt="Gameplay" width="200"><br> 
+            <img src="public/ios/gamePlay.png" alt="Gameplay" width="200"><br> 
             <sub>Gameplay</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <img src="public/ios/darkModeGamePlay-iOS.png" alt="Dark-Mode Gameplay" width="200"><br> 
+            <img src="public/ios/darkModeGamePlay.png" alt="Dark-Mode Gameplay" width="200"><br> 
             <sub>Dark-Mode Gameplay</sub>
         </td>
                 <td align="center">
-            <img src="public/ios/statsPage-iOS.png" alt="Stats Section" width="200"><br>
+            <img src="public/ios/statsPage.png" alt="Stats Section" width="200"><br>
             <sub>Stats Section</sub>
         </td>
     </tr>
@@ -243,6 +243,26 @@ Want to change it to fit your requirements? You can do it at these locations bel
         <td align="center">
             <img src="public/android/statViewWidget-Dark-Large.png" alt="Stat View Widget Dark Large" width="500"><br> 
             <sub>Player Stat Widget - Small - Dark</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/android/startPage.png" alt="Start Screen" width="200"><br> 
+            <sub>Starting Screen</sub>
+        </td>
+        <td align="center">
+            <img src="public/android/gamePlay.png" alt="Gameplay" width="200"><br> 
+            <sub>Gameplay</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/android/darkModeGamePlay.png" alt="Dark-Mode Gameplay" width="200"><br> 
+            <sub>Dark-Mode Gameplay</sub>
+        </td>
+                <td align="center">
+            <img src="public/android/statsPage.png" alt="Stats Section" width="200"><br>
+            <sub>Stats Section</sub>
         </td>
     </tr>
 </table>
