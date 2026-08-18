@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { WidgetBridge } from './widget-bridge';
+import { StorageService } from './storage';
 
 export interface StoryMessage {
     role: 'user' | 'assistant';
@@ -68,8 +69,8 @@ export class StoryService {
     playerName = '';
 
     pendingItemGain = signal<StoryResponse['itemGain'] | null>(null);
-
-    // This prompt was written to be optimized for cost. May come back to make this shorter, but will have to test variations and not effects on the game quality
+    private storage = inject(StorageService);
+// This prompt was written to be optimized for cost. May come back to make this shorter, but will have to test variations and not effects on the game quality
     private systemPrompt = `You are the Game Master of a persistent isekai fantasy RPG. The player is the protagonist, and every choice permanently affects the world, characters, and future events.
         Style:
         - Epic fantasy with progression, mystery, exploration, action, and occasional romance.
@@ -252,7 +253,7 @@ export class StoryService {
 
             this.conversationHistory.push({ role: 'assistant', content: text });
 
-            const openAiKey = localStorage.getItem('openai_key') ?? '';
+            const openAiKey = this.storage.getItem('openai_key') ?? '';
             if (parsed.imagePrompt && openAiKey) {
                 const imageUrl = await this.generateImage(parsed.imagePrompt, openAiKey);
 
