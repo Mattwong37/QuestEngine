@@ -54,10 +54,11 @@ object QuestWidget : GlanceAppWidget() {
     val defense: Int = 0,
     val magicDefense: Int = 0,
     val attackMin: Int = 1,
-    val attackMax: Int = 5
+    val attackMax: Int = 5,
+    val sceneText: String = "Nothing exciting here... For now"
   )
 
-  private fun parseSnapshot(raw: String?): StorySnapshot {
+  fun parseSnapshot(raw: String?): StorySnapshot {
     if (raw == null) return StorySnapshot()
     return try {
       val json = JSONObject(raw)
@@ -75,6 +76,7 @@ object QuestWidget : GlanceAppWidget() {
         magicDefense = json.getInt("magicDefense"),
         attackMin = json.getInt("attackMin"),
         attackMax = json.getInt("attackMax"),
+        sceneText = json.getString("sceneText"),
       )
     } catch (e: Exception) {
 
@@ -101,14 +103,14 @@ object QuestWidget : GlanceAppWidget() {
     val fraction = current.coerceIn(0, safeMax).toFloat() / safeMax
     val filled = (fraction * 10).toInt().coerceIn(0, 10)
 
-      Row(
-        modifier = GlanceModifier.fillMaxWidth().height(10.dp)
-          .background(track).cornerRadius(5.dp)
-      ) {
-        repeat(10) { i ->
-          Box(modifier = GlanceModifier.defaultWeight().fillMaxHeight()
-            .background(if (i < filled) color else track)) {}
-        }
+    Row(
+      modifier = GlanceModifier.fillMaxWidth().height(10.dp)
+        .background(track).cornerRadius(5.dp)
+    ) {
+      repeat(10) { i ->
+        Box(modifier = GlanceModifier.defaultWeight().fillMaxHeight()
+          .background(if (i < filled) color else track)) {}
+      }
 
     }
   }
@@ -126,7 +128,7 @@ object QuestWidget : GlanceAppWidget() {
   )
 
   @Composable
-  private fun Divider() {
+  fun Divider() {
     Column {
       Spacer(modifier = GlanceModifier.height(4.dp))
       Box(
@@ -139,9 +141,9 @@ object QuestWidget : GlanceAppWidget() {
     }
   }
 
-  private data class BarColors(val normal: Color, val low: Color? = null)
+  data class BarColors(val normal: Color, val low: Color? = null)
 
-  private object WidgetColors {
+  object WidgetColors {
     val gold            = ColorProvider(night = Color(0xFFC9A227), day = Color(0xFF8A6A16))
     val background      = ColorProvider(night = Color(0xFF2A2015), day = Color(0xFFCCC2AB))
     val subtext         = ColorProvider(night = Color(0xFFFFEBCD), day = Color(0xFF5A4A2A))
@@ -198,7 +200,7 @@ object QuestWidget : GlanceAppWidget() {
 
   @SuppressLint("RestrictedApi")
   @Composable
-  fun Content(snapshot: StorySnapshot) {
+  private fun Content(snapshot: StorySnapshot) {
     Column(
       modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(10.dp)
     ) {
