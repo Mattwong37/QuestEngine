@@ -29,6 +29,7 @@ class WidgetBridgePlugin : Plugin() {
 
     CoroutineScope(Dispatchers.Default).launch {
       QuestWidget.updateAll(context)
+      SceneWidget.updateAll(context)
     }
 
     call.resolve()
