@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
 import androidx.glance.LocalSize
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
@@ -231,7 +233,7 @@ object QuestWidget : GlanceAppWidget() {
 
       Column() {
         Divider()
-        Text("Continue your adventure >", style = styling(WidgetColors.subtext, 15, FontWeight.Bold))
+        Text("Continue your adventure >", style = styling(WidgetColors.subtext, 15, FontWeight.Bold),  modifier = GlanceModifier.clickable(actionStartActivity<MainActivity>()))
       }
     }
   }

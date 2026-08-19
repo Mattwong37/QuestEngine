@@ -6,6 +6,9 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.background
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -56,7 +59,7 @@ object SceneWidget : GlanceAppWidget() {
       Spacer(modifier = GlanceModifier.defaultWeight())
       QuestWidget.Divider()
       Spacer(modifier = GlanceModifier.defaultWeight())
-      Text("Continue your adventure >", maxLines=8, style=styling(WidgetColors.subtext, 13, FontWeight.Bold))
+      Text("Continue your adventure >", maxLines=8, style=styling(WidgetColors.subtext, 13, FontWeight.Bold), modifier = GlanceModifier.clickable(actionStartActivity<MainActivity>()))
       Spacer(modifier = GlanceModifier.defaultWeight())
     }
   }
