@@ -115,16 +115,17 @@ object QuestWidget : GlanceAppWidget() {
     }
   }
 
-  private fun styling (
+  fun styling (
     color: ColorProvider,
     size: Int,
-    weight: FontWeight = FontWeight.Normal
+    weight: FontWeight = FontWeight.Normal,
+    textAlign: TextAlign = TextAlign.Center
   ) = TextStyle(
     color = color,
     fontSize = size.sp,
     fontWeight = weight,
     fontFamily = FontFamily.Serif,
-    textAlign = TextAlign.Center
+    textAlign = textAlign
   )
 
   @Composable
