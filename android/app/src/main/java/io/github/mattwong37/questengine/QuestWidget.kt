@@ -198,7 +198,7 @@ object QuestWidget : GlanceAppWidget() {
 
   @SuppressLint("RestrictedApi")
   @Composable
-  private fun Content(snapshot: StorySnapshot) {
+  fun Content(snapshot: StorySnapshot) {
     Column(
       modifier = GlanceModifier.fillMaxSize().padding(12.dp).background(WidgetColors.background).padding(10.dp)
     ) {
