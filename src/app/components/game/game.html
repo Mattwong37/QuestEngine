@@ -291,6 +291,7 @@
         <div class="image-modal" (click)="$event.stopPropagation()">
             <button class="modal-close" (click)="closeImage()">✕</button>
             <img [src]="img" alt="Scene" />
+            <button class="modal-download" (click)="shareImage(img)">Download</button>
         </div>
     </div>
 }
