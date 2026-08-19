@@ -137,14 +137,18 @@ Want to change it to fit your requirements? You can do it at these locations bel
             <sub>Stats Section</sub>
         </td>
         <td align="center">
-            <img src="public/web/gameOver.png" alt="Game Over"><br> 
-            <sub>Game Over</sub>
+            <img src="public/web/imageExpanded.png" alt="Image Expanded"><br> 
+            <sub>Image Expanded</sub>
         </td>
     </tr>
     <tr>
         <td align="center">
             <img src="public/web/saveSlots.png" alt="Save Slots"><br> 
             <sub>Save Slots</sub>
+        </td>
+        <td align="center">
+            <img src="public/web/gameOver.png" alt="Game Over"><br> 
+            <sub>Game Over</sub>
         </td>
     </tr>
 </table>
@@ -263,6 +267,12 @@ Want to change it to fit your requirements? You can do it at these locations bel
                 <td align="center">
             <img src="public/android/statsPage.png" alt="Stats Section" width="200"><br>
             <sub>Stats Section</sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="public/android/imageExpanded.png" alt="Expanded Image" width="200"><br> 
+            <sub>Expanded Image</sub>
         </td>
     </tr>
 </table>
