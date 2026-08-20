@@ -53,7 +53,7 @@
                     <div class="card-content">
                         <div class="scene-image">
                             @if (currentCard()?.imageUrl) {
-                                <img [src]="currentCard()?.imageUrl" alt="Scene" />
+                                <img [src]="currentCard()?.imageUrl" alt="Scene" (click)="openImage(currentCard()?.imageUrl)" />
                             } @else {
                                 <div class="image-placeholder">
                                 <span>?</span>
@@ -284,3 +284,14 @@
         </div>
         }
 </div>
+
+
+@if (expandedImage(); as img) {
+    <div class="image-overlay" (click)="closeImage()">
+        <div class="image-modal" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeImage()">✕</button>
+            <img [src]="img" alt="Scene" />
+            <button class="modal-download" (click)="shareImage(img)">Download</button>
+        </div>
+    </div>
+}

@@ -9,8 +9,9 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation 'androidx.core:core-ktx:1.19.0'
+    implementation project(':capacitor-filesystem')
     implementation project(':capacitor-preferences')
+    implementation project(':capacitor-share')
     implementation project(':capacitor-secure-storage-plugin')
 
 }

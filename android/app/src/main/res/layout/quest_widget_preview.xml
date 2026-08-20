@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:background="#CCC2AB"
+  android:padding="18dp">
+
+  <LinearLayout
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_width="match_parent">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:fontFamily="serif"
+      android:text="Sharkey"
+      android:textColor="#FF8A6A16"
+      android:textStyle="bold" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:fontFamily="serif"
+      android:text=" •  LV 3"
+      android:textColor="#FF5C5B5B"
+      android:textStyle="bold" />
+  </LinearLayout>
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginVertical="8dp"
+    android:background="#4A3D1A"
+    android:contentDescription="@null" />
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Health"
+    android:textColor="#5A4A2A"
+    android:textStyle="bold"
+    android:fontFamily="serif"
+    android:padding="3dp"/>
+
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="10dp"
+    android:background="@drawable/bar_track">
+    <ImageView
+      android:layout_width="140dp"
+      android:layout_height="match_parent"
+      android:src="@drawable/bar_fill"
+      android:tint="#4E9F3D"
+      android:contentDescription="@null" />
+  </FrameLayout>
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Mana"
+    android:textColor="#5A4A2A"
+    android:textStyle="bold"
+    android:fontFamily="serif"
+    android:padding="3dp"/>
+
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="10dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/bar_track">
+    <ImageView
+      android:layout_width="90dp"
+      android:layout_height="match_parent"
+      android:src="@drawable/bar_fill"
+      android:tint="#1E88E5"
+      android:contentDescription="@null" />
+  </FrameLayout>
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginVertical="15dp"
+    android:background="#4A3D1A"
+    android:contentDescription="@null" />
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Continue your Adventure >"
+    android:textColor="#5A4A2A"
+    android:textStyle="bold"
+    android:fontFamily="serif" />
+
+</LinearLayout>

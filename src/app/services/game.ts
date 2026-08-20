@@ -64,6 +64,22 @@ export class GameService {
     saveSlots = signal<SaveSlot[]>(this.loadSavesFromStorage());
 
     initPlayer(name: string) {
+        WidgetBridge.sync({
+            playerName: name,
+            sceneText: '',
+            curHealth: 100,
+            maxHealth: 100,
+            curMana: 100,
+            maxMana: 100,
+            curLevel: 1,
+            xp: 0,
+            xpToNextLevel: 100,
+            stamina: 100,
+            defense: 0,
+            magicDefense: 0,
+            attackMin: 1,
+            attackMax: 5
+        });
         this.player.update(p => ({ ...p, name }));
         this.playerName.set(name);
     }

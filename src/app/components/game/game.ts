@@ -5,6 +5,9 @@ import { StoryService } from '../../services/story';
 import { ApiKeyService } from '../../services/api-key';
 import { EquipmentBonus } from '../../models/story.model';
 import { DarkMode } from '../../services/dark-mode';
+import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-game',
@@ -32,6 +35,8 @@ export class Game implements OnInit {
   saveName = signal('');
 
   isGameOver = computed(() => this.gameService.player().currentHealth <= 0);
+
+  expandedImage = signal<string | null>(null);
 
   private touchStartX = 0;
   private touchStartY = 0;
@@ -93,6 +98,14 @@ export class Game implements OnInit {
   xpPercent() {
     const p = this.gameService.player();
     return (p.xp / p.xpToNextLevel) * 100;
+  }
+
+  openImage(url: string) {
+    if (url) this.expandedImage.set(url);
+  }
+
+  closeImage() {
+    this.expandedImage.set(null);
   }
 
   formatBonus(bonus: EquipmentBonus): string[] {
@@ -326,5 +339,27 @@ export class Game implements OnInit {
     this.storyService.history.update(h => h.map((entry, i) =>
       i === currentIndex ? { ...entry, statsUpdate: update } : entry
     ));
+  }
+
+  async shareImage(dataUrl: string) {
+      const fileName = `quest-scene-${Date.now()}.png`;
+      if (Capacitor.getPlatform() === 'web') {
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = fileName + ".png";
+          a.click();
+          return;
+      }
+
+      const result = await Filesystem.writeFile({
+          path: fileName,
+          data: dataUrl.split(',')[1],
+          directory: Directory.Cache
+      });
+
+      await Share.share({
+          title: 'QuestEngine',
+          files: [result.uri]
+      });
   }
 }
