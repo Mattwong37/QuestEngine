@@ -125,7 +125,7 @@ Want to change it to fit your requirements? You can do it at these locations bel
     </tr>
     <tr>
         <td align="center">
-            <img src="public/web/gameplay.png" alt="Gameplay"><br> 
+            <img src="public/web/gamePlay.png" alt="Gameplay"><br> 
             <sub>Gameplay</sub>
         </td>
         <td align="center">
@@ -263,7 +263,7 @@ Want to change it to fit your requirements? You can do it at these locations bel
     </tr>
     <tr>
         <td align="center">
-            <img src="public/android/darkModeGamePlay.png" alt="Dark-Mode Gameplay" width="200"><br> 
+            <img src="public/android/darkModeGameplay.png" alt="Dark-Mode Gameplay" width="200"><br> 
             <sub>Dark-Mode Gameplay</sub>
         </td>
                 <td align="center">
