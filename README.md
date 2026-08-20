@@ -86,6 +86,8 @@ Please note that you will still need your own API keys to play. refer to [Add yo
 - **ViTest** — unit testing
 - **Capacitor 8** - native iOS wrapper
   - **capacitor-secure-storage-plugin** — stores API keys in the iOS Keychain
+- **SwiftUI + WidgetKit** — iOS widgets
+- **Kotlin + Jetpack Glance** — Android widgets
 
 
 ## Modify It For Yourself
@@ -102,9 +104,9 @@ Want to change it to fit your requirements? You can do it at these locations bel
 - [x] Create Vitest test suite
 - [x] Port to iOS via Capacitor
 - [x] iOS home screen widgets — current scene, stat summary
-- [ ] Port to Android via Capacitor *(in progress)*
-- [ ] Update test suite
-- [ ] Android widgets via Jetpack Glance — current scene, stat summary
+- [x] Port to Android via Capacitor
+- [x] Android widgets via Jetpack Glance — current scene, stat summary
+- [ ] Update test suite *(in progress)*
 - [ ] Additional widgets — pending choices, image gallery/carousel, lock screen
 
 
