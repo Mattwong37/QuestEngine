@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#CCC2AB"
+  android:padding="18dp">
+
+  <LinearLayout
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_width="match_parent">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:fontFamily="serif"
+      android:text="Sharkey"
+      android:textColor="#FF8A6A16"
+      android:textStyle="bold" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:fontFamily="serif"
+      android:text=" •  Aug 18, 2028"
+      android:textColor="#FF5C5B5B"
+      android:textStyle="bold" />
+  </LinearLayout>
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginVertical="8dp"
+    android:background="#4A3D1A"
+    android:contentDescription="@null" />
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fontFamily="serif"
+    android:text="Sharkey falls into step behind Sera, rusted blade catching the dying amber light as his eyes track her every movement. She leads him through a maze of collapsed ..."
+    android:textColor="#FF5C5B5B" />
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginVertical="8dp"
+    android:background="#4A3D1A"
+    android:contentDescription="@null" />
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fontFamily="serif"
+    android:text="Continue your adventure >"
+    android:textColor="#FF8A6A16"
+    android:textStyle="bold" />
+</LinearLayout>
+
