@@ -1,16 +1,61 @@
 import { TestBed } from '@angular/core/testing';
+import { WidgetPayload } from './widget-bridge'
 
 import { WidgetBridge } from './widget-bridge';
 
+const syncMock = vi.fn();
+const getPlatformMock = vi.fn();
+
+vi.mock('@capacitor/core', () => ({
+  registerPlugin: () => ({ sync: syncMock }),
+  Capacitor: { getPlatform: () => getPlatformMock() }
+}));
+
+const payload: WidgetPayload = {
+  playerName: 'test',
+  sceneText: '',
+  curHealth: 0,
+  maxHealth: 0,
+  curMana: 0,
+  maxMana: 0,
+  curLevel: 0,
+  xp: 0,
+  xpToNextLevel: 0,
+  stamina: 0,
+  defense: 0,
+  magicDefense: 0,
+  attackMin: 0,
+  attackMax: 0
+};
+
 describe('WidgetBridge', () => {
-  let service: WidgetBridge;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(WidgetBridge);
+    syncMock.mockClear();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('ignore non ios and android', async () => {
+    getPlatformMock.mockReturnValue('web');
+    await WidgetBridge.sync(payload);
+    expect(syncMock).not.toHaveBeenCalled();
   });
+
+    it('ignore non ios and android', async () => {
+    getPlatformMock.mockReturnValue('web');
+    await WidgetBridge.sync(payload);
+    expect(syncMock).not.toHaveBeenCalled();
+  });
+
+  it('respond to ios', async () => {
+    getPlatformMock.mockReturnValue('ios');
+    await WidgetBridge.sync(payload);
+    expect(syncMock).toHaveBeenCalledWith({ payload: JSON.stringify(payload) });
+  });
+  
+  it('respond to android', async () => {
+    getPlatformMock.mockReturnValue('ios');
+    await WidgetBridge.sync(payload);
+    expect(syncMock).toHaveBeenCalledWith({ payload: JSON.stringify(payload) });
+  });
+
 });
