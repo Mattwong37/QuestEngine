@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { WidgetPayload } from './widget-bridge'
+import { WidgetPayload, WidgetBridge } from './widget-bridge'
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { WidgetBridge } from './widget-bridge';
-
-const syncMock = vi.fn();
-const getPlatformMock = vi.fn();
+const { syncMock, getPlatformMock } = vi.hoisted(() => ({
+  syncMock: vi.fn(),
+  getPlatformMock: vi.fn()
+}));
 
 vi.mock('@capacitor/core', () => ({
   registerPlugin: () => ({ sync: syncMock }),
