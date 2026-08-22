@@ -1,9 +1,7 @@
 // @vitest-environment jsdom
 import { ApiKeyService } from './api-key';
-import { describe, it, expect, beforeEach } from 'vitest';
 import { StorageService } from './storage';
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
+import { TestBed } from '@angular/core/testing';
 
 class FakeStorage {
   private map = new Map<string, string>();
@@ -14,7 +12,6 @@ class FakeStorage {
 
 describe('ApiKeyService', () => {
   let storage: FakeStorage;
-  getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
 
   function makeService(): ApiKeyService {
     TestBed.resetTestingModule();

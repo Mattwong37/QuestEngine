@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { initStorage, StorageService, clearCache } from './storage';
 
 const { prefsGet, prefsSet, prefsRemove, secGet, secSet, secRemove } = vi.hoisted(() => ({
