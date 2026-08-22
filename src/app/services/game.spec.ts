@@ -3,18 +3,28 @@ import { TestBed } from '@angular/core/testing';
 import { GameService } from './game';
 import { StoryService } from './story';
 import { EquipmentItem } from '../models/story.model';
+import { StorageService } from './storage';
+
+class FakeStorage {
+  private map = new Map<string, string>();
+  getItem(key: string): string | null { return this.map.get(key) ?? null; }
+  setItem(key: string, value: string): void { this.map.set(key, value); }
+  removeItem(key: string): void { this.map.delete(key); }
+}
 
 describe('Game', () => {
   let service: GameService;
   let storyService: StoryService;
+  let storage: FakeStorage;
 
   beforeEach(() => {
-    localStorage.clear(); 
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(GameService);
+    storage = new FakeStorage();
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [{ provide: StorageService, useValue: storage }]
+    });
     storyService = TestBed.inject(StoryService);
+    service = TestBed.inject(GameService);
   });
 
   it('should be created', () => {
@@ -98,9 +108,11 @@ describe('Game', () => {
         }
       ];
 
-      localStorage.setItem('quest_engine_saves', JSON.stringify(existingSaves));
+      storage.setItem('quest_engine_saves', JSON.stringify(existingSaves));
       TestBed.resetTestingModule();
-      TestBed.configureTestingModule({});
+      TestBed.configureTestingModule({
+        providers: [{ provide: StorageService, useValue: storage }]
+      });
       const newGameService = TestBed.inject(GameService);
       const loadedSave = newGameService.saveSlots()[1];
 
@@ -129,7 +141,7 @@ describe('Game', () => {
   });
 
   describe('saving manipulating', () => {
-    it('create a new save slot and stored in localStorage', () => {
+    it('create a new save slot and store in storage service', () => {
       service.initPlayer('Matt');
       service.saveGame(1, 'Test Save');
 
@@ -139,7 +151,7 @@ describe('Game', () => {
       expect(slots[0].name).toBe('Test Save');
       expect(slots[0].playerName).toBe('Matt');
 
-      const stored = JSON.parse(localStorage.getItem('quest_engine_saves')!);
+      const stored = JSON.parse(storage.getItem('quest_engine_saves')!);
       expect(stored.length).toBe(1);
       expect(stored[0].id).toBe(1);
     });
