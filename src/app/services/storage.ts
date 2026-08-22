@@ -34,6 +34,10 @@ export async function initStorage(keyLabels: string[]) {
     }
 }
 
+export async function clearCache() {
+    cache.clear();
+}
+
 @Injectable({ providedIn: 'root' })
 
 export class StorageService {
