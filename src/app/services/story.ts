@@ -1,5 +1,4 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { WidgetBridge } from './widget-bridge';
 import { StorageService } from './storage';
 
 export interface StoryMessage {

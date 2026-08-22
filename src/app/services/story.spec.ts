@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-
 import { StoryService } from './story';
 import { ApiKeyService } from './api-key';
+import { StorageService } from './storage';
 
 // Builds a fake response with only the fields we call
 function jsonResponse(body: any, ok = true, status = 200): Response {
@@ -18,20 +18,29 @@ function claudeApiBody(scenePayload: any) {
   return { content: [{ type: 'text', text: JSON.stringify(scenePayload) }] };
 }
 
+class FakeStorage {
+  map = new Map<string, string>();
+  getItem(key: string): string | null { return this.map.get(key) ?? null; }
+  setItem(key: string, value: string): void { this.map.set(key, value); }
+  removeItem(key: string): void { this.map.delete(key); }
+}
+
 describe('StoryService', () => {
   let service: StoryService;
   let apiKeyService: ApiKeyService;
+  let storage: FakeStorage;
 
   beforeEach(() => {
-    localStorage.clear();
+    storage = new FakeStorage();
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [{ provide: StorageService, useValue: storage }]
+    });
     service = TestBed.inject(StoryService);
     apiKeyService = TestBed.inject(ApiKeyService);
   });
 
   afterEach(() => {
-    localStorage.clear();
     vi.restoreAllMocks();
   });
 
