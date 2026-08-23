@@ -22,7 +22,6 @@ describe('Storage', () => {
     let storage: StorageService;
 
     beforeEach(() => {
-        localStorage.clear();
         clearCache();
         vi.clearAllMocks();
         prefsGet.mockResolvedValue({ value: null });

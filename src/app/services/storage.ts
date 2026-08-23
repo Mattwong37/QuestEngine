@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 
+console.log('>>> storage.ts evaluated');
 const cache = new Map<string, string>();
 const SECRET_KEYS = new Set(['anthropic_key', 'openai_key']);
 

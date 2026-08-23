@@ -11,7 +11,20 @@ describe('TitleScreen', () => {
   let apiKeyService: ApiKeyService;
 
   beforeEach(async () => {
-    localStorage.clear();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false
+      })
+    });
+
     document.body.className = '';
     vi.spyOn(window, 'alert');
 
@@ -239,10 +252,12 @@ describe('TitleScreen', () => {
       expect(component.darkMode()).toBe(false);
       expect(document.body.classList.contains('dark-bg')).toBe(false);
       component.darkModeToggle();
+      fixture.detectChanges();
       expect(component.darkMode()).toBe(true);
       expect(document.body.classList.contains('dark-bg')).toBe(true);
       expect(document.body.classList.contains('light-bg')).toBe(false);
       component.darkModeToggle();
+      fixture.detectChanges();
       expect(component.darkMode()).toBe(false);
       expect(document.body.classList.contains('light-bg')).toBe(true);
       expect(document.body.classList.contains('dark-bg')).toBe(false);

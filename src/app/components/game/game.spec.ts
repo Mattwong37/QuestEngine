@@ -2,17 +2,40 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Game } from './game';
 import { StoryService } from '../../services/story';
+import { StorageService } from '../../services/storage';
+
+class FakeStorage {
+  private map = new Map<string, string>();
+  getItem(key: string): string | null { return this.map.get(key) ?? null; }
+  setItem(key: string, value: string): void { this.map.set(key, value); }
+  removeItem(key: string): void { this.map.delete(key); }
+}
 
 describe('Game', () => {
   let component: Game;
   let fixture: ComponentFixture<Game>;
   let storyService!: StoryService;
+  let storage: FakeStorage;
 
   beforeEach(async () => {
-    localStorage.clear()
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false
+      })
+    });
     
+    storage = new FakeStorage();
     await TestBed.configureTestingModule({
       imports: [Game],
+      providers: [{ provide: StorageService, useValue: storage }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Game);
