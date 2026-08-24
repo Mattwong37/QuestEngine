@@ -217,6 +217,12 @@ Want to change it to fit your requirements? You can do it at these locations bel
             <sub>Stats Section</sub>
         </td>
     </tr>
+    <tr>
+        <td align="center">
+            <img src="public/ios/lockScreenWidget.png" alt="Lock Screen Widget" width="200"><br> 
+            <sub>Lock Screen Widget</sub>
+        </td>
+    </tr>
 </table>
 
 ### Android
