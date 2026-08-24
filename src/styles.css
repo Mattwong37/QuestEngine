@@ -28,3 +28,7 @@ body.dark-bg {
     --text-box-bg: #574c2c;
     background-image: url('/darkMode.png');
 }
+
+html, body {
+    touch-action: manipulation;
+}
