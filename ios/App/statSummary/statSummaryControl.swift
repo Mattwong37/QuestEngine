@@ -9,7 +9,7 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-struct statSummaryControl: ControlWidget {
+struct StatSummaryControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         StaticControlConfiguration(
             kind: "io.github.mattwong37.questengine.statSummary",
@@ -28,7 +28,7 @@ struct statSummaryControl: ControlWidget {
     }
 }
 
-extension statSummaryControl {
+extension StatSummaryControl {
     struct Provider: ControlValueProvider {
         var previewValue: Bool {
             false

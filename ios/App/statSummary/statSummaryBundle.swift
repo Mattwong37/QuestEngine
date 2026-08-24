@@ -9,9 +9,10 @@ import WidgetKit
 import SwiftUI
 
 @main
-struct statSummaryBundle: WidgetBundle {
+struct StatSummaryBundle: WidgetBundle {
     var body: some Widget {
-        statSummary()
-        statSummaryControl()
+        StatSummary()
+        StatSummaryControl()
+        LockScreenStatWidget()
     }
 }

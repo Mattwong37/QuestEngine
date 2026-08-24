@@ -43,7 +43,7 @@ struct StatProvider: TimelineProvider {
         completion(currentEntry())
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(in context: Context, completion: @escaping (Timeline<StatEntry>) -> ()) {
         completion(Timeline(entries: [currentEntry()], policy: .never))
     }
 }
@@ -247,7 +247,7 @@ private func manaColor(for value: CGFloat) -> Color {
     return .red
 }
 
-struct statSummary: Widget {
+struct StatSummary: Widget {
   let kind: String = "statSummary"
 
   var body: some WidgetConfiguration {
@@ -263,7 +263,7 @@ struct statSummary: Widget {
 }
 
 #Preview(as: .systemSmall) {
-    statSummary()
+  StatSummary()
 } timeline: {
   StatEntry(date: Date(), curHealth: 88, maxHealth: 100, curMana: 50, maxMana: 100, curLevel: 0, xp: 100, xpToNextLevel: 10, stamina: 18, defense: 17, magicDefense: 30, attackMin: 1, attackMax: 5, playerName: "Adventurer")
 }
