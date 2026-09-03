@@ -26,8 +26,8 @@
             <input type="text" [(ngModel)]="playerName" placeholder="Enter your name..."/>
             <button (click)="createCharacter()" [disabled]="!playerName().trim()">Submit</button>
         </div>
-
     </div>
+    <button class= back-button (click)="currentScreen.set('title')">< Back</button>
 }
 
 
