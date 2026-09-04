@@ -52,6 +52,28 @@ export interface HistoryEntry {
     };
 }
 
+const STAT_KEYS = [
+    'healthChange',
+    'magicChange',
+    'xpGain',
+    'defenseChange',
+    'magicDefenseChange',
+    'attackMinChange',
+    'attackMaxChange',
+    'staminaChange',
+] as const;
+
+const BONUS_KEYS = [
+    'attackMinBonus',
+    'attackMaxBonus',
+    'defenseBonus',
+    'magicDefenseBonus',
+    'staminaDrainReduction',
+    'staminaRecoveryBonus',
+] as const;
+
+const EQUIPMENT_SLOTS = ['mainHand', 'offHand', 'shoes', 'armor'] as const;
+
 @Injectable({
     providedIn: 'root'
 })
@@ -145,7 +167,11 @@ export class StoryService {
         const firstMessage = `The player's name is ${playerName}. Begin the isekai story. Transport them from the modern world into a dangerous fantasy realm. Describe their appearance and surroundings in detail. Then present their first choices.
         Since this is the first scene, include a "characterSummary" field — a single compressed line describing the protagonist's appearance for image consistency. Example: "young male, messy black hair, brown eyes, modern clothes, no weapons yet"`;
 
-        await this.sendMessage(firstMessage, anthropicKey);
+        const ok = await this.sendMessage(firstMessage, anthropicKey);
+        if (!ok){
+            this.currentScene.set('Something\'s not right. Check your API key in Settings.');
+            this.currentChoices.set([]);
+        }
     }
 
     async makeChoice(choiceText: string, anthropicKey: string): Promise<void> {
@@ -153,7 +179,11 @@ export class StoryService {
         this.history.update(h => h.map((entry, i) =>
             i === this.currentCardIndex() ? { ...entry, choiceMade: choiceText } : entry
         ));
-        await this.sendMessage(`Player chose: ${choiceText}`, anthropicKey);
+        const ok = await this.sendMessage(`Player chose: ${choiceText}`, anthropicKey);
+        if (!ok){
+            this.currentScene.set('Something\'s not right. Please again try later');
+            this.currentChoices.set([]);
+        }
     }
 
     async generateImage(imagePrompt: string, openAiKey: string): Promise<string> {
@@ -195,81 +225,168 @@ export class StoryService {
         }
     }
 
-    private async sendMessage(message: string, anthropicKey: string): Promise<void> {
+    private async sendMessage(message: string, anthropicKey: string): Promise<boolean> {
         if (this.conversationHistory.length > 10) {
             this.conversationHistory = this.conversationHistory.slice(-10);
         }
         this.conversationHistory.push({ role: 'user', content: message });
 
         try {
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': anthropicKey,
-                'anthropic-version': '2023-06-01',
-                'anthropic-dangerous-direct-browser-access': 'true'
-                },
-                body: JSON.stringify({
-                model: 'claude-sonnet-4-6',
-                max_tokens: 1000,
-                system: this.systemPrompt,
-                messages: this.conversationHistory
-                })
-            });
+            for (let i = 0; i <= 3; i++) {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': anthropicKey,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                    },
+                    body: JSON.stringify({
+                    model: 'claude-sonnet-4-6',
+                    max_tokens: 1000,
+                    system: this.systemPrompt,
+                    messages: this.conversationHistory
+                    })
+                });
 
-            const data = await response.json();
-            const text = data.content[0].text;
-            const parsed: StoryResponse = JSON.parse(text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403 || response.status === 400 || response.status === 404 || response.status === 413) {
+                        return false;
+                    }
+                }
 
-            if (parsed.characterSummary && !this.characterRegistry['protagonist']) {
-                this.characterRegistry['protagonist'] = parsed.characterSummary;
+                const data = await response.json();
+
+                if (!this.validateResponse(data)) {
+                    continue
+                }
+
+                const text = data.content[0].text;
+                const parsed: StoryResponse = JSON.parse(text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+
+                if (parsed.characterSummary && !this.characterRegistry['protagonist']) {
+                    this.characterRegistry['protagonist'] = parsed.characterSummary;
+                }
+
+                if (parsed.newCharacters) {
+                    this.characterRegistry = { ...this.characterRegistry, ...parsed.newCharacters };
+                }
+
+                if (parsed.statsUpdate) {
+                    this.pendingStatsUpdate.set(parsed.statsUpdate);
+                }
+
+                if (parsed.itemGain) {
+                    console.log('itemGain from Claude:', parsed.itemGain);
+                    this.pendingItemGain.set(parsed.itemGain);
+                }
+                
+                this.currentScene.set(parsed.sceneText);
+                this.currentChoices.set(parsed.choices);
+                this.history.update(h => [...h, {
+                    sceneText: parsed.sceneText,
+                    imageUrl: '',
+                    choiceMade: '',
+                    imagePrompt: parsed.imagePrompt ?? '',
+                    statsUpdate: parsed.statsUpdate ?? null
+                }]);
+                this.currentCardIndex.set(this.history().length - 1);
+
+                this.conversationHistory.push({ role: 'assistant', content: text });
+
+                const openAiKey = this.storage.getItem('openai_key') ?? '';
+                if (parsed.imagePrompt && openAiKey) {
+                    const imageUrl = await this.generateImage(parsed.imagePrompt, openAiKey);
+
+                    this.history.update(h => h.map((entry, i) =>
+                        i === h.length - 1 ? { ...entry, imageUrl } : entry
+                    ));
+                }
+                return true;
             }
-
-            if (parsed.newCharacters) {
-                this.characterRegistry = { ...this.characterRegistry, ...parsed.newCharacters };
-            }
-
-            if (parsed.statsUpdate) {
-                this.pendingStatsUpdate.set(parsed.statsUpdate);
-            }
-
-            if (parsed.itemGain) {
-                console.log('itemGain from Claude:', parsed.itemGain);
-                this.pendingItemGain.set(parsed.itemGain);
-            }
-            
-            this.currentScene.set(parsed.sceneText);
-            this.currentChoices.set(parsed.choices);
-            this.history.update(h => [...h, {
-                sceneText: parsed.sceneText,
-                imageUrl: '',
-                choiceMade: '',
-                imagePrompt: parsed.imagePrompt ?? '',
-                statsUpdate: parsed.statsUpdate ?? null
-            }]);
-            this.currentCardIndex.set(this.history().length - 1);
-
-            this.conversationHistory.push({ role: 'assistant', content: text });
-
-            const openAiKey = this.storage.getItem('openai_key') ?? '';
-            if (parsed.imagePrompt && openAiKey) {
-                const imageUrl = await this.generateImage(parsed.imagePrompt, openAiKey);
-
-                this.history.update(h => h.map((entry, i) =>
-                    i === h.length - 1 ? { ...entry, imageUrl } : entry
-                ));
-            }
-
-            console.log('Image prompt from Claude:', parsed.imagePrompt);
+            return false;
 
         } catch (error) {
             console.error('Story error:', error);
-            this.currentScene.set('Something\'s not right. Check your API key in Settings.');
+            this.currentScene.set('Something\'s not right. Please again try later');
             this.currentChoices.set([]);
-        } finally {
-            this.isLoading.set(false);
+            return false;
         }
+    }
+
+    private async validateResponse(data: any): Promise<boolean> {
+        const text = this.extractText(data);
+
+        // Make sure response isn't bad
+        if (data?.type === 'error' || data?.stop_reason === 'max_tokens' || !text) {
+            return false;
+        }
+
+        const parsed = this.parseJson(text);
+        if (parsed.ok) {
+            const parsedValue = parsed.value;
+            if (parsedValue.imagePrompt !== undefined && parsedValue.imagePrompt !== null) {
+                if (!this.isNonEmptyString(parsedValue.imagePrompt)) {
+                    return false;
+                }
+            }
+
+            if (parsedValue.characterSummary !== undefined && parsedValue.characterSummary !== null) {
+                if (!this.isNonEmptyString(parsedValue.characterSummary)) {
+                    return false;
+                }
+            }
+
+            if (parsedValue.newCharacters !== undefined && parsedValue.newCharacters !== null) {
+                for (const [name, desc] of Object.entries(parsedValue.newCharacters)) {
+                    if (!this.isNonEmptyString(desc)) {
+                        return false
+                    }
+                }
+            }
+
+            if (parsedValue.statsUpdate !== undefined && parsedValue.statsUpdate !== null && STAT_KEYS.find(key => !(typeof(parsedValue.statsUpdate[key]) === 'number'))) {
+                    return false;
+            }
+            
+
+
+            if (parsedValue.itemGain !== undefined && parsedValue.itemGain !== null) {
+                const item = parsedValue.itemGain;
+                if (!EQUIPMENT_SLOTS.includes(item.slot)) return false;
+                if (BONUS_KEYS.find(key => !(typeof(parsedValue.bonus[key]) === 'number'))) return false;
+            }   
+        }
+        return true;
+    }
+
+    private parseJson(text: string): { ok: true; value: any } | { ok: false; reason: string } {
+        const cleaned = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+        try {
+            return { ok: true, value: JSON.parse(cleaned) };
+        } catch {
+            const start = cleaned.indexOf('{');
+            const end = cleaned.lastIndexOf('}');
+            if (start !== -1 && end > start) {
+                try {
+                    return { ok: true, value: JSON.parse(cleaned.slice(start, end + 1)) };
+                } catch { 
+                    return { ok: false, reason: 'Could not parse JSON from response' };
+                }
+            }
+            return { ok: false, reason: 'Could not parse JSON from response' };
+        }
+    }
+
+    private extractText(data: any): string {
+        if (!Array.isArray(data?.content)) return '';
+        const block = data.content.find((b: any) => b?.type === 'text' && typeof b.text === 'string');
+        return block?.text?.trim() ?? '';
+    }
+
+    private isNonEmptyString(v: any): v is string {
+        return typeof v === 'string' && v.trim().length > 0;
     }
 
     async regenerateImages(openAiKey: string): Promise<void> {
