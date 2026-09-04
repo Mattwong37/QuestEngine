@@ -311,6 +311,8 @@ export class StoryService {
             this.currentScene.set('Something\'s not right. Please again try later');
             this.currentChoices.set([]);
             return false;
+        } finally {
+            this.isLoading.set(false);
         }
     }
 
@@ -348,8 +350,6 @@ export class StoryService {
             if (parsedValue.statsUpdate !== undefined && parsedValue.statsUpdate !== null && STAT_KEYS.find(key => !(typeof(parsedValue.statsUpdate[key]) === 'number'))) {
                     return false;
             }
-            
-
 
             if (parsedValue.itemGain !== undefined && parsedValue.itemGain !== null) {
                 const item = parsedValue.itemGain;
